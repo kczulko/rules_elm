@@ -1,0 +1,6 @@
+exports_files(["compile.py"])
+
+toolchain_type(
+    name = "toolchain",
+    visibility = ["//visibility:public"],
+)
