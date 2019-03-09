@@ -8,9 +8,7 @@ with open("elm.json") as f:
 for root, dirs, files in os.walk("src"):
     with open(os.path.join(root, "BUILD.bazel"), "w") as build_file:
         print(
-            """
-load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_library")
-""",
+            """load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_library")""",
             file=build_file,
         )
 
@@ -18,11 +16,11 @@ load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_library")
             # TODO(edsch): Respect exposed-modules.
             if filename.endswith(".elm"):
                 print(
-                    """
-elm_library(
+                    """elm_library(
     name = %(name)s,
     srcs = %(srcs)s,
     deps = %(deps)s,
+    strip_import_prefix = "src",
     visibility = ["//visibility:public"],
 )"""
                     % {
