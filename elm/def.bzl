@@ -2,7 +2,6 @@ ElmLibrary = provider()
 
 def _elm_binary_impl(ctx):
     toolchain = ctx.toolchains["@com_github_edschouten_rules_elm//elm:toolchain"]
-    output = ctx.actions.declare_file(ctx.attr.name)
     package_directories = depset(transitive = [dep[ElmLibrary].package_directories for dep in ctx.attr.deps])
     source_directories = depset(transitive = [dep[ElmLibrary].source_directories for dep in ctx.attr.deps])
     dependencies = {}
@@ -24,14 +23,16 @@ def _elm_binary_impl(ctx):
         repr(source_directories.to_list()),
     ))
 
+    output = ctx.actions.declare_file(ctx.attr.name + ".js")
     ctx.actions.run(
         mnemonic = "Elm",
         executable = "python3",
         arguments = [
             ctx.files._compile[0].path,
-            elm_json.path,
             toolchain.elm.files.to_list()[0].path,
+            elm_json.path,
             ctx.files.main[0].path,
+            output.path,
         ] + package_directories.to_list(),
         inputs = toolchain.elm.files + ctx.files._compile + [elm_json] + ctx.files.main + deps_srcs,
         outputs = [output],

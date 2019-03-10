@@ -10,7 +10,7 @@ PACKAGES_DIR = "elm-home/0.19.0/package"
 # Construct an ELM_HOME directory, containing symlinks to all the
 # packages we want to be available to the build.
 all_packages = []
-for package_dir in sys.argv[4:]:
+for package_dir in sys.argv[5:]:
     with open(os.path.join(package_dir, "elm.json")) as f:
         metadata = json.load(f)
     all_packages.append((metadata["name"], metadata["version"]))
@@ -48,5 +48,9 @@ with open(os.path.join(PACKAGES_DIR, "versions.dat"), "wb") as f:
 for root, dirs, files in os.walk("elm-home"):
     os.chmod(root, 0o500)
 
-os.symlink(sys.argv[1], "elm.json")
-os.execve(sys.argv[2], [sys.argv[2], "make", sys.argv[3]], {"ELM_HOME": "elm-home"})
+os.symlink(sys.argv[2], "elm.json")
+os.execve(
+    sys.argv[1],
+    [sys.argv[1], "make", "--output=" + sys.argv[4], sys.argv[3]],
+    {"ELM_HOME": "elm-home"},
+)
