@@ -1,9 +1,7 @@
 def _elm_toolchain_impl(ctx):
-    return [
-        platform_common.ToolchainInfo(
-            elm = ctx.attr.elm,
-        ),
-    ]
+    return [platform_common.ToolchainInfo(
+        elm = ctx.attr.elm,
+    )]
 
 _elm_toolchain = rule(
     attrs = {

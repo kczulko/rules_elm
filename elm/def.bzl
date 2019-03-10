@@ -1,16 +1,19 @@
 ElmLibrary = provider()
 
+_TOOLCHAIN = "@com_github_edschouten_rules_elm//elm:toolchain"
+
 def _elm_binary_impl(ctx):
-    toolchain = ctx.toolchains["@com_github_edschouten_rules_elm//elm:toolchain"]
-    package_directories = depset(transitive = [dep[ElmLibrary].package_directories for dep in ctx.attr.deps])
-    source_directories = depset(transitive = [dep[ElmLibrary].source_directories for dep in ctx.attr.deps])
+    toolchain = ctx.toolchains[_TOOLCHAIN]
+
+    # Generate an elm.json file, containing a list of all package
+    # dependencies and directories where sources are stored.
+    source_directories = depset(
+        transitive = [dep[ElmLibrary].source_directories for dep in ctx.attr.deps],
+    )
     dependencies = {}
     for dep in ctx.attr.deps:
         for name, version in dep[ElmLibrary].dependencies:
             dependencies[name] = version
-    depset(transitive = [dep[ElmLibrary].dependencies for dep in ctx.attr.deps])
-    deps_srcs = depset(transitive = [dep[ElmLibrary].transitive_srcs for dep in ctx.attr.deps])
-
     elm_json = ctx.actions.declare_file(ctx.attr.name + "-elm.json")
     ctx.actions.write(elm_json, """{
     "type": "application",
@@ -23,6 +26,14 @@ def _elm_binary_impl(ctx):
         repr(source_directories.to_list()),
     ))
 
+    # Invoke Elm through a wrapper script that generates an ELM_HOME and
+    # moves elm.json to the right spot prior to invocation.
+    source_files = depset(
+        transitive = [dep[ElmLibrary].source_files for dep in ctx.attr.deps],
+    )
+    package_directories = depset(
+        transitive = [dep[ElmLibrary].package_directories for dep in ctx.attr.deps],
+    )
     output = ctx.actions.declare_file(ctx.attr.name + ".js")
     ctx.actions.run(
         mnemonic = "Elm",
@@ -34,13 +45,12 @@ def _elm_binary_impl(ctx):
             ctx.files.main[0].path,
             output.path,
         ] + package_directories.to_list(),
-        inputs = toolchain.elm.files + ctx.files._compile + [elm_json] + ctx.files.main + deps_srcs,
+        inputs = toolchain.elm.files + ctx.files._compile + [elm_json] +
+                 ctx.files.main + source_files,
         outputs = [output],
     )
 
-    return [
-        DefaultInfo(files = depset([output])),
-    ]
+    return [DefaultInfo(files = depset([output]))]
 
 elm_binary = rule(
     attrs = {
@@ -55,7 +65,7 @@ elm_binary = rule(
             default = Label("@com_github_edschouten_rules_elm//elm:compile.py"),
         ),
     },
-    toolchains = ["@com_github_edschouten_rules_elm//elm:toolchain"],
+    toolchains = [_TOOLCHAIN],
     implementation = _elm_binary_impl,
 )
 
@@ -63,7 +73,6 @@ def _elm_library_impl(ctx):
     source_directory = ctx.label.workspace_root
     if ctx.attr.strip_import_prefix:
         source_directory += "/" + ctx.attr.strip_import_prefix
-
     return [
         ElmLibrary(
             dependencies = depset(
@@ -76,9 +85,9 @@ def _elm_library_impl(ctx):
                 [source_directory],
                 transitive = [dep[ElmLibrary].source_directories for dep in ctx.attr.deps],
             ),
-            transitive_srcs = depset(
+            source_files = depset(
                 ctx.files.srcs,
-                transitive = [dep[ElmLibrary].transitive_srcs for dep in ctx.attr.deps],
+                transitive = [dep[ElmLibrary].srcs for dep in ctx.attr.deps],
             ),
         ),
     ]
@@ -109,9 +118,9 @@ def _elm_package_impl(ctx):
             source_directories = depset(
                 transitive = [dep[ElmLibrary].source_directories for dep in ctx.attr.deps],
             ),
-            transitive_srcs = depset(
+            source_files = depset(
                 ctx.files.srcs,
-                transitive = [dep[ElmLibrary].transitive_srcs for dep in ctx.attr.deps],
+                transitive = [dep[ElmLibrary].source_files for dep in ctx.attr.deps],
             ),
         ),
     ]

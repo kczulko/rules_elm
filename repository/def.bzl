@@ -12,7 +12,8 @@ def _elm_repository_impl(ctx):
         ctx.name,
     ])
     if result.return_code:
-        fail("failed to generate BUILD files for %s: %s" % (ctx.name, result.stderr))
+        fail("failed to generate BUILD files for %s: %s" %
+             (ctx.name, result.stderr))
 
 elm_repository = repository_rule(
     attrs = {
