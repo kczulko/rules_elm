@@ -14,7 +14,7 @@ all_packages = []
 for package_dir in sys.argv[5:]:
     with open(os.path.join(package_dir, "elm.json")) as f:
         metadata = json.load(f)
-    all_packages.append((metadata["name"], metadata["version"]))
+    all_packages.append((metadata["name"].split("/", 1) , metadata["version"]))
 
     internal_package_dir = os.path.join(PACKAGES_DIR, metadata["name"])
     os.makedirs(internal_package_dir)
@@ -28,8 +28,7 @@ for package_dir in sys.argv[5:]:
 # those packages that are available to the build.
 with open(os.path.join(PACKAGES_DIR, "versions.dat"), "wb") as f:
     f.write(struct.pack(">QQ", len(all_packages), len(all_packages)))
-    for name, version in sorted(all_packages):
-        name_parts = name.split("/", 1)
+    for name_parts, version in sorted(all_packages):
         version_parts = version.split(".", 2)
         f.write(struct.pack(">Q", len(name_parts[0])))
         f.write(bytes(name_parts[0], encoding="ASCII"))
