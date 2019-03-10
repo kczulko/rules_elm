@@ -1,6 +1,7 @@
 import json
 import os
 import struct
+import subprocess
 import sys
 
 import subprocess
@@ -49,8 +50,11 @@ for root, dirs, files in os.walk("elm-home"):
     os.chmod(root, 0o500)
 
 os.symlink(sys.argv[2], "elm.json")
-os.execve(
-    sys.argv[1],
-    [sys.argv[1], "make", "--output=" + sys.argv[4], sys.argv[3]],
-    {"ELM_HOME": "elm-home"},
+
+sys.exit(
+    subprocess.call(
+        [sys.argv[1], "make", "--output=" + sys.argv[4], sys.argv[3]],
+        env={"ELM_HOME": "elm-home"},
+        stdout=subprocess.DEVNULL,
+    )
 )
