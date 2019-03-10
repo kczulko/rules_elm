@@ -9,6 +9,7 @@ def _elm_repository_impl(ctx):
     result = ctx.execute([
         "python3",
         ctx.path(Label("@com_github_edschouten_rules_elm//repository:generate_build_files.py")),
+        ctx.name,
     ])
     if result.return_code:
         fail("failed to generate BUILD files for %s: %s" % (ctx.name, result.stderr))
