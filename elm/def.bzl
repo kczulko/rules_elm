@@ -69,8 +69,13 @@ elm_binary = rule(
     implementation = _elm_binary_impl,
 )
 
+def _get_workspace_root(ctx):
+    if not ctx.label.workspace_root:
+        return "."
+    return ctx.label.workspace_root
+
 def _elm_library_impl(ctx):
-    source_directory = ctx.label.workspace_root
+    source_directory = _get_workspace_root(ctx)
     if ctx.attr.strip_import_prefix:
         source_directory += "/" + ctx.attr.strip_import_prefix
     return [
@@ -87,7 +92,7 @@ def _elm_library_impl(ctx):
             ),
             source_files = depset(
                 ctx.files.srcs,
-                transitive = [dep[ElmLibrary].srcs for dep in ctx.attr.deps],
+                transitive = [dep[ElmLibrary].source_files for dep in ctx.attr.deps],
             ),
         ),
     ]
@@ -112,7 +117,7 @@ def _elm_package_impl(ctx):
                 transitive = [dep[ElmLibrary].dependencies for dep in ctx.attr.deps],
             ),
             package_directories = depset(
-                [ctx.label.workspace_root + "/" + ctx.label.package],
+                [_get_workspace_root(ctx) + "/" + ctx.label.package],
                 transitive = [dep[ElmLibrary].package_directories for dep in ctx.attr.deps],
             ),
             source_directories = depset(
