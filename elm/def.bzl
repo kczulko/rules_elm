@@ -142,3 +142,7 @@ elm_package = rule(
     },
     implementation = _elm_package_impl,
 )
+
+# TODO(edsch): Have a proper implementation for elm_test() that used
+# https://github.com/rtfeldman/node-test-runner
+elm_test = elm_binary
