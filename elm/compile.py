@@ -12,7 +12,7 @@ all_packages = []
 for package_dir in sys.argv[5:]:
     with open(os.path.join(package_dir, "elm.json")) as f:
         metadata = json.load(f)
-    all_packages.append((metadata["name"].split("/", 1) , metadata["version"]))
+    all_packages.append((metadata["name"].split("/", 1), metadata["version"]))
 
     internal_package_dir = os.path.join(PACKAGES_DIR, metadata["name"])
     os.makedirs(internal_package_dir)
@@ -20,6 +20,14 @@ for package_dir in sys.argv[5:]:
         os.path.abspath(package_dir),
         os.path.join(internal_package_dir, metadata["version"]),
     )
+
+
+def str_to_bytes(s):
+    try:
+        return bytes(s, encoding="ASCII")
+    except TypeError:
+        return bytes(s)
+
 
 # Generate a versions.dat package index file. Without it, Elm will be
 # dependent on internet access. Let the package index file contain just
@@ -29,9 +37,9 @@ with open(os.path.join(PACKAGES_DIR, "versions.dat"), "wb") as f:
     for name_parts, version in sorted(all_packages):
         version_parts = version.split(".", 2)
         f.write(struct.pack(">Q", len(name_parts[0])))
-        f.write(bytes(name_parts[0], encoding="ASCII"))
+        f.write(str_to_bytes(name_parts[0]))
         f.write(struct.pack(">Q", len(name_parts[1])))
-        f.write(bytes(name_parts[1], encoding="ASCII"))
+        f.write(str_to_bytes(name_parts[1]))
         f.write(
             struct.pack(
                 ">QBBB",
@@ -52,6 +60,6 @@ sys.exit(
     subprocess.call(
         [sys.argv[1], "make", "--output=" + sys.argv[4], sys.argv[3]],
         env={"ELM_HOME": "elm-home"},
-        stdout=subprocess.DEVNULL,
+        stdout=open(os.devnull, "w"),
     )
 )

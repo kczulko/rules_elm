@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import json
 import sys
 
@@ -27,10 +29,10 @@ elm_package(
     visibility = ["//visibility:public"],
 )"""
         % {
-            "name": repr(sys.argv[1]),
-            "deps": repr(deps),
-            "package_name": repr(metadata["name"]),
-            "package_version": repr(metadata["version"]),
+            "name": json.dumps(sys.argv[1]),
+            "deps": json.dumps(deps),
+            "package_name": json.dumps(metadata["name"]),
+            "package_version": json.dumps(metadata["version"]),
         },
         file=build_file,
     )

@@ -37,7 +37,7 @@ def _elm_binary_impl(ctx):
     output = ctx.actions.declare_file(ctx.attr.name + ".js")
     ctx.actions.run(
         mnemonic = "Elm",
-        executable = "python3",
+        executable = "python",
         arguments = [
             ctx.files._compile[0].path,
             toolchain.elm.files.to_list()[0].path,
