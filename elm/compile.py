@@ -4,8 +4,6 @@ import struct
 import subprocess
 import sys
 
-import subprocess
-
 PACKAGES_DIR = "elm-home/0.19.0/package"
 
 # Construct an ELM_HOME directory, containing symlinks to all the
