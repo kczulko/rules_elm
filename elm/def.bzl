@@ -2,19 +2,28 @@ ElmLibrary = provider()
 
 _TOOLCHAIN = "@com_github_edschouten_rules_elm//elm:toolchain"
 
-def _do_elm_make(ctx, outputs, js_path, elmi_path):
+def _do_elm_make(
+        ctx,
+        main,
+        additional_source_directories,
+        additional_source_files,
+        outputs,
+        js_path,
+        elmi_path,
+        suffix):
     toolchain = ctx.toolchains[_TOOLCHAIN]
 
     # Generate an elm.json file, containing a list of all package
     # dependencies and directories where sources are stored.
     source_directories = depset(
+        additional_source_directories,
         transitive = [dep[ElmLibrary].source_directories for dep in ctx.attr.deps],
     )
     dependencies = {}
     for dep in ctx.attr.deps:
         for name, version in dep[ElmLibrary].dependencies:
             dependencies[name] = version
-    elm_json = ctx.actions.declare_file(ctx.attr.name + "-elm.json")
+    elm_json = ctx.actions.declare_file(ctx.attr.name + "-elm.json" + suffix)
     ctx.actions.write(
         elm_json,
         """{
@@ -30,6 +39,7 @@ def _do_elm_make(ctx, outputs, js_path, elmi_path):
     # Invoke Elm through a wrapper script that generates an ELM_HOME and
     # moves elm.json to the right spot prior to invocation.
     source_files = depset(
+        additional_source_files,
         transitive = [dep[ElmLibrary].source_files for dep in ctx.attr.deps],
     )
     package_directories = depset(
@@ -42,19 +52,27 @@ def _do_elm_make(ctx, outputs, js_path, elmi_path):
             ctx.files._compile[0].path,
             toolchain.elm.files.to_list()[0].path,
             elm_json.path,
-            ctx.files.main[0].path,
+            main.path,
             js_path,
             elmi_path,
         ] + package_directories.to_list(),
         inputs = toolchain.elm.files +
-                 ctx.files._compile + [elm_json] + ctx.files.main +
-                 source_files,
+                 ctx.files._compile + [elm_json, main] + source_files,
         outputs = outputs,
     )
 
 def _elm_binary_impl(ctx):
     js_file = ctx.actions.declare_file(ctx.attr.name + ".js")
-    _do_elm_make(ctx, [js_file], js_file.path, "unused.elmi")
+    _do_elm_make(
+        ctx,
+        ctx.files.main[0],
+        [],
+        [],
+        [js_file],
+        js_file.path,
+        "unused.elmi",
+        "",
+    )
     return [DefaultInfo(files = depset([js_file]))]
 
 elm_binary = rule(
@@ -166,22 +184,51 @@ def _elm_test_impl(ctx):
         elmi_filename = elmi_filename[:-4]
     elmi_filename += ".elmi"
     elmi_file = ctx.actions.declare_file(elmi_filename)
-    _do_elm_make(ctx, [elmi_file], "unused.js", elmi_file.path)
-
-    # TODO(edsch): Convert .elmi to main source file.
-
-    runner_filename = ctx.attr.name + "_start.sh"
-    runner_file = ctx.actions.declare_file(runner_filename)
-    ctx.actions.write(
-        runner_file,
-        "#!/bin/sh\necho Hello world\n",
-        is_executable = True,
+    _do_elm_make(
+        ctx,
+        ctx.files.main[0],
+        [],
+        [],
+        [elmi_file],
+        "unused.js",
+        elmi_file.path,
+        "-1",
     )
 
-    return [DefaultInfo(
-        executable = runner_file,
-        runfiles = ctx.runfiles([elmi_file]),
-    )]
+    # Create a main source file for the test that runs all the tests.
+    # Obtain the list of tests to run from the .elmi file.
+    main_filename = ctx.attr.name + "_main.elm"
+    main_file = ctx.actions.declare_file(main_filename)
+    ctx.actions.run(
+        mnemonic = "Elmi2Main",
+        executable = "python",
+        arguments = [
+            ctx.files._generate_test_main[0].path,
+            elmi_file.path,
+            main_file.path,
+        ],
+        inputs = ctx.files._generate_test_main + [elmi_file],
+        outputs = [main_file],
+    )
+
+    # Build the new main file.
+    js_file = ctx.actions.declare_file(ctx.attr.name + ".js")
+    _do_elm_make(
+        ctx,
+        main_file,
+        [ctx.files.main[0].dirname],
+        ctx.files.main,
+        [js_file],
+        js_file.path,
+        "unused.elmi",
+        "-2",
+    )
+
+    runner_filename = ctx.attr.name + ".sh"
+    runner_file = ctx.actions.declare_file(runner_filename)
+    ctx.actions.write(runner_file, "#!/bin/sh\necho Hello world\n", is_executable = True)
+
+    return [DefaultInfo(executable = runner_file, runfiles = ctx.runfiles([js_file]))]
 
 elm_test = rule(
     attrs = {
@@ -194,6 +241,13 @@ elm_test = rule(
             allow_files = True,
             single_file = True,
             default = Label("@com_github_edschouten_rules_elm//elm:compile.py"),
+        ),
+        "_generate_test_main": attr.label(
+            allow_files = True,
+            single_file = True,
+            default = Label(
+                "@com_github_edschouten_rules_elm//elm:generate_test_main.py",
+            ),
         ),
     },
     test = True,

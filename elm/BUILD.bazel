@@ -1,4 +1,7 @@
-exports_files(["compile.py"])
+exports_files([
+    "compile.py",
+    "generate_test_main.py",
+])
 
 toolchain_type(
     name = "toolchain",
