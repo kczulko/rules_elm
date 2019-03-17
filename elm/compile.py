@@ -9,7 +9,7 @@ PACKAGES_DIR = "elm-home/0.19.0/package"
 # Construct an ELM_HOME directory, containing symlinks to all the
 # packages we want to be available to the build.
 all_packages = []
-for package_dir in sys.argv[5:]:
+for package_dir in sys.argv[6:]:
     with open(os.path.join(package_dir, "elm.json")) as f:
         metadata = json.load(f)
     all_packages.append((metadata["name"].split("/", 1), metadata["version"]))
@@ -54,12 +54,20 @@ with open(os.path.join(PACKAGES_DIR, "versions.dat"), "wb") as f:
 for root, dirs, files in os.walk("elm-home"):
     os.chmod(root, 0o500)
 
+# Invoke Elm build action.
 os.symlink(sys.argv[2], "elm.json")
-
-sys.exit(
-    subprocess.call(
-        [sys.argv[1], "make", "--output=" + sys.argv[4], sys.argv[3]],
-        env={"ELM_HOME": "elm-home"},
-        stdout=open(os.devnull, "w"),
-    )
+main_file = sys.argv[3]
+subprocess.check_call(
+    [sys.argv[1], "make", "--output=" + sys.argv[4], main_file],
+    env={"ELM_HOME": "elm-home"},
+    stdout=open(os.devnull, "w"),
 )
+
+# Preserve the .elmi file. This file contains information about
+# top-level declarations in the source file. It is used by elm_test() to
+# automatically generate an entry point that invokes all unit tests.
+elmi_file = os.path.basename(main_file)
+if elmi_file.endswith(".elm"):
+    elmi_file = elmi_file[:-4]
+elmi_file += ".elmi"
+os.rename(os.path.join("elm-stuff/0.19.0", elmi_file), sys.argv[5])
