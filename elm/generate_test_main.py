@@ -19,7 +19,7 @@ def _read_uint64(f):
 def _read_string(f):
     offset = f.tell()
     length = _read_uint64(f)
-    if length > 10000:
+    if length > 1000:
         raise OverflowError(
             "Cannot read string of length %d (%#018x) at offset %#x"
             % (length, length, offset)
@@ -112,7 +112,7 @@ def _read_freevars(f):
 
 
 def _read_tvar(f):
-    return _read_string(f)
+    return _read_name(f)
 
 
 def _read_tlambda(f):
@@ -123,10 +123,14 @@ def _read_ttuple(f):
     return (_read_type(f), _read_type(f), _create_maybe_reader(_read_type)(f))
 
 
+def _read_fieldtype(f):
+    return (_read_uint16(f), _read_type(f))
+
+
 def _read_trecord(f):
     return (
-        _create_map_reader(_read_name, _read_uint16),
-        _create_maybe_reader(_read_name),
+        _create_map_reader(_read_name, _read_fieldtype)(f),
+        _create_maybe_reader(_read_name)(f),
     )
 
 
@@ -148,12 +152,12 @@ def _read_ttype_n(f, n):
 
 
 def _read_talias(f):
-    return {
-        "module_name": _read_module_name(f),
-        "name": _read_name(f),
-        "whatever": _create_list_reader(lambda f: (_read_name(f), _read_type(f)))(f),
-        "alias_type": _read_alias_type(f),
-    }
+    return (
+        _read_module_name(f),
+        _read_name(f),
+        _create_list_reader(lambda f: (_read_name(f), _read_type(f)))(f),
+        _read_alias_type(f),
+    )
 
 
 def _read_alias_type(f):
@@ -168,7 +172,6 @@ def _read_alias_type(f):
 
 
 def _read_type(f):
-    offset = f.tell()
     tag = _read_uint8(f)
     if tag == 0:
         return _read_tlambda(f)
