@@ -1,7 +1,11 @@
 from __future__ import print_function
 
+import os
 import struct
 import sys
+
+
+# Parsers for raw structures stored on .elmi files.
 
 
 def _read_uint8(f):
@@ -20,7 +24,7 @@ def _read_string(f):
     offset = f.tell()
     length = _read_uint64(f)
     if length > 1000:
-        raise OverflowError(
+        raise Exception(
             "Cannot read string of length %d (%#018x) at offset %#x"
             % (length, length, offset)
         )
@@ -47,7 +51,7 @@ def _create_map_reader(read_key, read_value):
         for _ in range(_read_uint64(f)):
             key = read_key(f, v)
             if key in res:
-                raise KeyError("Key %s already exists" % key)
+                raise Exception("Key %s already exists" % key)
             res[key] = read_value(f, v)
         return res
 
@@ -61,7 +65,7 @@ def _create_maybe_reader(read_value):
             return None
         if has_value == 1:
             return read_value(f, v)
-        raise OverflowError("Unknown maybe field value %d" % has_type)
+        raise Exception("Unknown maybe field value %d" % has_type)
 
     return reader
 
@@ -72,7 +76,7 @@ def _create_set_reader(read_key):
         for _ in range(_read_uint64(f)):
             key = read_key(f, v)
             if key in res:
-                raise KeyError("Key %s already exists" % key)
+                raise Exception("Key %s already exists" % key)
             res.add(key)
         return res
 
@@ -172,7 +176,7 @@ def _read_aliastype(f, v):
     elif tag == 1:
         return v.visit_aliastype(True, _read_type(f, v))
     else:
-        raise OverflowError("Unknown alias type kind %d at offset %#x" % (tag, offset))
+        raise Exception("Unknown alias type kind %d at offset %#x" % (tag, offset))
 
 
 def _read_type(f, v):
@@ -204,18 +208,20 @@ def _read_interface(f, v):
     return v.visit_interface(_create_map_reader(_read_name, _read_annotation)(f, v))
 
 
-class BlaVisitor:
+class TypeAliasExtractor:
+    """Extracts just the "TAlias" type entries from an .elmi file."""
+
     def visit_aliastype(self, filled, type_):
-        pass
+        return None
 
     def visit_annotation(self, free_variables, type_):
-        pass
+        return type_
 
     def visit_fieldtype(self, source_order, type_):
-        pass
+        return None
 
     def visit_interface(self, annotations):
-        pass
+        return annotations
 
     def visit_module_name(self, package, name):
         return (package, name)
@@ -227,26 +233,68 @@ class BlaVisitor:
         return (author, name)
 
     def visit_talias(self, module_name, name, fields, type_):
-        pass
+        return (module_name, name)
 
     def visit_tlambda(self, left, right):
-        pass
+        return None
 
     def visit_trecord(self, fields, name):
-        pass
+        return None
 
     def visit_ttuple(self, first, second, maybe_third):
-        pass
+        return None
 
     def visit_ttype(self, module_name, name, types):
-        pass
+        return None
 
     def visit_tunit(self):
-        pass
+        return None
 
     def visit_tvar(self, name):
-        pass
+        return None
 
 
+# Extract all tests stored in the source file.
 with open(sys.argv[1], "rb") as f:
-    print(_read_interface(f, BlaVisitor()))
+    all_tests = sorted(
+        name
+        for name, type_ in _read_interface(f, TypeAliasExtractor()).items()
+        if type_ == ((("elm-explorations", "test"), "Test"), "Test")
+    )
+if not all_tests:
+    raise Exception("Failed to find any tests in this source file")
+
+module_name = os.path.basename(sys.argv[1])
+if module_name.endswith(".elmi"):
+    module_name = module_name[:-5]
+
+# Emit a main source file that calls the tests.
+# TODO(edsch): What about the seed?
+with open(sys.argv[2], "w") as f:
+    print(
+        """
+import Console.Text exposing (UseColor(..))
+import Test
+import Test.Reporter.Reporter exposing (Report(..))
+import Test.Runner.Node
+
+import %(module_name)s
+
+main : Test.Runner.Node.TestProgram
+main =
+    [ Test.describe "%(module_name)s" [%(tests)s] ]
+        |> Test.concat
+        |> Test.Runner.Node.run {
+            runs = Nothing,
+            report = (ConsoleReport UseColor),
+            seed = 236315485321474,
+            processes = 1,
+            paths = ["%(source_file)s"],
+        }"""
+        % {
+            "source_file": sys.argv[1],
+            "module_name": module_name,
+            "tests": ", ".join("%s.%s" % (module_name, test) for test in all_tests),
+        },
+        file=f,
+    )
