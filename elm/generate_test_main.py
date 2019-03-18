@@ -288,7 +288,7 @@ main =
             report = (ConsoleReport UseColor),
             seed = 236315485321474,
             processes = 1,
-            paths = ["%(source_file)s"],
+            paths = ["%(source_file)s"]
         }"""
         % {
             "source_file": sys.argv[1],
