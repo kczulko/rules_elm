@@ -5,6 +5,7 @@ _TOOLCHAIN = "@com_github_edschouten_rules_elm//elm:toolchain"
 def _do_elm_make(
         ctx,
         main,
+        deps,
         additional_source_directories,
         additional_source_files,
         outputs,
@@ -17,10 +18,10 @@ def _do_elm_make(
     # dependencies and directories where sources are stored.
     source_directories = depset(
         additional_source_directories,
-        transitive = [dep[ElmLibrary].source_directories for dep in ctx.attr.deps],
+        transitive = [dep[ElmLibrary].source_directories for dep in deps],
     )
     dependencies = {}
-    for dep in ctx.attr.deps:
+    for dep in deps:
         for name, version in dep[ElmLibrary].dependencies:
             dependencies[name] = version
     elm_json = ctx.actions.declare_file(ctx.attr.name + "-elm.json" + suffix)
@@ -40,10 +41,10 @@ def _do_elm_make(
     # moves elm.json to the right spot prior to invocation.
     source_files = depset(
         additional_source_files,
-        transitive = [dep[ElmLibrary].source_files for dep in ctx.attr.deps],
+        transitive = [dep[ElmLibrary].source_files for dep in deps],
     )
     package_directories = depset(
-        transitive = [dep[ElmLibrary].package_directories for dep in ctx.attr.deps],
+        transitive = [dep[ElmLibrary].package_directories for dep in deps],
     )
     ctx.actions.run(
         mnemonic = "Elm",
@@ -66,6 +67,7 @@ def _elm_binary_impl(ctx):
     _do_elm_make(
         ctx,
         ctx.files.main[0],
+        ctx.attr.deps,
         [],
         [],
         [js_file],
@@ -187,6 +189,7 @@ def _elm_test_impl(ctx):
     _do_elm_make(
         ctx,
         ctx.files.main[0],
+        ctx.attr.deps,
         [],
         [],
         [elmi_file],
@@ -216,6 +219,7 @@ def _elm_test_impl(ctx):
     _do_elm_make(
         ctx,
         main_file,
+        ctx.attr.deps + [ctx.attr._node_test_runner],
         [ctx.files.main[0].dirname],
         ctx.files.main,
         [js_file],
@@ -247,6 +251,12 @@ elm_test = rule(
             single_file = True,
             default = Label(
                 "@com_github_edschouten_rules_elm//elm:generate_test_main.py",
+            ),
+        ),
+        "_node_test_runner": attr.label(
+            providers = [ElmLibrary],
+            default = Label(
+                "@com_github_rtfeldman_node_test_runner//:node_test_runner",
             ),
         ),
     },
