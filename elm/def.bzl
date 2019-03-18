@@ -230,9 +230,16 @@ def _elm_test_impl(ctx):
 
     runner_filename = ctx.attr.name + ".sh"
     runner_file = ctx.actions.declare_file(runner_filename)
-    ctx.actions.write(runner_file, "#!/bin/sh\necho Hello world\n", is_executable = True)
+    ctx.actions.write(
+        runner_file,
+        "#!/bin/sh\nexec %s %s $(pwd)/%s\n" % (ctx.files._node[0].short_path, ctx.files._run_test[0].short_path, js_file.short_path),
+        is_executable = True,
+    )
 
-    return [DefaultInfo(executable = runner_file, runfiles = ctx.runfiles([js_file]))]
+    return [DefaultInfo(
+        executable = runner_file,
+        runfiles = ctx.runfiles(ctx.files._node + ctx.files._node_runfiles + ctx.files._run_test + [js_file]),
+    )]
 
 elm_test = rule(
     attrs = {
@@ -253,11 +260,24 @@ elm_test = rule(
                 "@com_github_edschouten_rules_elm//elm:generate_test_main.py",
             ),
         ),
+        "_node": attr.label(
+            allow_single_file = True,
+            default = Label("@nodejs//:node"),
+        ),
+        "_node_runfiles": attr.label(
+            allow_files = True,
+            default = Label("@nodejs//:node_runfiles"),
+        ),
         "_node_test_runner": attr.label(
             providers = [ElmLibrary],
             default = Label(
                 "@com_github_rtfeldman_node_test_runner//:node_test_runner",
             ),
+        ),
+        "_run_test": attr.label(
+            allow_files = True,
+            single_file = True,
+            default = Label("@com_github_edschouten_rules_elm//elm:run_test.js"),
         ),
     },
     test = True,
