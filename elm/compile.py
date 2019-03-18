@@ -66,8 +66,9 @@ subprocess.check_call(
 # Preserve the .elmi file. This file contains information about
 # top-level declarations in the source file. It is used by elm_test() to
 # automatically generate an entry point that invokes all unit tests.
-elmi_file = os.path.basename(main_file)
-if elmi_file.endswith(".elm"):
-    elmi_file = elmi_file[:-4]
-elmi_file += ".elmi"
-os.rename(os.path.join("elm-stuff/0.19.0", elmi_file), sys.argv[5])
+if sys.argv[5] != "":
+    elmi_file = os.path.basename(main_file)
+    if elmi_file.endswith(".elm"):
+        elmi_file = elmi_file[:-4]
+    elmi_file += ".elmi"
+    os.rename(os.path.join("elm-stuff/0.19.0", elmi_file), sys.argv[5])

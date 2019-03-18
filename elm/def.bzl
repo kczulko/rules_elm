@@ -70,7 +70,7 @@ def _elm_binary_impl(ctx):
         [],
         [js_file],
         js_file.path,
-        "unused.elmi",
+        "",
         "",
     )
     return [DefaultInfo(files = depset([js_file]))]
@@ -220,7 +220,7 @@ def _elm_test_impl(ctx):
         ctx.files.main,
         [js_file],
         js_file.path,
-        "unused.elmi",
+        "",
         "-2",
     )
 
