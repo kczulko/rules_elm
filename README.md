@@ -116,3 +116,11 @@ elm_repository(name, urls, sha256, strip_prefix)
 - `sha256`: SHA-256 checksum of the tarball.
 - `strip_prefix`: Directory prefix that may be removed from the files
   upon extraction.
+
+## Examples on how to use these rules
+
+[The Bazel Elm SPA Example repository](https://github.com/EdSchouten/bazel-elm-spa-example)
+contains a concrete example of how these rules may be used to build a
+web application written in Elm. This repository contains a copy of a
+well-known demonstration application that has been adjusted to be
+buildable using Bazel.
