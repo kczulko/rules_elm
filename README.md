@@ -62,3 +62,57 @@ by multiple `elm_binary()`s.
   `my/project/Foo/Bar.elm` contains module `Foo.Bar`,
   `strip_import_prefix` should be set to `my/project` for module
   resolution to work.
+
+### `elm_package()`
+
+```python
+load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_package")
+
+elm_package(name, package_name, package_version, srcs, deps, visibility)
+```
+
+**Purpose:** make an off-the-shelf Elm package usable as a dependency.
+
+- `package_name`: The publicly used name of the package (e.g.,
+  `elm/json`).
+- `package_version`: The version of the package (e.g., `1.0.2`).
+- `srcs`: Files that are part of this package. This list **SHOULD**
+  include `"elm.json"`.
+- `deps`: List of packages on which this package depends.
+
+**Note:** This function is typically not used directly; it is often
+sufficient to use `elm_repository()`.
+
+### `elm_test()`
+
+```python
+load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_test")
+
+elm_test(name, main, deps, visibility)
+```
+
+**Purpose:** compile an Elm testing application to Javascript and
+execute it using Node.js.
+
+- `main`: The name of the source file containing one or more
+  [`Test`s](https://package.elm-lang.org/packages/elm-explorations/test/1.2.1/Test#Test)
+- `deps`: List of `elm_library()` and `elm_package()` targets on which
+  the testing application depends.
+
+## Repository rules provided by this project
+
+### `elm_repository()`
+
+```python
+load("@com_github_edschouten_rules_elm//repository:def.bzl", "elm_repository")
+
+elm_repository(name, urls, sha256, strip_prefix)
+```
+
+**Purpose:** download an Elm package over HTTP, extract it and create a
+`BUILD.bazel` file containing an `elm_package()` declaration.
+
+- `urls`: List of URLs where the package tarball may be downloaded.
+- `sha256`: SHA-256 checksum of the tarball.
+- `strip_prefix`: Directory prefix that may be removed from the files
+  upon extraction.
