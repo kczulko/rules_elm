@@ -12,12 +12,13 @@ any libraries used may be versioned as part of your Bazel project.
 Add the following declarations to your `WORKSPACE` file:
 
 ```python
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-git_repository(
+http_archive(
     name = "com_github_edschouten_rules_elm",
-    commit = "<fill in the commit hash here>",
-    remote = "https://github.com/EdSchouten/rules_elm.git",
+    sha256 = "f6f1bd1b2e03b2d6b59781e48115126ba14fd8792f4c08229f706c13461beae7",
+    strip_prefix = "rules_elm-0.1",
+    urls = ["https://github.com/EdSchouten/rules_elm/archive/v0.1.tar.gz"],
 )
 
 load("@com_github_edschouten_rules_elm//elm:deps.bzl", "elm_register_toolchains")
