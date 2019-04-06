@@ -3,9 +3,9 @@ load("//elm:def.bzl", _ElmLibrary = "ElmLibrary")
 def _convert_proto_to_elm_path(path):
     return "/".join([component.capitalize() for component in path.split("/")])
 
-def _elm_proto_library_impl(ctx):
+def _elm_proto_library_aspect_impl(target, ctx):
     args = ctx.actions.args()
-    proto = ctx.attr.proto.proto
+    proto = target[ProtoInfo]
     elm_srcs = []
     outpath = None
     for src in proto.direct_sources:
@@ -46,23 +46,25 @@ def _elm_proto_library_impl(ctx):
         outputs = elm_srcs,
     )
 
-    # TODO(edsch): Fill in transitive source_directories.
     return [
         _ElmLibrary(
             dependencies = depset(),
             package_directories = depset(),
-            source_directories = depset([outpath]),
-            source_files = depset(elm_srcs),
+            source_directories = depset(
+                [outpath],
+                transitive = [dep[_ElmLibrary].source_directories for dep in ctx.rule.attr.deps],
+            ),
+            source_files = depset(
+                elm_srcs,
+                transitive = [dep[_ElmLibrary].source_files for dep in ctx.rule.attr.deps],
+            ),
         ),
     ]
 
-elm_proto_library = rule(
-    _elm_proto_library_impl,
+_elm_proto_library_aspect = aspect(
+    _elm_proto_library_aspect_impl,
+    attr_aspects = ["deps"],
     attrs = {
-        "proto": attr.label(
-            mandatory = True,
-            providers = ["proto"],
-        ),
         "_protoc": attr.label(
             allow_files = True,
             single_file = True,
@@ -76,6 +78,20 @@ elm_proto_library = rule(
             executable = True,
             cfg = "host",
             default = Label("@com_github_tiziano88_elm_protobuf//protoc-gen-elm"),
+        ),
+    },
+)
+
+def _elm_proto_library_impl(ctx):
+    return ctx.attr.proto[_ElmLibrary]
+
+elm_proto_library = rule(
+    _elm_proto_library_impl,
+    attrs = {
+        "proto": attr.label(
+            aspects = [_elm_proto_library_aspect],
+            mandatory = True,
+            providers = ["proto"],
         ),
     },
 )
