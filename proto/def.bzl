@@ -1,4 +1,4 @@
-#load("//elm:def.bzl", _ElmLibrary = "ElmLibrary")
+load("//elm:def.bzl", _ElmLibrary = "ElmLibrary")
 
 def _convert_proto_to_elm_path(path):
     components = []
@@ -18,21 +18,29 @@ def _elm_proto_library_impl(ctx):
             outpath = out.dirname if importpath == "." else out.dirname[:-len(importpath)]
 
     args = ctx.actions.args()
-    args.add([
+    args.add_all([
         "--plugin",
         ctx.executable._plugin.path,
         "--elm_out",
         outpath,
     ])
-    args.add(proto.direct_sources)
+    args.add_all(proto.transitive_proto_path, before_each = "-I")
+    args.add_all(proto.direct_sources)
     ctx.actions.run(
         executable = ctx.executable._protoc,
         arguments = [args],
-        inputs = proto.direct_sources + [ctx.executable._plugin],
+        inputs = proto.transitive_sources + [ctx.executable._plugin],
         outputs = elm_srcs,
     )
+
+    # TODO(edsch): Fill in dependencies and source_directories.
     return [
-        DefaultInfo(files = depset(elm_srcs)),
+        _ElmLibrary(
+            dependencies = depset(),
+            package_directories = depset(),
+            source_directories = depset(),
+            source_files = depset(elm_srcs),
+        ),
     ]
 
 elm_proto_library = rule(
@@ -42,7 +50,6 @@ elm_proto_library = rule(
             mandatory = True,
             providers = ["proto"],
         ),
-        #"deps": attr.label_list(providers = [_ElmLibrary]),
         "_protoc": attr.label(
             allow_files = True,
             single_file = True,
