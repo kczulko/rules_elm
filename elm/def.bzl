@@ -1,4 +1,8 @@
-ElmLibrary = provider()
+load(
+    "//elm/private:providers.bzl",
+    _ElmLibrary = "ElmLibrary",
+    _create_elm_library_provider = "create_elm_library_provider",
+)
 
 _TOOLCHAIN = "@com_github_edschouten_rules_elm//elm:toolchain"
 
@@ -18,11 +22,11 @@ def _do_elm_make(
     # dependencies and directories where sources are stored.
     source_directories = depset(
         additional_source_directories,
-        transitive = [dep[ElmLibrary].source_directories for dep in deps],
+        transitive = [dep[_ElmLibrary].source_directories for dep in deps],
     )
     dependencies = {}
     for dep in deps:
-        for name, version in dep[ElmLibrary].dependencies:
+        for name, version in dep[_ElmLibrary].dependencies:
             dependencies[name] = version
     elm_json = ctx.actions.declare_file(ctx.attr.name + "-elm.json" + suffix)
     ctx.actions.write(
@@ -41,10 +45,10 @@ def _do_elm_make(
     # moves elm.json to the right spot prior to invocation.
     source_files = depset(
         additional_source_files,
-        transitive = [dep[ElmLibrary].source_files for dep in deps],
+        transitive = [dep[_ElmLibrary].source_files for dep in deps],
     )
     package_directories = depset(
-        transitive = [dep[ElmLibrary].package_directories for dep in deps],
+        transitive = [dep[_ElmLibrary].package_directories for dep in deps],
     )
     ctx.actions.run(
         mnemonic = "Elm",
@@ -79,7 +83,7 @@ def _elm_binary_impl(ctx):
 
 elm_binary = rule(
     attrs = {
-        "deps": attr.label_list(providers = [ElmLibrary]),
+        "deps": attr.label_list(providers = [_ElmLibrary]),
         "main": attr.label(
             allow_files = True,
             mandatory = True,
@@ -104,33 +108,18 @@ def _elm_library_impl(ctx):
     if ctx.attr.strip_import_prefix:
         source_directory += "/" + ctx.attr.strip_import_prefix
     return [
-        ElmLibrary(
-            dependencies = depset(
-                transitive = [dep[ElmLibrary].dependencies for dep in ctx.attr.deps],
-            ),
-            package_directories = depset(
-                transitive = [
-                    dep[ElmLibrary].package_directories
-                    for dep in ctx.attr.deps
-                ],
-            ),
-            source_directories = depset(
-                [source_directory],
-                transitive = [
-                    dep[ElmLibrary].source_directories
-                    for dep in ctx.attr.deps
-                ],
-            ),
-            source_files = depset(
-                ctx.files.srcs,
-                transitive = [dep[ElmLibrary].source_files for dep in ctx.attr.deps],
-            ),
+        _create_elm_library_provider(
+            ctx.attr.deps,
+            [],
+            [],
+            [source_directory],
+            ctx.files.srcs,
         ),
     ]
 
 elm_library = rule(
     attrs = {
-        "deps": attr.label_list(providers = [ElmLibrary]),
+        "deps": attr.label_list(providers = [_ElmLibrary]),
         "srcs": attr.label_list(
             allow_files = True,
             mandatory = True,
@@ -142,31 +131,18 @@ elm_library = rule(
 
 def _elm_package_impl(ctx):
     return [
-        ElmLibrary(
-            dependencies = depset(
-                [(ctx.attr.package_name, ctx.attr.package_version)],
-                transitive = [dep[ElmLibrary].dependencies for dep in ctx.attr.deps],
-            ),
-            package_directories = depset(
-                [_get_workspace_root(ctx) + "/" + ctx.label.package],
-                transitive = [
-                    dep[ElmLibrary].package_directories
-                    for dep in ctx.attr.deps
-                ],
-            ),
-            source_directories = depset(
-                transitive = [dep[ElmLibrary].source_directories for dep in ctx.attr.deps],
-            ),
-            source_files = depset(
-                ctx.files.srcs,
-                transitive = [dep[ElmLibrary].source_files for dep in ctx.attr.deps],
-            ),
+        _create_elm_library_provider(
+            ctx.attr.deps,
+            [(ctx.attr.package_name, ctx.attr.package_version)],
+            [_get_workspace_root(ctx) + "/" + ctx.label.package],
+            [],
+            ctx.files.srcs,
         ),
     ]
 
 elm_package = rule(
     attrs = {
-        "deps": attr.label_list(providers = [ElmLibrary]),
+        "deps": attr.label_list(providers = [_ElmLibrary]),
         "package_name": attr.string(mandatory = True),
         "package_version": attr.string(mandatory = True),
         "srcs": attr.label_list(
@@ -243,7 +219,7 @@ def _elm_test_impl(ctx):
 
 elm_test = rule(
     attrs = {
-        "deps": attr.label_list(providers = [ElmLibrary]),
+        "deps": attr.label_list(providers = [_ElmLibrary]),
         "main": attr.label(
             allow_files = True,
             mandatory = True,
@@ -269,7 +245,7 @@ elm_test = rule(
             default = Label("@nodejs//:node_runfiles"),
         ),
         "_node_test_runner": attr.label(
-            providers = [ElmLibrary],
+            providers = [_ElmLibrary],
             default = Label(
                 "@com_github_rtfeldman_node_test_runner//:node_test_runner",
             ),
