@@ -111,7 +111,10 @@ elm_repository(name, urls, sha256, strip_prefix)
 ```
 
 **Purpose:** download an Elm package over HTTP, extract it and create a
-`BUILD.bazel` file containing an `elm_package()` declaration.
+`BUILD.bazel` file containing either an `elm_package()` or `elm_library()`
+declaration. For `elm/*` and `elm-explorations/*` an `elm_package()` is
+used. For others, `elm_library()` is used to prevent the Elm compiler
+from returning hard to debug dependency management related errors.
 
 - `urls`: List of URLs where the package tarball may be downloaded.
 - `sha256`: SHA-256 checksum of the tarball.
