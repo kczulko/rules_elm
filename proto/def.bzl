@@ -108,7 +108,7 @@ elm_proto_library = rule(
         "proto": attr.label(
             aspects = [_elm_proto_library_aspect],
             mandatory = True,
-            providers = ["proto"],
+            providers = [ProtoInfo],
         ),
     },
 )
