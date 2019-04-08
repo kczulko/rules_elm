@@ -93,7 +93,7 @@ elm_proto_library(name, proto, visibility)
 ```
 
 **Purpose:** generate Elm bindings for [Protocol Buffers](https://developers.google.com/protocol-buffers/)
-definitions using [elm-protobuf](https://github.com/tiziano88/elm-protobuf)
+definitions using [tiziano88/elm-protobuf](https://github.com/tiziano88/elm-protobuf)
 and package them as an `elm_library()`.
 
 - `proto`: The `proto_library()` that should be converted to Elm.
