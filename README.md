@@ -84,6 +84,24 @@ elm_package(name, package_name, package_version, srcs, deps, visibility)
 **Note:** This function is typically not used directly; it is often
 sufficient to use `elm_repository()`.
 
+### `elm_proto_library()`
+
+```python
+load("@com_github_edschouten_rules_elm//proto:def.bzl", "elm_proto_library")
+
+elm_proto_library(name, proto, visibility)
+```
+
+**Purpose:** generate Elm bindings for [Protocol Buffers](https://developers.google.com/protocol-buffers/)
+definitions using [elm-protobuf](https://github.com/tiziano88/elm-protobuf)
+and package them as an `elm_library()`.
+
+- `proto`: The `proto_library()` that should be converted to Elm.
+
+**Note:** This function is implemented using [Bazel aspects](https://docs.bazel.build/versions/master/skylark/aspects.html),
+meaning that it automatically instantiates build rules for all
+transitive dependencies of the `proto_library()`.
+
 ### `elm_test()`
 
 ```python
