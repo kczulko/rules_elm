@@ -100,7 +100,8 @@ and package them as an `elm_library()`.
 
 **Note:** This function is implemented using [Bazel aspects](https://docs.bazel.build/versions/master/skylark/aspects.html),
 meaning that it automatically instantiates build rules for all
-transitive dependencies of the `proto_library()`.
+transitive dependencies of the `proto_library()` and sets up
+dependencies between them accordingly.
 
 ### `elm_test()`
 
