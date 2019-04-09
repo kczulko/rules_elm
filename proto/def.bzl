@@ -4,7 +4,10 @@ load(
     _create_elm_library_provider = "create_elm_library_provider",
 )
 
-_WELL_KNOWN_PROTOS = ["google/protobuf/timestamp.proto"]
+_WELL_KNOWN_PROTOS = [
+    "google/protobuf/timestamp.proto",
+    "google/protobuf/wrappers.proto",
+]
 
 def _convert_proto_to_elm_path(path):
     return "/".join([component.capitalize() for component in path.split("/")])
