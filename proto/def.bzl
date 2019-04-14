@@ -53,7 +53,7 @@ def _elm_proto_library_aspect_impl(target, ctx):
         # TODO(edsch): This should be removed once this is resolved:
         # https://github.com/bazelbuild/bazel/issues/7964
         args.add_all([
-            "bazel-out/k8-fastbuild/genfiles/" + p
+            ctx.genfiles_dir.path + "/" + p
             for p in proto.transitive_proto_path.to_list()
         ], before_each = "-I")
         ctx.actions.run(
