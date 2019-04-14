@@ -55,6 +55,7 @@ def _do_elm_make(
         executable = "python",
         arguments = [
             ctx.files._compile[0].path,
+            ctx.var["COMPILATION_MODE"],
             toolchain.elm.files.to_list()[0].path,
             elm_json.path,
             main.path,
