@@ -44,6 +44,10 @@ Javascript file will be named `${name}.js`.
 - `deps`: List of `elm_library()` and `elm_package()` targets on which
   the application depends.
 
+**Note:** When the compilation mode (`-c`) is equal to `dbg`, the
+resulting Javascript file will have the traveling debugger enabled. When
+the compilation mode is `opt`, optimizations are performed.
+
 ### `elm_library()`
 
 ```python
