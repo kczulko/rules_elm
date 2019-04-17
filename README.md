@@ -130,7 +130,7 @@ execute it using Node.js.
 ```python
 load("@com_github_edschouten_rules_elm//repository:def.bzl", "elm_repository")
 
-elm_repository(name, urls, sha256, strip_prefix)
+elm_repository(name, urls, sha256, strip_prefix, patches)
 ```
 
 **Purpose:** download an Elm package over HTTP, extract it and create a
@@ -143,6 +143,7 @@ from returning hard to debug dependency management related errors.
 - `sha256`: SHA-256 checksum of the tarball.
 - `strip_prefix`: Directory prefix that may be removed from the files
   upon extraction.
+- `patches`: List of labels of patches to apply after extraction.
 
 ## Examples on how to use these rules
 
