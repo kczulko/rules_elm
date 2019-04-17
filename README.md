@@ -16,9 +16,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "com_github_edschouten_rules_elm",
-    sha256 = "f6f1bd1b2e03b2d6b59781e48115126ba14fd8792f4c08229f706c13461beae7",
-    strip_prefix = "rules_elm-0.1",
-    urls = ["https://github.com/EdSchouten/rules_elm/archive/v0.1.tar.gz"],
+    sha256 = "c34015356f755e5c8dd26c5a82ff9710353f925f435861892fb80a929fa07445",
+    strip_prefix = "rules_elm-0.2",
+    urls = ["https://github.com/EdSchouten/rules_elm/archive/v0.2.tar.gz"],
 )
 
 load("@com_github_edschouten_rules_elm//elm:deps.bzl", "elm_register_toolchains")
