@@ -73,11 +73,13 @@ elif arg_compilation_mode == "opt":
 
 # Invoke Elm build action.
 os.symlink(arg_elm_json, "elm.json")
-subprocess.check_call(
+exit_code = subprocess.call(
     [arg_elm_binary, "make", "--output=" + arg_out_js, arg_main] + opt_flags,
     env={"ELM_HOME": "elm-home"},
     stdout=open(os.devnull, "w"),
 )
+if exit_code != 0:
+    sys.exit(exit_code)
 
 # Preserve the .elmi file. This file contains information about
 # top-level declarations in the source file. It is used by elm_test() to
