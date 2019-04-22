@@ -69,17 +69,63 @@ def _do_elm_make(
 
 def _elm_binary_impl(ctx):
     js_file = ctx.actions.declare_file(ctx.attr.name + ".js")
-    _do_elm_make(
-        ctx,
-        ctx.files.main[0],
-        ctx.attr.deps,
-        [],
-        [],
-        [js_file],
-        js_file.path,
-        "",
-        "",
-    )
+    if ctx.var["COMPILATION_MODE"] == "opt":
+        # Step 1: Compile the Elm code.
+        js1_file = ctx.actions.declare_file(ctx.attr.name + ".1.js")
+        _do_elm_make(
+            ctx,
+            ctx.files.main[0],
+            ctx.attr.deps,
+            [],
+            [],
+            [js1_file],
+            js1_file.path,
+            "",
+            "",
+        )
+
+        # Step 2: Compress the resulting Javascript.
+        js2_file = ctx.actions.declare_file(ctx.attr.name + ".2.js")
+        ctx.actions.run(
+            mnemonic = "UglifyJS",
+            executable = ctx.executable._uglifyjs,
+            arguments = [
+                js1_file.path,
+                "--compress",
+                "pure_funcs=[F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9],pure_getters,keep_fargs=false,unsafe_comps,unsafe",
+                "--output",
+                js2_file.path,
+            ],
+            inputs = [js1_file],
+            outputs = [js2_file],
+        )
+
+        # Step 3: Mangle the resulting Javascript.
+        ctx.actions.run(
+            mnemonic = "UglifyJS",
+            executable = ctx.executable._uglifyjs,
+            arguments = [
+                js2_file.path,
+                "--mangle",
+                "--output",
+                js_file.path,
+            ],
+            inputs = [js2_file],
+            outputs = [js_file],
+        )
+    else:
+        # Don't attempt to compress the code after building.
+        _do_elm_make(
+            ctx,
+            ctx.files.main[0],
+            ctx.attr.deps,
+            [],
+            [],
+            [js_file],
+            js_file.path,
+            "",
+            "",
+        )
     return [DefaultInfo(files = depset([js_file]))]
 
 elm_binary = rule(
@@ -93,6 +139,11 @@ elm_binary = rule(
             allow_files = True,
             single_file = True,
             default = Label("@com_github_edschouten_rules_elm//elm:compile.py"),
+        ),
+        "_uglifyjs": attr.label(
+            cfg = "host",
+            default = Label("@npm//uglify-js/bin:uglifyjs"),
+            executable = True,
         ),
     },
     toolchains = [_TOOLCHAIN],

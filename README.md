@@ -46,7 +46,8 @@ Javascript file will be named `${name}.js`.
 
 **Note:** When the compilation mode (`-c`) is equal to `dbg`, the
 resulting Javascript file will have the time traveling debugger enabled.
-When the compilation mode is `opt`, optimizations are performed.
+When the compilation mode is `opt`, optimizations are performed and the
+resulting code is minified using UglifyJS.
 
 ### `elm_library()`
 
