@@ -8,6 +8,7 @@ _TOOLCHAIN = "@com_github_edschouten_rules_elm//elm:toolchain"
 
 def _do_elm_make(
         ctx,
+        compilation_mode,
         main,
         deps,
         additional_source_directories,
@@ -55,7 +56,7 @@ def _do_elm_make(
         executable = "python",
         arguments = [
             ctx.files._compile[0].path,
-            ctx.var["COMPILATION_MODE"],
+            compilation_mode,
             toolchain.elm.files.to_list()[0].path,
             elm_json.path,
             main.path,
@@ -69,11 +70,13 @@ def _do_elm_make(
 
 def _elm_binary_impl(ctx):
     js_file = ctx.actions.declare_file(ctx.attr.name + ".js")
-    if ctx.var["COMPILATION_MODE"] == "opt":
+    compilation_mode = ctx.var["COMPILATION_MODE"]
+    if compilation_mode == "opt":
         # Step 1: Compile the Elm code.
         js1_file = ctx.actions.declare_file(ctx.attr.name + ".1.js")
         _do_elm_make(
             ctx,
+            compilation_mode,
             ctx.files.main[0],
             ctx.attr.deps,
             [],
@@ -117,6 +120,7 @@ def _elm_binary_impl(ctx):
         # Don't attempt to compress the code after building.
         _do_elm_make(
             ctx,
+            compilation_mode,
             ctx.files.main[0],
             ctx.attr.deps,
             [],
@@ -216,6 +220,7 @@ def _elm_test_impl(ctx):
     elmi_file = ctx.actions.declare_file(elmi_filename)
     _do_elm_make(
         ctx,
+        "fastbuild",
         ctx.files.main[0],
         ctx.attr.deps,
         [],
@@ -246,6 +251,7 @@ def _elm_test_impl(ctx):
     js_file = ctx.actions.declare_file(ctx.attr.name + ".js")
     _do_elm_make(
         ctx,
+        "fastbuild",
         main_file,
         ctx.attr.deps + [ctx.attr._node_test_runner],
         [ctx.files.main[0].dirname],
