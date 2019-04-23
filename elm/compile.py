@@ -65,11 +65,9 @@ for root, dirs, files in os.walk("elm-home"):
 
 
 # Convert Bazel compilation mode to flags for 'elm make'.
-opt_flags = []
-if arg_compilation_mode == "dbg":
-    opt_flags = ["--debug"]
-elif arg_compilation_mode == "opt":
-    opt_flags = ["--optimize"]
+opt_flags = {"dbg": ["--debug"], "fastbuild": [], "opt": ["--optimize"]}[
+    arg_compilation_mode
+]
 
 # Invoke Elm build action.
 os.symlink(arg_elm_json, "elm.json")
