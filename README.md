@@ -26,6 +26,19 @@ load("@com_github_edschouten_rules_elm//elm:deps.bzl", "elm_register_toolchains"
 elm_register_toolchains()
 ```
 
+As some of these rules depend on Node.js and UglifyJS, you should also
+add [rules\_nodejs](https://github.com/bazelbuild/rules_nodejs) to your
+`WORKSPACE` file, calling `yarn_install()` on a `yarn.lock` file that
+provides UglifyJS.
+
+## Examples on how to use these rules
+
+[The Bazel Elm SPA Example repository](https://github.com/EdSchouten/bazel-elm-spa-example)
+contains a concrete example of how these rules may be used to build a
+web application written in Elm. This repository contains a copy of a
+well-known demonstration application that has been adjusted to be
+buildable using Bazel.
+
 ## Build rules provided by this project
 
 ### `elm_binary()`
@@ -145,11 +158,3 @@ from returning hard to debug dependency management related errors.
 - `strip_prefix`: Directory prefix that may be removed from the files
   upon extraction.
 - `patches`: List of labels of patches to apply after extraction.
-
-## Examples on how to use these rules
-
-[The Bazel Elm SPA Example repository](https://github.com/EdSchouten/bazel-elm-spa-example)
-contains a concrete example of how these rules may be used to build a
-web application written in Elm. This repository contains a copy of a
-well-known demonstration application that has been adjusted to be
-buildable using Bazel.
