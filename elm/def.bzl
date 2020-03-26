@@ -51,20 +51,21 @@ def _do_elm_make(
     package_directories = depset(
         transitive = [dep[_ElmLibrary].package_directories for dep in deps],
     )
+    toolchain_elm_files_list = toolchain.elm.files.to_list()
     ctx.actions.run(
         mnemonic = "Elm",
         executable = "python",
         arguments = [
             ctx.files._compile[0].path,
             compilation_mode,
-            toolchain.elm.files.to_list()[0].path,
+            toolchain_elm_files_list[0].path,
             elm_json.path,
             main.path,
             js_path,
             elmi_path,
         ] + package_directories.to_list(),
-        inputs = toolchain.elm.files +
-                 ctx.files._compile + [elm_json, main] + source_files,
+        inputs = toolchain_elm_files_list +
+                 ctx.files._compile + [elm_json, main] + source_files.to_list(),
         outputs = outputs,
     )
 
