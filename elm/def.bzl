@@ -141,8 +141,7 @@ elm_binary = rule(
             mandatory = True,
         ),
         "_compile": attr.label(
-            allow_files = True,
-            single_file = True,
+            allow_single_file = True,
             default = Label("@com_github_edschouten_rules_elm//elm:compile.py"),
         ),
         "_uglifyjs": attr.label(
@@ -284,13 +283,11 @@ elm_test = rule(
             mandatory = True,
         ),
         "_compile": attr.label(
-            allow_files = True,
-            single_file = True,
+            allow_single_file = True,
             default = Label("@com_github_edschouten_rules_elm//elm:compile.py"),
         ),
         "_generate_test_main": attr.label(
-            allow_files = True,
-            single_file = True,
+            allow_single_file = True,
             default = Label(
                 "@com_github_edschouten_rules_elm//elm:generate_test_main.py",
             ),
@@ -310,8 +307,7 @@ elm_test = rule(
             ),
         ),
         "_run_test": attr.label(
-            allow_files = True,
-            single_file = True,
+            allow_single_file = True,
             default = Label("@com_github_edschouten_rules_elm//elm:run_test.js"),
         ),
     },
