@@ -27,7 +27,7 @@ def _do_elm_make(
     )
     dependencies = {}
     for dep in deps:
-        for name, version in dep[_ElmLibrary].dependencies:
+        for name, version in dep[_ElmLibrary].dependencies.to_list():
             dependencies[name] = version
     elm_json = ctx.actions.declare_file(ctx.attr.name + "-elm.json" + suffix)
     ctx.actions.write(
