@@ -83,15 +83,13 @@ _elm_proto_library_aspect = aspect(
     attr_aspects = ["deps"],
     attrs = {
         "_protoc": attr.label(
-            allow_files = True,
-            single_file = True,
+            allow_single_file = True,
             executable = True,
             cfg = "host",
             default = Label("@com_google_protobuf//:protoc"),
         ),
         "_plugin": attr.label(
-            allow_files = True,
-            single_file = True,
+            allow_single_file = True,
             executable = True,
             cfg = "host",
             default = Label("@com_github_tiziano88_elm_protobuf//protoc-gen-elm"),
