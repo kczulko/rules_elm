@@ -272,7 +272,7 @@ def _elm_test_impl(ctx):
 
     return [DefaultInfo(
         executable = runner_file,
-        runfiles = ctx.runfiles(ctx.files._node + ctx.files._node_runfiles + ctx.files._run_test + [js_file]),
+        runfiles = ctx.runfiles(ctx.files._node + ctx.files._run_test + [js_file]),
     )]
 
 elm_test = rule(
@@ -295,10 +295,6 @@ elm_test = rule(
         "_node": attr.label(
             allow_single_file = True,
             default = Label("@nodejs//:node"),
-        ),
-        "_node_runfiles": attr.label(
-            allow_files = True,
-            default = Label("@nodejs//:node_runfiles"),
         ),
         "_node_test_runner": attr.label(
             providers = [_ElmLibrary],
