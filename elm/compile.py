@@ -4,7 +4,7 @@ import struct
 import subprocess
 import sys
 
-PACKAGES_DIR = "elm-home/0.19.0/package"
+PACKAGES_DIR = "elm-home/0.19.1/package"
 
 (
     arg_compilation_mode,
@@ -87,4 +87,4 @@ if arg_out_elmi != "":
     if elmi_file.endswith(".elm"):
         elmi_file = elmi_file[:-4]
     elmi_file += ".elmi"
-    os.rename(os.path.join("elm-stuff/0.19.0", elmi_file), arg_out_elmi)
+    os.rename(os.path.join("elm-stuff/0.19.1", elmi_file), arg_out_elmi)

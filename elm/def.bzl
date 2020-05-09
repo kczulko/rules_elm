@@ -35,7 +35,7 @@ def _do_elm_make(
         """{
     "type": "application",
     "dependencies": {"direct": %s, "indirect": {}},
-    "elm-version": "0.19.0",
+    "elm-version": "0.19.1",
     "source-directories": %s,
     "test-dependencies": {"direct": {}, "indirect": {}}
 }""" %
