@@ -3,12 +3,12 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", _http_archive = "http_archi
 def elm_register_toolchains():
     _http_file(
         name = "com_github_elm_compiler_linux",
-        urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz"],
+        urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz"]
     )
 
     _http_file(
         name = "com_github_elm_compiler_mac",
-        urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit.gz"],
+        urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit.gz"]
     )
 
     _http_archive(
