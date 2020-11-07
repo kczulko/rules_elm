@@ -30,6 +30,8 @@ for package_dir in sys.argv[7:]:
         os.path.join(internal_package_dir, metadata["version"]),
     )
 
+if len(sys.argv) <= 8:
+    os.makedirs(PACKAGES_DIR)
 
 def str_to_bytes(s):
     try:
