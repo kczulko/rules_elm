@@ -5,6 +5,7 @@ import subprocess
 import sys
 
 PACKAGES_DIR = "elm-home/0.19.0/package"
+os.makedirs(PACKAGES_DIR)
 
 (
     arg_compilation_mode,
@@ -29,9 +30,6 @@ for package_dir in sys.argv[7:]:
         os.path.abspath(package_dir),
         os.path.join(internal_package_dir, metadata["version"]),
     )
-
-if len(sys.argv) <= 8:
-    os.makedirs(PACKAGES_DIR)
 
 def str_to_bytes(s):
     try:
