@@ -275,13 +275,13 @@ def _elm_test_impl(ctx):
     runner_file = ctx.actions.declare_file(runner_filename)
     ctx.actions.write(
         runner_file,
-        "#!/bin/sh\nexec %s %s $(pwd)/%s\n" % (ctx.files._node[0].short_path, ctx.files._run_test[0].short_path, js_file.short_path),
+        "#!/usr/bin/env sh\nexec %s %s $(pwd)/%s\n" % (ctx.files.node[0].short_path, ctx.files._run_test[0].short_path, js_file.short_path),
         is_executable = True,
     )
 
     return [DefaultInfo(
         executable = runner_file,
-        runfiles = ctx.runfiles(ctx.files._node + ctx.files._run_test + [js_file]),
+        runfiles = ctx.runfiles(ctx.files.node + ctx.files._run_test + [js_file]),
     )]
 
 elm_test = rule(
@@ -290,6 +290,10 @@ elm_test = rule(
         "main": attr.label(
             allow_files = True,
             mandatory = True,
+        ),
+        "node": attr.label(
+            allow_single_file = True,
+            default = Label("@nodejs//:node"),
         ),
         "_compile": attr.label(
             allow_single_file = True,
@@ -300,10 +304,6 @@ elm_test = rule(
             default = Label(
                 "@com_github_edschouten_rules_elm//elm:generate_test_main.py",
             ),
-        ),
-        "_node": attr.label(
-            allow_single_file = True,
-            default = Label("@nodejs//:node"),
         ),
         "_node_test_runner": attr.label(
             providers = [_ElmLibrary],
