@@ -1,0 +1,47 @@
+load(
+    "@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl",
+    "bazel_integration_test",
+    "integration_test_utils",
+)
+
+sh_binary(
+    name = "output_match_runner",
+    testonly = True,
+    srcs = ["output_match_runner.sh"],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:assertions",
+    ],
+)
+
+bazel_integration_test(
+    name = "main_no_dependencies",
+    bazel_binary = "@bazel5//:bin/bazel",
+    test_runner = ":output_match_runner",
+    workspace_path = "main-no-deps",
+    workspace_files = integration_test_utils.glob_workspace_files("main-no-deps") + [
+        "@com_github_edschouten_rules_elm//:local_repository_files"
+    ],
+    env = {
+        "BAZEL_CMD": "build :main",
+        "EXPECTED_OUTPUT": """Use --sandbox_debug to see verbose messages from the sandbox and retain the sandbox build root for debugging
+-- MISSING DEPENDENCY ------------------------------------------------- elm.json
+
+An application must have "elm/core" as a dependency. Try running:
+
+    elm install elm/core
+
+It has some supporting code that is needed by every Elm application!
+
+Target //:main failed to build
+Use --verbose_failures to see the command lines of failed build steps.""",
+    },
+)
+
+test_suite(
+    name = "integration_tests",
+    tests = [
+        ":main_no_dependencies",
+    ],
+    visibility = ["//:__subpackages__"],
+)
