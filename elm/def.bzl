@@ -92,7 +92,7 @@ def _elm_binary_impl(ctx):
         js2_file = ctx.actions.declare_file(ctx.attr.name + ".2.js")
         ctx.actions.run(
             mnemonic = "UglifyJS",
-            executable = ctx.executable._uglifyjs,
+            executable = ctx.executable.uglifyjs,
             arguments = [
                 js1_file.path,
                 "--compress",
@@ -107,7 +107,7 @@ def _elm_binary_impl(ctx):
         # Step 3: Mangle the resulting Javascript.
         ctx.actions.run(
             mnemonic = "UglifyJS",
-            executable = ctx.executable._uglifyjs,
+            executable = ctx.executable.uglifyjs,
             arguments = [
                 js2_file.path,
                 "--mangle",
@@ -144,7 +144,7 @@ elm_binary = rule(
             allow_single_file = True,
             default = Label("@com_github_edschouten_rules_elm//elm:compile.py"),
         ),
-        "_uglifyjs": attr.label(
+        "uglifyjs": attr.label(
             cfg = "host",
             default = Label("@npm//uglify-js/bin:uglifyjs"),
             executable = True,
