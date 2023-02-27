@@ -1,5 +1,7 @@
 # Bazel build rules for Elm
 
+![CI](https://github.com/kczulko/rules_elm/actions/workflows/workflow.yaml/badge.svg)
+
 [Elm](https://elm-lang.org/) is a functional programming language that
 can be [transpiled](https://en.wikipedia.org/wiki/Source-to-source_compiler)
 to Javascript. This repository contains rules for building Elm
