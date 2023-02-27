@@ -1,0 +1,35 @@
+load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_binary", "elm_library")
+load("@npm//http-server:index.bzl", "http_server")
+
+filegroup(
+    name = "assets",
+    srcs = [
+        "index.html",
+        "style.css",
+    ]
+)
+
+elm_library(
+    name = "app",
+    srcs = ["src/App.elm"],
+    strip_import_prefix = "src",
+    deps = [],
+    # deps = [ "@elm_package_elm_core" ],
+)
+
+elm_binary(
+    name = "elm",
+    main = "src/Main.elm",
+    deps = [
+        ":app",
+        "@elm_package_elm_browser",
+    ],
+)
+
+http_server(
+    name = "dev-server",
+    data = [
+        ":elm",
+        ":assets",
+    ]
+)

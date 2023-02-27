@@ -38,10 +38,25 @@ Use --verbose_failures to see the command lines of failed build steps.""",
     },
 )
 
+bazel_integration_test(
+    name = "elm_todo_mvc",
+    bazel_binary = "@bazel5//:bin/bazel",
+    test_runner = ":output_match_runner",
+    workspace_path = "elm-todomvc",
+    workspace_files = integration_test_utils.glob_workspace_files("elm-todomvc") + [
+        "@com_github_edschouten_rules_elm//:local_repository_files"
+    ],
+    env = {
+        "BAZEL_CMD": "build :elm",
+        "EXPECTED_OUTPUT": """INFO: Build completed successfully, 3 total actions""",
+    },
+)
+
 test_suite(
     name = "integration_tests",
     tests = [
         ":main_no_dependencies",
+        ":elm_todo_mvc",
     ],
     visibility = ["//:__subpackages__"],
 )
