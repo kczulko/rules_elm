@@ -1,4 +1,4 @@
-# Bazel build rules for Elm
+# Bazel build rules for ELM
 
 ![CI](https://github.com/kczulko/rules_elm/actions/workflows/workflow.yaml/badge.svg)
 
