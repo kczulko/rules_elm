@@ -1,0 +1,24 @@
+load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_library", "elm_test")
+
+elm_library(
+    name = "lib",
+    srcs = ["Lib.elm"],
+    deps = [],
+)
+
+elm_test(
+    name = "spec",
+    main = "Spec.elm",
+    node = "@nodejs//:bin/node",
+    deps = [
+        ":lib",
+        "@elm_package_elm_core",
+        "@elm_package_elm_json",
+        "@elm_package_elm_test",
+        "@elm_package_elm_bytes",
+        "@elm_package_elm_random",
+        "@elm_package_elm_virtual_dom",
+        "@elm_package_elm_html",
+        "@elm_package_elm_time",
+    ],
+)

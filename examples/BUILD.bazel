@@ -52,11 +52,30 @@ bazel_integration_test(
     },
 )
 
+bazel_integration_test(
+    name = "elm_test",
+    bazel_binary = "@bazel5//:bin/bazel",
+    test_runner = ":output_match_runner",
+    workspace_path = "elm-test",
+    workspace_files = integration_test_utils.glob_workspace_files("elm-test") + [
+        "@com_github_edschouten_rules_elm//:local_repository_files"
+    ],
+    env = {
+        "BAZEL_CMD": "test :spec --test_output=all",
+        "EXPECTED_OUTPUT": """TEST RUN PASSED
+
+Duration: 0 ms
+Passed:   3
+Failed:   0""",
+    },
+)
+
 test_suite(
     name = "integration_tests",
     tests = [
         ":main_no_dependencies",
         ":elm_todo_mvc",
+        ":elm_test",
     ],
     visibility = ["//:__subpackages__"],
 )

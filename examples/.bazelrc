@@ -1,5 +1,5 @@
 build --host_platform=@io_tweag_rules_nixpkgs//nixpkgs/platforms:host
 build --java_runtime_version=nixpkgs_java
 build --tool_java_runtime_version=nixpkgs_java
-build --deleted_packages=elm-todomvc,main-no-deps
-query --deleted_packages=elm-todomvc,main-no-deps
+build --deleted_packages=elm-test,elm-todomvc,main-no-deps
+query --deleted_packages=elm-test,elm-todomvc,main-no-deps
