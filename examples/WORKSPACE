@@ -1,3 +1,4 @@
+workspace(name = "com_github_edschouten_rules_elm_examples")
 
 local_repository(
     name = "com_github_edschouten_rules_elm",
@@ -61,6 +62,12 @@ nixpkgs_local_repository(
 nixpkgs_package(
     name = "bazel5",
     attribute_path = "bazel_5",
+    repository = "@nixpkgs",
+)
+
+nixpkgs_package(
+    name = "bazel6",
+    attribute_path = "bazel_6",
     repository = "@nixpkgs",
 )
 

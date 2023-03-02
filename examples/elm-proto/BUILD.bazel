@@ -1,0 +1,24 @@
+load("@com_github_edschouten_rules_elm//proto:def.bzl", "elm_proto_library")
+load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_test")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+
+proto_library(
+    name = "book_proto",
+    srcs = ["book.proto"],
+)
+
+elm_proto_library(
+    name = "proto",
+    proto = ":book_proto",
+)
+
+elm_test(
+    name = "spec",
+    main = "Spec.elm",
+    node = "@nodejs//:bin/node",
+    deps = [
+        ":proto",
+        "@elm_package_elm_test",
+    ],
+)
+
