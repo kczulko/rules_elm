@@ -21,7 +21,7 @@ jobs:
         with:
           path: ~/repo-cache
           key: repo-cache-${{ runner.os }}-nixpkgs-${{ env.cache-version }}
-      - uses: cachix/install-nix-action@v12
+      - uses: cachix/install-nix-action@v20
         with:
           nix_path: nixpkgs=./nixpkgs.nix
       - name: Integration tests
