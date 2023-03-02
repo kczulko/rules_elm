@@ -3,16 +3,16 @@ load("@com_github_edschouten_rules_elm//elm/private:elm_toolchain.bzl", "elm_too
 elm_toolchain(
     name = "linux",
     exec_compatible_with = [
-        "@bazel_tools//platforms:linux",
-        "@bazel_tools//platforms:x86_64",
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
     ],
 )
 
 elm_toolchain(
     name = "mac",
     exec_compatible_with = [
-        "@bazel_tools//platforms:osx",
-        "@bazel_tools//platforms:x86_64",
+        "@platforms//os:osx",
+        "@platforms//cpu:x86_64",
     ],
 )
 

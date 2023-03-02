@@ -22,7 +22,7 @@ def _elm_proto_library_aspect_impl(target, ctx):
         base_path = src.path
         if src.root.path != "":
             base_path = base_path[len(src.root.path) + 1:]
-        base_path = base_path[len(src.owner.workspace_root) + 1:]
+        base_path = base_path[len(src.owner.workspace_root) + 0:]
         if base_path in _WELL_KNOWN_PROTOS:
             continue
         args.add_all([base_path])
@@ -44,7 +44,11 @@ def _elm_proto_library_aspect_impl(target, ctx):
         # that actually need building.
         args.add_all([
             "--plugin",
-            ctx.executable._plugin.path,
+            # EXECUTABLE may be of the form
+            # NAME=PATH, in which case the given plugin name
+            # is mapped to the given executable even if
+            # the executable's own name differs.
+            "{NAME}={PATH}".format(NAME = "protoc-gen-elm", PATH = ctx.executable._plugin.path),
             "--elm_out",
             outpath,
         ])
@@ -59,7 +63,7 @@ def _elm_proto_library_aspect_impl(target, ctx):
         ctx.actions.run(
             executable = ctx.executable._protoc,
             arguments = [args],
-            inputs = proto.transitive_sources + [ctx.executable._plugin],
+            inputs = proto.transitive_sources.to_list() + [ctx.executable._plugin],
             outputs = elm_srcs,
         )
         return [

@@ -1,7 +1,6 @@
-load(
-    "@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl",
-    "bazel_integration_test",
-    "integration_test_utils",
+load("@com_github_edschouten_rules_elm_examples//:defs.bzl",
+     "rules_elm_integration_test_each_bazel",
+     "gen_test_names_each"
 )
 
 sh_binary(
@@ -14,17 +13,14 @@ sh_binary(
     ],
 )
 
-bazel_integration_test(
-    name = "main_no_dependencies",
-    bazel_binary = "@bazel5//:bin/bazel",
-    test_runner = ":output_match_runner",
+bazel_versions = ["bazel5", "bazel6"]
+
+rules_elm_integration_test_each_bazel(
+    name = "main_no_deps",
+    bazel_versions = bazel_versions,
     workspace_path = "main-no-deps",
-    workspace_files = integration_test_utils.glob_workspace_files("main-no-deps") + [
-        "@com_github_edschouten_rules_elm//:local_repository_files"
-    ],
-    env = {
-        "BAZEL_CMD": "build :main",
-        "EXPECTED_OUTPUT": """Use --sandbox_debug to see verbose messages from the sandbox and retain the sandbox build root for debugging
+    bazel_cmd = "build :main",
+    expected_output = """Use --sandbox_debug to see verbose messages from the sandbox and retain the sandbox build root for debugging
 -- MISSING DEPENDENCY ------------------------------------------------- elm.json
 
 An application must have "elm/core" as a dependency. Try running:
@@ -35,47 +31,53 @@ It has some supporting code that is needed by every Elm application!
 
 Target //:main failed to build
 Use --verbose_failures to see the command lines of failed build steps.""",
-    },
 )
 
-bazel_integration_test(
+rules_elm_integration_test_each_bazel(
     name = "elm_todo_mvc",
-    bazel_binary = "@bazel5//:bin/bazel",
+    bazel_versions = bazel_versions,
     test_runner = ":output_match_runner",
     workspace_path = "elm-todomvc",
-    workspace_files = integration_test_utils.glob_workspace_files("elm-todomvc") + [
-        "@com_github_edschouten_rules_elm//:local_repository_files"
-    ],
-    env = {
-        "BAZEL_CMD": "build :elm",
-        "EXPECTED_OUTPUT": """INFO: Build completed successfully, 3 total actions""",
-    },
+    bazel_cmd = "build :elm",
+    expected_output = """INFO: Build completed successfully, 3 total actions""",
 )
 
-bazel_integration_test(
+rules_elm_integration_test_each_bazel(
     name = "elm_test",
-    bazel_binary = "@bazel5//:bin/bazel",
+    bazel_versions = bazel_versions,
     test_runner = ":output_match_runner",
     workspace_path = "elm-test",
-    workspace_files = integration_test_utils.glob_workspace_files("elm-test") + [
-        "@com_github_edschouten_rules_elm//:local_repository_files"
-    ],
-    env = {
-        "BAZEL_CMD": "test :spec --test_output=all",
-        "EXPECTED_OUTPUT": """TEST RUN PASSED
+    bazel_cmd = "test :spec --test_output=all",
+    expected_output = """TEST RUN PASSED
 
 Duration: 0 ms
 Passed:   3
 Failed:   0""",
-    },
+)
+
+rules_elm_integration_test_each_bazel(
+    name = "elm_proto",
+    bazel_versions = bazel_versions,
+    test_runner = ":output_match_runner",
+    workspace_path = "elm-proto",
+    bazel_cmd = "test :spec --test_output=all",
+    expected_output = """TEST RUN PASSED
+
+Duration: 0 ms
+Passed:   2
+Failed:   0""",
 )
 
 test_suite(
     name = "integration_tests",
-    tests = [
-        ":main_no_dependencies",
-        ":elm_todo_mvc",
-        ":elm_test",
-    ],
+    tests = gen_test_names_each(
+        name_prefixes = [
+            "elm_test",
+            "elm_proto",
+            "elm_todo_mvc",
+            "main_no_deps",
+        ],
+        bazel_versions = bazel_versions
+    ),
     visibility = ["//:__subpackages__"],
 )
