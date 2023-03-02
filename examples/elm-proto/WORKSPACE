@@ -122,18 +122,20 @@ nixpkgs_package(
 { pkgs ? import <nixpkgs> {} }:
 
 with pkgs;
-
+let
+    osSuffix = if stdenv.isDarwin then "osx" else "linux";
+    sha256Darwin = "sha256-lD73CVQC6srB2/3bg6J5BiOSWUvN+1V8UZ2Eg1Atn5k=";
+    sha256Linux = "sha256-0JZ3WCGybG4pVC0JYVnX3KlC9U1R7s0so4l7fLbaaF4=";
+    checkSum = if stdenv.isDarwin then sha256Darwin else sha256Linux;
+in
 pkgs.stdenv.mkDerivation {
     name = "protoc-gen-elm";
     src = fetchurl {
-      url = "https://github.com/tiziano88/elm-protobuf/releases/download/3.0.0/elm-protobuf-3.0.0-linux-x86_64.tar.gz";
-      sha256 = "sha256-0JZ3WCGybG4pVC0JYVnX3KlC9U1R7s0so4l7fLbaaF4=";
+      url = "https://github.com/tiziano88/elm-protobuf/releases/download/3.0.0/elm-protobuf-3.0.0-${osSuffix}-x86_64.tar.gz";
+      sha256 = checkSum;
     };
 
-    # nativeBuildInputs = [
-    #   autoPatchelfHook
-    # ];
-    sourceRoot = "bin/elm-protobuf-3.0.0-linux-x86_64";
+    sourceRoot = "bin/elm-protobuf-3.0.0-${osSuffix}-x86_64";
     
     installPhase = ''
       install -m755 -D protoc-gen-elm $out/bin/protoc-gen-elm
@@ -171,3 +173,11 @@ nixpkgs_package(
     repository = "@nixpkgs",
 )
 
+load("@io_tweag_rules_nixpkgs//nixpkgs:nixpkgs.bzl", "nixpkgs_java_configure")
+nixpkgs_java_configure(
+    attribute_path = "jdk11.home",
+    repository = "@nixpkgs",
+    toolchain = True,
+    toolchain_name = "nixpkgs_java",
+    toolchain_version = "11",
+)
