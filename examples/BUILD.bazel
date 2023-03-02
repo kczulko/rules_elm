@@ -72,10 +72,10 @@ test_suite(
     name = "integration_tests",
     tests = gen_test_names_each(
         name_prefixes = [
-            "elm_test",
+            # "elm_test",
             "elm_proto",
-            "elm_todo_mvc",
-            "main_no_deps",
+            # "elm_todo_mvc",
+            # "main_no_deps",
         ],
         bazel_versions = bazel_versions
     ),

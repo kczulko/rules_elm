@@ -124,7 +124,7 @@ nixpkgs_package(
 with pkgs;
 let
     osSuffix = if stdenv.isDarwin then "osx" else "linux";
-    sha256Darwin = "sha256-0JZ3WCGybG4pVC0JYVnX3KlC9U1R7s0so4l7fLbaaF3=";
+    sha256Darwin = "sha256-lD73CVQC6srB2/3bg6J5BiOSWUvN+1V8UZ2Eg1Atn5k=";
     sha256Linux = "sha256-0JZ3WCGybG4pVC0JYVnX3KlC9U1R7s0so4l7fLbaaF4=";
     checkSum = if stdenv.isDarwin then sha256Darwin else sha256Linux;
 in
