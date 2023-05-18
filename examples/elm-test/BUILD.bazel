@@ -6,12 +6,22 @@ elm_library(
     deps = [],
 )
 
+elm_library(
+    name = "main-lib",
+    srcs = ["Main.elm"],
+    deps = [
+        "@elm_package_elm_browser",
+        "@elm_package_elm_http",
+    ],
+)
+
 elm_test(
     name = "spec",
     main = "Spec.elm",
     node = "@nodejs//:bin/node",
     deps = [
         ":lib",
+        ":main-lib",
         "@elm_package_elm_core",
         "@elm_package_elm_json",
         "@elm_package_elm_test",

@@ -15,7 +15,7 @@ function handleResults(response) {
     }
 }
 
-var app = require(process.argv[2]).Elm.Main.init({
+var app = require(process.argv[2]).Elm.RulesElmMainTestsExecutor.init({
     flags: 0,
 })
 

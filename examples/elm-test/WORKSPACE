@@ -47,11 +47,20 @@ nixpkgs_package(
     repository = "@nixpkgs",
 )
 
+load("@io_tweag_rules_nixpkgs//nixpkgs:nixpkgs.bzl", "nixpkgs_java_configure")
+nixpkgs_java_configure(
+    attribute_path = "jdk11.home",
+    repository = "@nixpkgs",
+    toolchain = True,
+    toolchain_name = "nixpkgs_java",
+    toolchain_version = "11",
+)
+
 elm_repository(
-        name = "elm_package_elm_core",
-        sha256 = "6e37b11c88c89a68d19d0c7625f1ef39ed70c59e443def95e4de98d6748c80a7",
-        strip_prefix = "core-1.0.5",
-        urls = ["https://github.com/elm/core/archive/1.0.5.tar.gz"],
+    name = "elm_package_elm_core",
+    sha256 = "6e37b11c88c89a68d19d0c7625f1ef39ed70c59e443def95e4de98d6748c80a7",
+    strip_prefix = "core-1.0.5",
+    urls = ["https://github.com/elm/core/archive/1.0.5.tar.gz"],
 )
 elm_repository(
     name = "elm_package_elm_json",
@@ -95,12 +104,27 @@ elm_repository(
     strip_prefix = "time-1.0.0",
     urls = ["https://github.com/elm/time/archive/1.0.0.tar.gz"],
 )
-
-load("@io_tweag_rules_nixpkgs//nixpkgs:nixpkgs.bzl", "nixpkgs_java_configure")
-nixpkgs_java_configure(
-    attribute_path = "jdk11.home",
-    repository = "@nixpkgs",
-    toolchain = True,
-    toolchain_name = "nixpkgs_java",
-    toolchain_version = "11",
+elm_repository(
+    name = "elm_package_elm_http",
+    sha256 = "619bc23d7753bc172016ea764233dd7dfded1d919263c41b59885c5bcdd10b01",
+    strip_prefix = "http-2.0.0",
+    urls = ["https://github.com/elm/http/archive/2.0.0.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_file",
+    sha256 = "c85b4025e12c1bf2dee9e4d853459ead7d1fa917304adfa2af27d116c86292e6",
+    strip_prefix = "file-1.0.5",
+    urls = ["https://github.com/elm/file/archive/1.0.5.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_browser",
+    sha256 = "23f41491d325afc72649d512741fb8173725014c93e482d25bab3325555a4f59",
+    strip_prefix = "browser-1.0.2",
+    urls = ["https://github.com/elm/browser/archive/1.0.2.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_url",
+    sha256 = "840e9d45d8a9bd64a7f76421a1de2518e02c7cbea7ed42efd380b4e875e9682b",
+    strip_prefix = "url-1.0.0",
+    urls = ["https://github.com/elm/url/archive/1.0.0.tar.gz"],
 )

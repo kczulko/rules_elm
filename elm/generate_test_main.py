@@ -272,7 +272,8 @@ if module_name.endswith(".elmi"):
 # TODO(edsch): What about the seed?
 with open(sys.argv[2], "w") as f:
     print(
-        """import Console.Text exposing (UseColor(..))
+        """module RulesElmMainTestsExecutor exposing (main)
+import Console.Text exposing (UseColor(..))
 import Test
 import Test.Reporter.Reporter exposing (Report(..))
 import Test.Runner.Node

@@ -51,7 +51,7 @@ rules_elm_integration_test_each_bazel(
     expected_output = """TEST RUN PASSED
 
 Duration: 0 ms
-Passed:   3
+Passed:   4
 Failed:   0""",
 )
 
