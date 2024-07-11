@@ -6,8 +6,6 @@ load("@aspect_rules_js//js:defs.bzl", "js_run_devserver")
 
 npm_link_all_packages(name = "node_modules")
 
-# load("@npm//http-server:index.bzl", "http_server")
-
 nodejs_toolchain(
     name = "node_toolchain",
     node = "@nixpkgs_nodejs//:bin/node",
@@ -21,14 +19,19 @@ toolchain(
     toolchain_type = "@rules_nodejs//nodejs:toolchain_type",
 )
 
-
+filegroup(
+    name = "assets",
+    srcs = [
+        "index.html",
+        "style.css",
+    ]
+)
 
 elm_library(
     name = "lib",
     srcs = ["src/App.elm"],
     strip_import_prefix = "src",
     deps = [],
-    # deps = [ "@elm_package_elm_core" ],
 )
 
 elm_binary(
@@ -44,14 +47,6 @@ http_server_bin.http_server_binary(
     name = "http_server",
 )
 
-filegroup(
-    name = "assets",
-    srcs = [
-        "index.html",
-        "style.css",
-    ]
-)
-
 js_run_devserver(
     name = "dev_server",
     args = [ "." ],
@@ -59,10 +54,3 @@ js_run_devserver(
     tool = ":http_server",
 )
 
-# http_server(
-#     name = "dev-server",
-#     data = [
-#         ":elm",
-#         ":assets",
-#     ]
-# )

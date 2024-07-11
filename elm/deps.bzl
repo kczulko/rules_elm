@@ -74,7 +74,6 @@ elm_library(
 
         npm_translate_lock(
             name = "com_github_edschouten_rules_elm_npm",
-            # npmrc = "//:.npmrc",
             pnpm_lock = "@com_github_edschouten_rules_elm//tools/npm:pnpm-lock.yaml",
             verify_node_modules_ignored = "@com_github_edschouten_rules_elm//:.bazelignore",
         )

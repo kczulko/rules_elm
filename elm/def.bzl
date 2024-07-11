@@ -127,7 +127,6 @@ def _elm_binary_impl(ctx):
             outputs = [js_file],
         )
     else:
-        print("I am here")
         # Don't attempt to compress the code after building.
         _do_elm_make(
             ctx,
