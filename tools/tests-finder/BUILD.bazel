@@ -1,0 +1,19 @@
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
+
+genrule(
+    name = "mk-tests-finder",
+    srcs = [
+        "@com_github_rtfeldman_node_test_runner//:lib/Parser.js",
+        "main.js"
+    ],
+    outs = [ "tests-finder.js" ],
+    cmd = """
+      cat $(SRCS) >> $@
+    """,
+)
+
+js_binary(
+    name = "bin",
+    entry_point = ":mk-tests-finder",
+    visibility = ["//visibility:public"],
+)

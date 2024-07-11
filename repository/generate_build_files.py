@@ -11,6 +11,10 @@ deps = sorted(
     for name in metadata["dependencies"].keys()
 )
 
+# getting rid of canonical repo name representation
+def fix_bzl_mod_repo_name(name):
+    return name.split("~")[-1]
+
 with open("BUILD.bazel", "w") as build_file:
     name = metadata["name"]
     if name.startswith("elm/") or name.startswith("elm-explorations/"):
@@ -34,7 +38,7 @@ elm_package(
     visibility = ["//visibility:public"],
 )"""
             % {
-                "name": json.dumps(sys.argv[1]),
+                "name": json.dumps(fix_bzl_mod_repo_name(sys.argv[1])),
                 "deps": json.dumps(deps),
                 "package_name": json.dumps(metadata["name"]),
                 "package_version": json.dumps(metadata["version"]),
@@ -57,6 +61,6 @@ elm_library(
     strip_import_prefix = "src",
     visibility = ["//visibility:public"],
 )"""
-            % {"name": json.dumps(sys.argv[1]), "deps": json.dumps(deps)},
+            % {"name": json.dumps(fix_bzl_mod_repo_name(sys.argv[1])), "deps": json.dumps(deps)},
             file=build_file,
         )

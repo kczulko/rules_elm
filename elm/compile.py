@@ -4,8 +4,15 @@ import struct
 import subprocess
 import sys
 
-PACKAGES_DIR = "elm-home/0.19.0/package"
-os.makedirs(PACKAGES_DIR)
+def mkdir(directory):
+    try:
+        original_umask = os.umask(0)
+        os.makedirs(directory)
+    finally:
+        os.umask(original_umask)
+
+PACKAGES_DIR = "elm-home/0.19.1/packages"
+mkdir(PACKAGES_DIR)
 
 (
     arg_compilation_mode,
@@ -25,7 +32,7 @@ for package_dir in sys.argv[7:]:
     all_packages.append((metadata["name"].split("/", 1), metadata["version"]))
 
     internal_package_dir = os.path.join(PACKAGES_DIR, metadata["name"])
-    os.makedirs(internal_package_dir)
+    mkdir(internal_package_dir)
     os.symlink(
         os.path.abspath(package_dir),
         os.path.join(internal_package_dir, metadata["version"]),
@@ -37,6 +44,7 @@ def str_to_bytes(s):
     except TypeError:
         return bytes(s)
 
+# os.system("ls -la elm-home/0.19.1/packages/elm")
 
 # Generate a versions.dat package index file. Without it, Elm will be
 # dependent on internet access. Let the package index file contain just
@@ -61,8 +69,7 @@ with open(os.path.join(PACKAGES_DIR, "versions.dat"), "wb") as f:
 
 # Cause a hard failure in case Elm tries to bypass our packages.
 for root, dirs, files in os.walk("elm-home"):
-    os.chmod(root, 0o500)
-
+    os.chmod(root, 0o700)
 
 # Convert Bazel compilation mode to flags for 'elm make'.
 opt_flags = {"dbg": ["--debug"], "fastbuild": [], "opt": ["--optimize"]}[
@@ -71,20 +78,10 @@ opt_flags = {"dbg": ["--debug"], "fastbuild": [], "opt": ["--optimize"]}[
 
 # Invoke Elm build action.
 os.symlink(arg_elm_json, "elm.json")
+
 exit_code = subprocess.call(
     [arg_elm_binary, "make", "--output=" + arg_out_js, arg_main] + opt_flags,
     env={"ELM_HOME": "elm-home"},
     stdout=open(os.devnull, "w"),
 )
-if exit_code != 0:
-    sys.exit(exit_code)
 
-# Preserve the .elmi file. This file contains information about
-# top-level declarations in the source file. It is used by elm_test() to
-# automatically generate an entry point that invokes all unit tests.
-if arg_out_elmi != "":
-    elmi_file = os.path.basename(arg_main)
-    if elmi_file.endswith(".elm"):
-        elmi_file = elmi_file[:-4]
-    elmi_file += ".elmi"
-    os.rename(os.path.join("elm-stuff/0.19.0", elmi_file), arg_out_elmi)

@@ -14,9 +14,16 @@ _elm_toolchain = rule(
 )
 
 def elm_toolchain(name, exec_compatible_with):
+    native.genrule(
+        name = "elm_compiler_{}".format(name),
+        srcs = ["@com_github_elm_compiler_{}//file".format(name)],
+        outs = [ "%s/elm-compiler" % name ],
+        cmd = "gunzip -c $(SRCS) > $@ && chmod +x $@"
+    )
+
     _elm_toolchain(
         name = name + "_info",
-        elm = "@com_github_elm_compiler_%s//:elm" % name,
+        elm = ":elm_compiler_{}".format(name),
         visibility = ["//visibility:public"],
     )
 

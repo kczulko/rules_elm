@@ -1,7 +1,7 @@
 load("@com_github_edschouten_rules_elm//elm/private:elm_toolchain.bzl", "elm_toolchain")
 
 elm_toolchain(
-    name = "linux",
+    name = "linux_x86",
     exec_compatible_with = [
         "@platforms//os:linux",
         "@platforms//cpu:x86_64",
@@ -9,10 +9,18 @@ elm_toolchain(
 )
 
 elm_toolchain(
-    name = "mac",
+    name = "mac_x86",
     exec_compatible_with = [
         "@platforms//os:osx",
         "@platforms//cpu:x86_64",
+    ],
+)
+
+elm_toolchain(
+    name = "mac_arm64",
+    exec_compatible_with = [
+        "@platforms//os:osx",
+        "@platforms//cpu:arm64",
     ],
 )
 

@@ -1,0 +1,8 @@
+load("@aspect_rules_js//js:defs.bzl", "js_binary", "js_run_binary")
+
+js_binary(
+    name = "bin",
+    entry_point = "main.js",
+    visibility = ["//visibility:public"],
+)
+
