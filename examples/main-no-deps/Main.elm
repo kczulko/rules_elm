@@ -1,4 +1,5 @@
 module Main exposing (main)
 
-main  = 1
+import Html exposing (text)
 
+main = text "Hello!"

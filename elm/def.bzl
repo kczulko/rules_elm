@@ -30,6 +30,9 @@ def _do_elm_make(
         for name, version in dep[_ElmLibrary].dependencies.to_list():
             dependencies[name] = version
     elm_json = ctx.actions.declare_file(ctx.attr.name + "-elm.json" + suffix)
+    # since 0.19.1 elm doesn't tolerate empty source-directories...
+    # TODO: move to source_directories
+    source_dirs = [ main.dirname ] if source_directories.to_list() == [] else source_directories.to_list()
     ctx.actions.write(
         elm_json,
         """{
@@ -39,7 +42,7 @@ def _do_elm_make(
     "source-directories": %s,
     "test-dependencies": {"direct": {}, "indirect": {}}
 }""" %
-        (repr(dependencies), repr(source_directories.to_list())),
+        (repr(dependencies), repr(source_dirs)),
     )
 
     # Invoke Elm through a wrapper script that generates an ELM_HOME and
@@ -92,14 +95,17 @@ def _elm_binary_impl(ctx):
         js2_file = ctx.actions.declare_file(ctx.attr.name + ".2.js")
         ctx.actions.run(
             mnemonic = "UglifyJS",
-            executable = ctx.executable.uglifyjs,
+            executable = ctx.executable._uglifyjs,
             arguments = [
-                js1_file.path,
+                js1_file.basename,
                 "--compress",
                 "pure_funcs=[F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9],pure_getters,keep_fargs=false,unsafe_comps,unsafe",
                 "--output",
-                js2_file.path,
+                js2_file.basename,
             ],
+            env = {
+                "BAZEL_BINDIR": ctx.bin_dir.path,
+            },
             inputs = [js1_file],
             outputs = [js2_file],
         )
@@ -107,17 +113,21 @@ def _elm_binary_impl(ctx):
         # Step 3: Mangle the resulting Javascript.
         ctx.actions.run(
             mnemonic = "UglifyJS",
-            executable = ctx.executable.uglifyjs,
+            executable = ctx.executable._uglifyjs,
             arguments = [
-                js2_file.path,
+                js2_file.basename,
                 "--mangle",
                 "--output",
-                js_file.path,
+                js_file.basename,
             ],
+            env = {
+                "BAZEL_BINDIR": ctx.bin_dir.path,
+            },
             inputs = [js2_file],
             outputs = [js_file],
         )
     else:
+        print("I am here")
         # Don't attempt to compress the code after building.
         _do_elm_make(
             ctx,
@@ -144,9 +154,9 @@ elm_binary = rule(
             allow_single_file = True,
             default = Label("@com_github_edschouten_rules_elm//elm:compile.py"),
         ),
-        "uglifyjs": attr.label(
+        "_uglifyjs": attr.label(
             cfg = "host",
-            default = Label("@npm//uglify-js/bin:uglifyjs"),
+            default = Label("@com_github_edschouten_rules_elm//tools/uglifyjs:bin"),
             executable = True,
         ),
     },

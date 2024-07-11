@@ -1,0 +1,6 @@
+load("@com_github_edschouten_rules_elm_npm//tools/npm:uglify-js/package_json.bzl", "bin")
+
+bin.uglifyjs_binary(
+    name = "bin",
+    visibility = ["//visibility:public"]
+)

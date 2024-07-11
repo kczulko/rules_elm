@@ -1,0 +1,7 @@
+build --host_platform=@rules_nixpkgs_core//platforms:host
+# build --enable_bzlmod
+build --incompatible_strict_action_env
+build --incompatible_merge_fixed_and_default_shell_env
+# build --java_runtime_version=nixpkgs_java
+# build --tool_java_runtime_version=nixpkgs_java
+

@@ -1,5 +1,8 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", _http_archive = "http_archive", _http_file = "http_file")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
+load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
+load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
+load("@aspect_rules_js//js:toolchains.bzl", "DEFAULT_NODE_VERSION", "rules_js_register_toolchains")
 
 def http_archive(**kwargs):
     maybe(_http_archive, **kwargs)
@@ -8,6 +11,8 @@ def http_file(**kwargs):
     maybe(_http_file, **kwargs)
 
 def elm_register_toolchains(register = True):
+    rules_js_dependencies()
+    
     http_file(
         name = "com_github_elm_compiler_linux_x86",
         sha256 = "e44af52bb27f725a973478e589d990a6428e115fe1bb14f03833134d6c0f155c",
@@ -59,9 +64,19 @@ elm_library(
     )
 
     if register:
+        rules_js_register_toolchains(node_version = DEFAULT_NODE_VERSION)
+        
         platforms = [ 'linux_x86', 'mac_x86', 'mac_arm64' ]
         for platform in platforms:
            native.register_toolchains("@com_github_edschouten_rules_elm//elm/toolchain:%s" % platform)
         # native.register_toolchains("@com_github_edschouten_rules_elm//proto/toolchain:linux")
         # native.register_toolchains("@com_github_edschouten_rules_elm//proto/toolchain:osx")
+
+        npm_translate_lock(
+            name = "com_github_edschouten_rules_elm_npm",
+            # npmrc = "//:.npmrc",
+            pnpm_lock = "@com_github_edschouten_rules_elm//tools/npm:pnpm-lock.yaml",
+            verify_node_modules_ignored = "@com_github_edschouten_rules_elm//:.bazelignore",
+        )
+
 

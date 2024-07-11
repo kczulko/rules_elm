@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "5af0734de61a875e6bdf3aa79cb9a2b90489e91ea71919656d558162a13257c5",
+  "moduleFileHash": "21af18fda3dadd391e5a8c2814cb92d938728ea944d3d5a97e35f0fe5c0e909f",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -32,7 +32,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 7,
+            "line": 8,
             "column": 25
           },
           "imports": {
@@ -49,7 +49,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 10,
+                "line": 11,
                 "column": 16
               }
             }
@@ -63,7 +63,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 8,
+            "line": 9,
             "column": 24
           },
           "imports": {
@@ -81,7 +81,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 16,
+                "line": 17,
                 "column": 13
               }
             }
@@ -91,13 +91,43 @@
         }
       ],
       "deps": {
+        "bazel_skylib": "bazel_skylib@1.5.0",
         "rules_nixpkgs_core": "rules_nixpkgs_core@0.11.1",
         "rules_nodejs": "rules_nodejs@6.1.0",
         "aspect_bazel_lib": "aspect_bazel_lib@2.7.7",
-        "bazel_skylib": "bazel_skylib@1.5.0",
         "aspect_rules_js": "aspect_rules_js@2.0.0-rc4",
         "bazel_tools": "bazel_tools@_",
         "local_config_platform": "local_config_platform@_"
+      }
+    },
+    "bazel_skylib@1.5.0": {
+      "name": "bazel_skylib",
+      "version": "1.5.0",
+      "key": "bazel_skylib@1.5.0",
+      "repoName": "bazel_skylib",
+      "executionPlatformsToRegister": [],
+      "toolchainsToRegister": [
+        "//toolchains/unittest:cmd_toolchain",
+        "//toolchains/unittest:bash_toolchain"
+      ],
+      "extensionUsages": [],
+      "deps": {
+        "platforms": "platforms@0.0.8",
+        "bazel_tools": "bazel_tools@_",
+        "local_config_platform": "local_config_platform@_"
+      },
+      "repoSpec": {
+        "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+        "ruleClassName": "http_archive",
+        "attributes": {
+          "urls": [
+            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.5.0/bazel-skylib-1.5.0.tar.gz"
+          ],
+          "integrity": "sha256-zVWgYudjuTSZIfD124w5MyiNyLpPdt2UFqrGis7jy5Q=",
+          "strip_prefix": "",
+          "remote_patches": {},
+          "remote_patch_strip": 0
+        }
       }
     },
     "rules_nixpkgs_core@0.11.1": {
@@ -380,36 +410,6 @@
             "https://bcr.bazel.build/modules/aspect_bazel_lib/2.7.7/patches/module_dot_bazel_version.patch": "sha256-FDbxjcvVK7HecYjvYhIaZ8HF2mujF2bZ/b6LiM6iu4A="
           },
           "remote_patch_strip": 1
-        }
-      }
-    },
-    "bazel_skylib@1.5.0": {
-      "name": "bazel_skylib",
-      "version": "1.5.0",
-      "key": "bazel_skylib@1.5.0",
-      "repoName": "bazel_skylib",
-      "executionPlatformsToRegister": [],
-      "toolchainsToRegister": [
-        "//toolchains/unittest:cmd_toolchain",
-        "//toolchains/unittest:bash_toolchain"
-      ],
-      "extensionUsages": [],
-      "deps": {
-        "platforms": "platforms@0.0.8",
-        "bazel_tools": "bazel_tools@_",
-        "local_config_platform": "local_config_platform@_"
-      },
-      "repoSpec": {
-        "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
-        "ruleClassName": "http_archive",
-        "attributes": {
-          "urls": [
-            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.5.0/bazel-skylib-1.5.0.tar.gz"
-          ],
-          "integrity": "sha256-zVWgYudjuTSZIfD124w5MyiNyLpPdt2UFqrGis7jy5Q=",
-          "strip_prefix": "",
-          "remote_patches": {},
-          "remote_patch_strip": 0
         }
       }
     },
