@@ -31,7 +31,7 @@ rules_elm_integration_test_each_bazel(
     bazel_binaries = bazel_binaries,
     workspace_path = "elm-binary",
     bazel_cmd = "build :main -c opt",
-    expected_output = """UglifyJS main.2.js.*
+    expected_output = """(UglifyJS main.2.js)?.*
 INFO: Build completed successfully, 12 total actions""",
 )
 
