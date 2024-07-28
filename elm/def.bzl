@@ -55,6 +55,7 @@ def _do_elm_make(
         transitive = [dep[_ElmLibrary].package_directories for dep in deps],
     )
     toolchain_elm_files_list = toolchain.elm.files.to_list()
+
     ctx.actions.run(
         mnemonic = "Elm",
         executable = "python",
@@ -247,11 +248,11 @@ def _elm_test_impl(ctx):
     )
 
     # Create a main source file for the test that runs all the tests.
-    # Obtain the list of tests to run from the .elmi file.
+    # Obtain the list of tests to run from the .elm file.
     main_filename = ctx.attr.name + "_main.elm"
     main_file = ctx.actions.declare_file(main_filename)
     ctx.actions.run(
-        mnemonic = "Elmi2Main",
+        mnemonic = "ElmGenTest",
         executable = "python",
         arguments = [
             ctx.files._generate_test_main[0].path,

@@ -16,7 +16,7 @@ use_repo(nix_repo, "nixpkgs")
 nix_pkg.attr(
     name = "nixpkgs_nodejs",
     attr = "nodejs",
-    repo = "nixpkgs",
+    repo = "@nixpkgs",
 )
 
 use_repo(

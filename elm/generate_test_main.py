@@ -20,7 +20,7 @@ all_tests = tests_found
 # Emit a main source file that calls the tests.
 # TODO(edsch): What about the seed?
 with open(output_file, "w") as f:
-    print(
+    f.write(
         """module RulesElmMainTestsExecutor exposing (main)
 import Console.Text exposing (UseColor(..))
 import Test exposing (Test)
@@ -45,7 +45,6 @@ main = Test.Runner.Node.run {
             "source_file": output_file,
             "module_name": module_name,
             "tests": ", ".join("%s.%s" % (module_name, test) for test in all_tests),
-        },
-        file=f,
+        }
     )
 

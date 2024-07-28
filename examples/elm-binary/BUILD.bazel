@@ -24,3 +24,9 @@ elm_binary(
         "@elm_package_elm_virtual_dom",
     ],
 )
+
+elm_binary(
+    name = "main-no-deps",
+    main = "Main.elm",
+    deps = [],
+)

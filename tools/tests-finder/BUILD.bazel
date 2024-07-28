@@ -1,5 +1,11 @@
 load("@aspect_rules_js//js:defs.bzl", "js_binary")
 
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
+
 genrule(
     name = "mk-tests-finder",
     srcs = [
