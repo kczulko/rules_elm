@@ -22,12 +22,12 @@ def elm_register_toolchains(register = True):
     http_file(
         name = "com_github_elm_compiler_mac_x86",
         sha256 = "18410e605208fc2b620f5e30bccbbd122c992a27de46f9f362271ce3dcc66962",
-        urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit.tar.gz"],
+        urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit.gz"],
     )
     http_file(
         name = "com_github_elm_compiler_mac_arm64",
         sha256 = "18410e605208fc2b620f5e30bccbbd122c992a27de46f9f362271ce3dcc66962",
-        urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit-ARM.tar.gz"],
+        urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit-ARM.gz"],
     )
 
     http_archive(
