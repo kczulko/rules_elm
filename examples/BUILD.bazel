@@ -100,8 +100,7 @@ test_suite(
             "elm_binary",
             "elm_binary_opt",
             "elm_binary_no_deps_negative",
-            # TODO - uncomment when fixed
-            # "elm_proto",
+            "elm_proto",
         ],
         bazel_binaries = bazel_binaries,
     ),

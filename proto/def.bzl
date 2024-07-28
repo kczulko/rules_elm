@@ -4,6 +4,9 @@ load(
     _create_elm_library_provider = "create_elm_library_provider",
 )
 
+# TODO: use protobuf toolchain instead of "@com_google_protobuf//:protoc" label
+# _PROTOBUF_TOOLCHAIN="@rules_proto//proto:toolchain_type"
+
 _WELL_KNOWN_PROTOS = [
     "google/protobuf/timestamp.proto",
     "google/protobuf/wrappers.proto",
@@ -61,6 +64,7 @@ def _elm_proto_library_aspect_impl(target, ctx):
             for p in proto.transitive_proto_path.to_list()
         ], before_each = "-I")
         ctx.actions.run(
+            mnemonic = "ElmGenProto",
             executable = ctx.executable._protoc,
             arguments = [args],
             inputs = proto.transitive_sources.to_list() + [ctx.executable._plugin],
