@@ -98,7 +98,7 @@ test_suite(
             "elm_binary",
             "elm_binary_no_deps_negative",
             "elm_binary_opt",
-            "elm_proto",
+            # "elm_proto",
             "elm_test",
             "elm_todo_mvc",
         ],

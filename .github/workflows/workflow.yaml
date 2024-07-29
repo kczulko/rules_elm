@@ -21,7 +21,8 @@ jobs:
       - name: Bazel_6 integration tests
         run: |
           nix shell nixpkgs#bazel_7 nixpkgs#gcc14 --command bazel test //examples:integration_tests --config=nix --test_tag_filters=bazel6 --test_output=all
-      # - name: Bazel_7 integration tests
-        # run: |
-          # nix shell nixpkgs#bazel_7 nixpkgs#gcc --command bazel query 'attr("tags", "[\[ ]bazel7[,\]]", deps("//examples:integration_tests"))' | xargs -L1 bazel run --config=nix
+      - name: Bazel_7 integration tests
+        run: |
+          nix shell nixpkgs#bazel_7 nixpkgs#gcc --command sh -c "set -eo pipefail; bazel query 'attr(\"tags\", \"[\\[ ]bazel7[,\\]]\", deps(\"//examples:integration_tests\"))' | xargs -L1 bazel run --config=nix"
+
 
