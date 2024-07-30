@@ -79,7 +79,7 @@ rules_elm_integration_test_each_bazel(
     bazel_binaries = bazel_binaries,
     test_runner = ":output_match_runner",
     workspace_path = "elm-proto",
-    bazel_cmd = "test :spec --test_output=all",
+    bazel_cmd = "test :spec_proto --test_output=all",
     expected_output = """TEST RUN PASSED
 
 Duration: 0 ms
@@ -98,7 +98,7 @@ test_suite(
             "elm_binary",
             "elm_binary_no_deps_negative",
             "elm_binary_opt",
-            # "elm_proto",
+            "elm_proto",
             "elm_test",
             "elm_todo_mvc",
         ],

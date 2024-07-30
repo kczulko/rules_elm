@@ -1,7 +1,9 @@
 build --host_platform=@rules_nixpkgs_core//platforms:host
 build --enable_bzlmod
+build --enable_runfiles
 # absl fix: use c++14:
 # reference:  https://stackoverflow.com/questions/75850778/error-c-versions-less-than-c14-are-not-supported-in-bazel-how-to-resolve
 common --host_cxxopt=-std=c++14
 common --cxxopt=c++14
+common --noincompatible_sandbox_hermetic_tmp
 

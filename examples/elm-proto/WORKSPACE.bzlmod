@@ -8,7 +8,60 @@ local_repository(
 load("@com_github_edschouten_rules_elm//elm:deps.bzl", "elm_register_toolchains")
 elm_register_toolchains()
 
+load("@com_github_edschouten_rules_elm_npm//:repositories.bzl", elm_npm_repositories = "npm_repositories")
+elm_npm_repositories()
+
 load("@com_github_edschouten_rules_elm//repository:def.bzl", "elm_repository")
+elm_repository(
+    name = "elm_package_elm_file",
+    sha256 = "c85b4025e12c1bf2dee9e4d853459ead7d1fa917304adfa2af27d116c86292e6",
+    strip_prefix = "file-1.0.5",
+    urls = ["https://github.com/elm/file/archive/1.0.5.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_http",
+    sha256 = "619bc23d7753bc172016ea764233dd7dfded1d919263c41b59885c5bcdd10b01",
+    strip_prefix = "http-2.0.0",
+    urls = ["https://github.com/elm/http/archive/2.0.0.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_protoc_utils",
+    sha256 = "4dad004fca078f677ee8a4a01eeb4f74816f278d076d8bb37a5fe7cc7bf60223",
+    strip_prefix = "elm-protoc-utils-2.3.0",
+    urls = [ "https://github.com/anmolitor/elm-protoc-utils/archive/refs/tags/2.3.0.tar.gz", ],
+    patches = [
+        "//:elm_protoc_utils_elm_json.patch",
+    ],
+    patch_args = ["-p1"],
+)
+
+# elm_package_elm_parser
+elm_repository(
+    name = "elm_package_elm_parser",
+    sha256 = "2294a3274ee08fdb6fec78983c00d71f9516e53e175a3f7d7abc9eba76ee6c28",
+    strip_prefix = "parser-1.1.0",
+    urls = [ "https://github.com/elm/parser/archive/refs/tags/1.1.0.tar.gz", ],
+)
+# "rtfeldman/elm-iso8601-date-strings": "1.1.4 <= v < 2.0.0"
+elm_repository(
+    name = "elm_package_rtfeldman_elm_iso8601_date_strings",
+    sha256 = "2a2ce3d4c3bbfa21b66610d8fa6652feac0f37a6ded7c482df8f45ff664804aa",
+    strip_prefix = "elm-iso8601-date-strings-1.1.4",
+    urls = [ "https://github.com/rtfeldman/elm-iso8601-date-strings/archive/refs/tags/1.1.4.tar.gz", ],
+)
+
+elm_repository(
+    name = "elm_package_danfishgold_base64_bytes",
+    sha256 = "413ede3c324c666b3d4812c4b1756f9ce4fa1f9b9c5bc60922fd7e920f9e84f7",
+    strip_prefix = "base64-bytes-1.1.0",
+    urls = ["https://github.com/danfishgold/base64-bytes/archive/1.1.0.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_anmolitor_elm_protocol_buffers",
+    sha256 = "e929bc551ca939bcca2855ed2560930415b60f1101c0c2e8accfc26eedb51413",
+    strip_prefix = "elm-protocol-buffers-1.2.0",
+    urls = ["https://github.com/eriktim/elm-protocol-buffers/archive/1.2.0.tar.gz"],
+)
 elm_repository(
     name = "elm_package_elm_core",
     sha256 = "6e37b11c88c89a68d19d0c7625f1ef39ed70c59e443def95e4de98d6748c80a7",

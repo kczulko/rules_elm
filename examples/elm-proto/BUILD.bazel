@@ -1,4 +1,4 @@
-load("@com_github_edschouten_rules_elm//proto:def.bzl", "elm_proto_library")
+load("@com_github_edschouten_rules_elm//proto:def.bzl", "elm_proto_library", "elm_grpc_library")
 load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_test")
 load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
 load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
@@ -18,19 +18,29 @@ toolchain(
 
 proto_library(
     name = "book_proto",
-    srcs = ["book.proto"],
+    srcs = [ "book.proto" ]
 )
 
 elm_proto_library(
-    name = "proto",
-    proto = ":book_proto",
+    name = "elm_book_proto",
+    protos = [ "book_proto" ],
+    plugin_opts = [ "json" ],
+    deps = [
+        "@elm_package_anmolitor_elm_protocol_buffers",
+        "@elm_package_elm_protoc_utils",
+        "@elm_package_danfishgold_base64_bytes",
+        "@elm_package_rtfeldman_elm_iso8601_date_strings",
+        "@elm_package_elm_http",
+        "@elm_package_elm_file",
+        "@elm_package_elm_parser",
+    ]
 )
 
 elm_test(
-    name = "spec",
+    name = "spec_proto",
     main = "Spec.elm",
     deps = [
-        ":proto",
+        ":elm_book_proto",
         "@elm_package_elm_test",
     ],
 )

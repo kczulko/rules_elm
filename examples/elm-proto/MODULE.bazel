@@ -4,6 +4,7 @@ bazel_dep(name = "rules_nodejs", version = "6.1.0")
 bazel_dep(name = "aspect_bazel_lib", version = "2.7.7")
 bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc4")
 bazel_dep(name = "protobuf", version = "27.2", repo_name = "com_google_protobuf")
+bazel_dep(name = "rules_proto_grpc", version = "5.0.0-alpha2")
 
 # TODO: remove rules_proto dependency
 # In the time of writing, there still exists wired dependency between protobuf <-> rules_proto

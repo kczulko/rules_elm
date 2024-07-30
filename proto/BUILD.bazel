@@ -1,5 +1,16 @@
+load("@rules_proto_grpc//:defs.bzl", "proto_plugin")
+
 filegroup(
     name = "all_files",
     srcs = glob(["*"]),
     visibility = ["//:__subpackages__"],
+)
+
+proto_plugin(
+    name = "protoc_gen_elm",
+    protoc_plugin_name = "protoc_gen_elm",
+    output_directory = True,
+    separate_options_flag = True,
+    tool = "//tools/protoc-gen-elm:bin",
+    visibility = ["//visibility:public"],
 )
