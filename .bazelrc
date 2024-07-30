@@ -3,5 +3,3 @@ build:nix --host_platform=@rules_nixpkgs_core//platforms:host
 # bazel run @rules_bazel_integration_test//tools:update_deleted_packages
 build:nix --deleted_packages=examples/elm-binary,examples/elm-proto,examples/elm-test,examples/elm-todomvc
 query:nix --deleted_packages=examples/elm-binary,examples/elm-proto,examples/elm-test,examples/elm-todomvc
-
-
