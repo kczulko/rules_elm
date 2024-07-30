@@ -20,7 +20,7 @@ mkdir(PACKAGES_DIR)
     arg_elm_json,
     arg_main,
     arg_out_js,
-    arg_out_elmi,
+    arg_out_elmi, # TODO: to be removed:
 ) = sys.argv[1:7]
 
 # Construct an ELM_HOME directory, containing symlinks to all the
@@ -43,8 +43,6 @@ def str_to_bytes(s):
         return bytes(s, encoding="ASCII")
     except TypeError:
         return bytes(s)
-
-# os.system("ls -la elm-home/0.19.1/packages/elm")
 
 # Generate a versions.dat package index file. Without it, Elm will be
 # dependent on internet access. Let the package index file contain just

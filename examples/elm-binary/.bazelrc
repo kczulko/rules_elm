@@ -1,3 +1,2 @@
 build --host_platform=@rules_nixpkgs_core//platforms:host
 build --enable_bzlmod
-

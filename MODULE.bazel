@@ -28,10 +28,21 @@ use_repo(npm, "com_github_edschouten_rules_elm_npm")
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo", dev_dependency = True)
 nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg", dev_dependency = True)
 
-nix_repo.github(name = "nixpkgs", commit = "3178439a4e764da70ca83f47bc144a2a276b2f0b")
+nix_repo.file(
+    name = "nixpkgs",
+    file = "//:nixpkgs.nix",
+    file_deps = [ "//:flake.lock" ],
+)
 use_repo(nix_repo, "nixpkgs")
 
+nix_pkg.attr(name = "nixpkgs_nodejs", attr = "nodejs", repo = "@nixpkgs")
 nix_pkg.attr(name = "bazel6", attr = "bazel_6", repo = "@nixpkgs")
-nix_pkg.attr(name = "bazel7", attr = "bazel_7", repo = "@nixpkgs")
-use_repo(nix_pkg, "bazel6", "bazel7")
+nix_pkg.file(
+    name = "bazel7",
+    attr = "",
+    file = "//:nix/bazel7.nix",
+    file_deps = [ "//:nix/overlays/bazel7.nix"],
+    repo = "@nixpkgs",
+)
+use_repo(nix_pkg, "bazel6", "bazel7", "nixpkgs_nodejs")
 
