@@ -99,11 +99,11 @@ test_suite(
     name = "integration_tests",
     tests = gen_test_names_each(
         name_prefixes = [
-            # "elm_binary",
-            # "elm_binary_no_deps_negative",
-            # "elm_binary_opt",
-            # "elm_test",
-            # "elm_todo_mvc",
+            "elm_binary",
+            "elm_binary_no_deps_negative",
+            "elm_binary_opt",
+            "elm_test",
+            "elm_todo_mvc",
         ],
         bazel_binaries = bazel_binaries,
     ) + [
