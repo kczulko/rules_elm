@@ -14,14 +14,14 @@ def elm_register_toolchains(register = True):
     rules_js_dependencies()
     
     http_file(
-        name = "com_github_elm_compiler_linux_x86",
+        name = "com_github_elm_compiler_linux_x86_64",
         sha256 = "e44af52bb27f725a973478e589d990a6428e115fe1bb14f03833134d6c0f155c",
         urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz"],
     )
 
     http_file(
-        name = "com_github_elm_compiler_mac_x86",
-        sha256 = "18410e605208fc2b620f5e30bccbbd122c992a27de46f9f362271ce3dcc66962",
+        name = "com_github_elm_compiler_mac_x86_64",
+        sha256 = "05289f0e3d4f30033487c05e689964c3bb17c0c48012510dbef1df43868545d1",
         urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit.gz"],
     )
     http_file(
@@ -66,16 +66,13 @@ elm_library(
     if register:
         rules_js_register_toolchains(node_version = DEFAULT_NODE_VERSION)
         
-        platforms = [ 'linux_x86', 'mac_x86', 'mac_arm64' ]
+        platforms = [ 'linux_x86_64', 'mac_x86_64', 'mac_arm64' ]
         for platform in platforms:
            native.register_toolchains("@com_github_edschouten_rules_elm//elm/toolchain:%s" % platform)
-        # native.register_toolchains("@com_github_edschouten_rules_elm//proto/toolchain:linux")
-        # native.register_toolchains("@com_github_edschouten_rules_elm//proto/toolchain:osx")
 
         npm_translate_lock(
             name = "com_github_edschouten_rules_elm_npm",
             pnpm_lock = "@com_github_edschouten_rules_elm//tools/npm:pnpm-lock.yaml",
             verify_node_modules_ignored = "@com_github_edschouten_rules_elm//:.bazelignore",
         )
-
 
