@@ -20,7 +20,7 @@ let
     , gnused
     , gnutar
     , gzip
-    , python
+    , python3
     , unzip
     , which
     , zip
@@ -39,7 +39,7 @@ let
         gnused
         gnutar
         gzip
-        python
+        python3
         unzip
         which
         zip
