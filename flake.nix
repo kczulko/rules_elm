@@ -26,9 +26,8 @@
               # python313
               nix
               # for macos pure build:
-              libtool
+              # libtool
               xcbuild
-              # libcxx
             ];
           };
         };
