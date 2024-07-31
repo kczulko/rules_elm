@@ -1,5 +1,8 @@
 build:nix --enable_bzlmod
 build:nix --host_platform=@rules_nixpkgs_core//platforms:host
+build:nix --host_cxxopt=-std=c++14
+build:nix --cxxopt=c++14
 # bazel run @rules_bazel_integration_test//tools:update_deleted_packages
 build:nix --deleted_packages=examples/elm-binary,examples/elm-proto,examples/elm-test,examples/elm-todomvc
 query:nix --deleted_packages=examples/elm-binary,examples/elm-proto,examples/elm-test,examples/elm-todomvc
+
