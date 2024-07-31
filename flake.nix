@@ -24,6 +24,7 @@
               gcc14
               python313
               nix
+              libtool
             ];
           };
         };
