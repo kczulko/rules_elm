@@ -23,6 +23,7 @@
               nodePackages.pnpm
               gcc14
               python313
+              nix
             ];
           };
         };
