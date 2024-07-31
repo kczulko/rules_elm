@@ -30,9 +30,10 @@
               # python313
               nix
               # for macos pure build:
-              # libtool
+              
             ] ++ (if pkgs.stdenv.isDarwin then
               [
+                libtool
                 # xcbuild
                 # xcode-install
                 # darwin.xcode
