@@ -18,12 +18,14 @@
 
         shells = {
           # default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages.libstdcxxClang.stdenv; } {
-          default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages_18.libcxxStdenv; } {
+          # default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages_18.libcxxStdenv; } {
+          # default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages_18.libcxxStdenv; } {
+          default = pkgs.mkShell.override { stdenv = pkgs.gcc14Stdenv; } {
             packages = with pkgs; [
               # outa
               bazel_7
               nodePackages.pnpm
-              gcc14
+              # gcc14
               # python313
               nix
               # for macos pure build:
