@@ -24,7 +24,9 @@
               gcc14
               python313
               nix
+              # for macos pure build:
               libtool
+              xcbuild
             ];
           };
         };

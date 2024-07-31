@@ -21,6 +21,7 @@ let
     , gnutar
     , gzip
     , python313
+    , gcc14
     , unzip
     , which
     , zip
