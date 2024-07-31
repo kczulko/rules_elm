@@ -20,12 +20,10 @@ let
     , gnused
     , gnutar
     , gzip
-    , python313
-    , gcc14
+    , python
     , unzip
     , which
     , zip
-    , nodePackages
     }:
     let
       # yanked from https://sourcegraph.com/github.com/NixOS/nixpkgs/-/blob/pkgs/development/tools/build-managers/bazel/bazel_7/default.nix?L77-120
@@ -41,7 +39,7 @@ let
         gnused
         gnutar
         gzip
-        python313
+        python
         unzip
         which
         zip
