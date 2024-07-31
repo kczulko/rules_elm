@@ -17,8 +17,9 @@
         };
 
         shells = {
-          default = pkgs.mkShell {
+          default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages.libstdcxxClang.stdenv; } {
             packages = with pkgs; [
+              # outa
               bazel_7
               nodePackages.pnpm
               gcc14
