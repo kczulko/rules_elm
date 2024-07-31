@@ -30,8 +30,11 @@
               nix
               # for macos pure build:
               # libtool
-              xcbuild
-            ];
+            ] ++ (if pkgs.stdenv.isDarwin then
+              [
+                xcbuild
+                darwin.CF
+              ] else []);
           };
         };
       in
