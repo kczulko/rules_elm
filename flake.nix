@@ -28,6 +28,7 @@
               libtool
               xcbuild
               libcxx
+              libstdcxx5
             ];
           };
         };
