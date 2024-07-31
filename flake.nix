@@ -22,6 +22,7 @@
               bazel_7
               nodePackages.pnpm
               gcc14
+              python313
             ];
           };
         };

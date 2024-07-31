@@ -5,5 +5,6 @@ build --enable_runfiles
 # reference:  https://stackoverflow.com/questions/75850778/error-c-versions-less-than-c14-are-not-supported-in-bazel-how-to-resolve
 common --host_cxxopt=-std=c++14
 common --cxxopt=c++14
+# getting rid of [...]execroot/_main/bazel-out/k8-fastbuild/bin/elm_book_proto_elm_proto_compile is a dangling symbolic link
 common --noincompatible_sandbox_hermetic_tmp
 
