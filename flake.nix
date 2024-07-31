@@ -27,6 +27,7 @@
               # for macos pure build:
               libtool
               xcbuild
+              libcxx
             ];
           };
         };
