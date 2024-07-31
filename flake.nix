@@ -17,7 +17,8 @@
         };
 
         shells = {
-          default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages.libstdcxxClang.stdenv; } {
+          # default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages.libstdcxxClang.stdenv; } {
+          default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages_18.libcxxStdenv; } {
             packages = with pkgs; [
               # outa
               bazel_7
