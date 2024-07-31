@@ -1,7 +1,9 @@
 load("@com_github_edschouten_rules_elm//proto:def.bzl", "elm_proto_library", "elm_grpc_library")
 load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_test")
-load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_proto//proto:proto_toolchain.bzl", "proto_toolchain")
 load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
+load("@rules_proto//proto/private/rules:proto_toolchain_rule.bzl", "proto_toolchain")
 
 nodejs_toolchain(
     name = "node_toolchain",
@@ -14,6 +16,19 @@ toolchain(
     exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
     toolchain = ":node_toolchain",
     toolchain_type = "@rules_nodejs//nodejs:toolchain_type",
+)
+
+proto_toolchain(
+    name = "nixpkgs_protoc_toolchain",
+    proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
+    visibility = ["//visibility:public"],
+)
+
+toolchain(
+    name = "nixpkgs_protobuf_toolchain",
+    toolchain_type = "@rules_proto//proto:toolchain_type",
+    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
+    toolchain = ":nixpkgs_protoc_toolchain",
 )
 
 proto_library(

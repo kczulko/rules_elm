@@ -1,5 +1,6 @@
 load("@com_github_edschouten_rules_elm//examples:defs.bzl",
      "rules_elm_integration_test_each_bazel",
+     "rules_elm_integration_test",
      "gen_test_names_each",
 )
 
@@ -74,9 +75,10 @@ Passed:   4
 Failed:   0""",
 )
 
-rules_elm_integration_test_each_bazel(
+# Due to macos protoc compilation issues, this test works only with bazel7
+# as it is using bazel7's --incompatible_enable_proto_toolchain_resolution
+rules_elm_integration_test(
     name = "elm_proto",
-    bazel_binaries = bazel_binaries,
     test_runner = ":output_match_runner",
     workspace_path = "elm-proto",
     bazel_cmd = "test :spec_proto --test_output=all",
@@ -85,6 +87,8 @@ rules_elm_integration_test_each_bazel(
 Duration: 0 ms
 Passed:   2
 Failed:   0""",
+    bazel_binary = bazel_binaries["bazel7"],
+    tags = [ "bazel7" ]
 )
 
 # bazel7 cmd:
@@ -98,11 +102,12 @@ test_suite(
             # "elm_binary",
             # "elm_binary_no_deps_negative",
             # "elm_binary_opt",
-            "elm_proto",
             # "elm_test",
             # "elm_todo_mvc",
         ],
         bazel_binaries = bazel_binaries,
-    ),
+    ) + [
+        "elm_proto"
+    ],
     visibility = ["//:__subpackages__"],
 )

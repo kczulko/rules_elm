@@ -1,10 +1,18 @@
-bazel_dep(name = "bazel_skylib", version = "1.5.0")
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "rules_nixpkgs_core", version = "0.11.1")
 bazel_dep(name = "rules_nodejs", version = "6.1.0")
 bazel_dep(name = "aspect_bazel_lib", version = "2.7.7")
 bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc4")
-bazel_dep(name = "protobuf", version = "27.2", repo_name = "com_google_protobuf")
-bazel_dep(name = "rules_proto_grpc", version = "5.0.0-alpha2")
+bazel_dep(name = "rules_proto", version = "6.0.2")
+bazel_dep(name = "rules_proto_grpc", version = "5.0.0")
+archive_override(
+    module_name = "rules_proto_grpc",
+    urls = [
+        "https://github.com/rules-proto-grpc/rules_proto_grpc/archive/refs/tags/5.0.0.tar.gz"
+    ],
+    strip_prefix = "rules_proto_grpc-5.0.0/modules/core",
+    integrity = "sha256-xrMPlUcHkvmJTjtrasJxgTp7WfbLQ6CbyhUhPTCdRfk="
+)
 
 # TODO: remove rules_proto dependency
 # In the time of writing, there still exists wired dependency between protobuf <-> rules_proto
@@ -27,6 +35,12 @@ use_repo(nix_repo, "nixpkgs")
 nix_pkg.attr(
     name = "nixpkgs_nodejs",
     attr = "nodejs",
+    repo = "@nixpkgs",
+)
+
+nix_pkg.attr(
+    name = "nixpkgs_protobuf",
+    attr = "protobuf",
     repo = "@nixpkgs",
 )
 
@@ -86,11 +100,13 @@ package(default_visibility = ["//visibility:public"])
 use_repo(
     nix_pkg,
     "nixpkgs_nodejs",
+    "nixpkgs_protobuf",
     "com_github_tiziano88_elm_protobuf",
     # "com_google_protobuf",
 )
 
 register_toolchains(
-    "//:nixpkgs_nodejs_toolchain"
+    "//:nixpkgs_nodejs_toolchain",
+    "//:nixpkgs_protobuf_toolchain",
 )
 
