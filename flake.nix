@@ -33,6 +33,8 @@
             ] ++ (if pkgs.stdenv.isDarwin then
               [
                 xcbuild
+                xcode-install
+                darwin.xcode
                 darwin.CF
               ] else []);
           };
