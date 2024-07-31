@@ -22,7 +22,7 @@
               bazel_7
               nodePackages.pnpm
               gcc14
-              python313
+              # python313
               nix
               # for macos pure build:
               libtool
