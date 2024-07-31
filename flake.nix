@@ -13,32 +13,17 @@
 
         pkgs = import nixpkgs {
           inherit system;
-          config.allowUnfree = true;
           overlays = [ bazel7Overlay ];
         };
 
         shells = {
-          # default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages.libstdcxxClang.stdenv; } {
-          # default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages_18.libcxxStdenv; } {
-          # default = pkgs.mkShell.override { stdenv = pkgs.llvmPackages_18.libcxxStdenv; } {
-          default = pkgs.mkShell.override { stdenv = pkgs.gcc14Stdenv; } {
+          default = pkgs.mkShell {
             packages = with pkgs; [
-              # outa
               bazel_7
               nodePackages.pnpm
-              # gcc14
-              # python313
               nix
-              # for macos pure build:
-              
-            ] ++ (if pkgs.stdenv.isDarwin then
-              [
-                libtool
-                # xcbuild
-                # xcode-install
-                # darwin.xcode
-                # darwin.CF
-              ] else []);
+              libtool # for macos build
+            ];
           };
         };
       in

@@ -54,12 +54,12 @@ let
           ];
         });
     in
-      # https://discourse.nixos.org/t/getting-mount-related-error/40262
-      final.writeShellScriptBin "bazel" ''
-        unset TMPDIR TMP
-        exec ${unwrapped_bazel_7}/bin/bazel "$@"
-      '';
+    # https://discourse.nixos.org/t/getting-mount-related-error/40262
+    final.writeShellScriptBin "bazel" ''
+      unset TMPDIR TMP
+      exec ${unwrapped_bazel_7}/bin/bazel "$@"
+    '';
 in
 {
-  bazel_7 = prev.callPackage bazel_7_wrapper {};
+  bazel_7 = prev.callPackage bazel_7_wrapper { };
 }
