@@ -23,6 +23,7 @@
               nodePackages.pnpm
               nix
               libtool # for macos build
+              protobuf
             ];
           };
         };

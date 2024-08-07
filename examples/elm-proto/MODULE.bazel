@@ -5,14 +5,17 @@ bazel_dep(name = "aspect_bazel_lib", version = "2.7.7")
 bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc4")
 bazel_dep(name = "rules_proto", version = "6.0.2")
 bazel_dep(name = "rules_proto_grpc", version = "5.0.0")
-archive_override(
-    module_name = "rules_proto_grpc",
-    urls = [
-        "https://github.com/rules-proto-grpc/rules_proto_grpc/archive/refs/tags/5.0.0.tar.gz"
-    ],
-    strip_prefix = "rules_proto_grpc-5.0.0/modules/core",
-    integrity = "sha256-xrMPlUcHkvmJTjtrasJxgTp7WfbLQ6CbyhUhPTCdRfk="
-)
+bazel_dep(name = "protobuf", version = "23.1", dev_dependency = True, repo_name = "com_google_protobuf")
+local_path_override(module_name = "rules_proto_grpc", path = "/home/kczulko/Projects/rules_proto_grpc/modules/core")
+# local_repository(mod = "rules_proto_grpc")
+# archive_override(
+#     module_name = "rules_proto_grpc",
+#     urls = [
+#         "https://github.com/rules-proto-grpc/rules_proto_grpc/archive/refs/tags/5.0.0.tar.gz"
+#     ],
+#     strip_prefix = "rules_proto_grpc-5.0.0/modules/core",
+#     integrity = "sha256-xrMPlUcHkvmJTjtrasJxgTp7WfbLQ6CbyhUhPTCdRfk="
+# )
 
 # TODO: remove rules_proto dependency
 # In the time of writing, there still exists wired dependency between protobuf <-> rules_proto
@@ -102,7 +105,6 @@ use_repo(
     "nixpkgs_nodejs",
     "nixpkgs_protobuf",
     "com_github_tiziano88_elm_protobuf",
-    # "com_google_protobuf",
 )
 
 register_toolchains(
