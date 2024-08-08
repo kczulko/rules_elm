@@ -1,4 +1,3 @@
-load("@rules_proto_grpc//:defs.bzl", "proto_plugin")
 load("@rules_proto//proto:defs.bzl", "proto_lang_toolchain")
 
 filegroup(
@@ -13,15 +12,6 @@ proto_lang_toolchain(
     progress_message = "Generating Elm proto_library %{label}",
     plugin = "@com_github_edschouten_rules_elm//tools/protoc-gen-elm:bin",
     plugin_format_flag = "--plugin=protoc-gen-elm=%s",
-    visibility = ["//visibility:public"],
-)
-
-proto_plugin(
-    name = "protoc_gen_elm",
-    protoc_plugin_name = "protoc_gen_elm",
-    output_directory = True,
-    separate_options_flag = True,
-    tool = "//tools/protoc-gen-elm:bin",
     visibility = ["//visibility:public"],
 )
 
