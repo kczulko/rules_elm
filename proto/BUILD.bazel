@@ -7,6 +7,15 @@ filegroup(
     visibility = ["//:__subpackages__"],
 )
 
+proto_lang_toolchain(
+    name = "default_elm_proto_toolchain",
+    command_line = "--elm_out=%s",
+    progress_message = "Generating Elm proto_library %{label}",
+    plugin = "@com_github_edschouten_rules_elm//tools/protoc-gen-elm:bin",
+    plugin_format_flag = "--plugin=protoc-gen-elm=%s",
+    visibility = ["//visibility:public"],
+)
+
 proto_plugin(
     name = "protoc_gen_elm",
     protoc_plugin_name = "protoc_gen_elm",
@@ -20,16 +29,3 @@ toolchain_type(
     name = "toolchain_type",
     visibility = ["//visibility:public"],
 )
-
-# proto_lang_toolchain(
-#     name = "elm_toolchain",
-#     command_line = "--elm_out=%s",
-#     progress_message = "Generating Elm proto_library %{label}",
-#     plugin = "@com_github_edschouten_rules_elm//tools/protoc-gen-elm:bin",
-#     output_files = "multiple",
-#     # runtime = "@com_google_protobuf//:protobuf_python",
-#     # NOTE: This isn't *actually* public. It's an implicit dependency of py_proto_library,
-#     # so must be public so user usages of the rule can reference it.
-#     toolchain_type = "@com_github_edschouten_rules_elm//proto:toolchain_type",
-#     visibility = ["//visibility:public"],
-# )

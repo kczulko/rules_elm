@@ -1,4 +1,5 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@rules_proto//proto:defs.bzl", "ProtoInfo", "proto_common")
 load(
     "//elm/private:providers.bzl",
     _ElmLibrary = "ElmLibrary",
@@ -10,81 +11,54 @@ _WELL_KNOWN_PROTOS = [
     "google/protobuf/wrappers.proto",
 ]
 
+ELM_PROTO_TOOLCHAIN = "@com_github_edschouten_rules_elm//proto:toolchain_type"
+
+def _incompatible_toolchains_enabled():
+    return getattr(proto_common, "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION", False)
+
 def _elm_proto_aspect_impl(target, ctx):
+    if _incompatible_toolchains_enabled():
+        toolchain = ctx.toolchains[ELM_PROTO_TOOLCHAIN]
+        if not toolchain:
+            fail("No toolchains registered for '%s'." % ELM_PROTO_TOOLCHAIN)
+        proto_lang_toolchain_info = toolchain.proto
+    else:
+        proto_lang_toolchain_info = getattr(ctx.attr, "_aspect_proto_toolchain")[proto_common.ProtoLangToolchainInfo]
 
-    args = ctx.actions.args()
-    proto = target[ProtoInfo]
-    elm_srcs = []
-    outpath = None
-    for src in proto.direct_sources:
-        # Add command line flag for input file.
-        base_path = src.path
-        if src.root.path != "":
-            base_path = base_path[len(src.root.path) + 1:]
-        base_path = base_path[len(src.owner.workspace_root) + 0:]
-        if base_path in _WELL_KNOWN_PROTOS:
-            continue
-        args.add_all([base_path])
+    proto_info = target[ProtoInfo]
+    proto_root = proto_info.proto_source_root
 
-        # Declare output file. Elm uses capitalized package names.
-        output_path = "/".join([
-            component.capitalize()
-            for component in base_path.split("/")
-        ])[:-6] + ".elm"
-        # output_path = "bazel-out/k8-fastbuild/bin/Proto/Com/Book.elm"
-        output_path = "Proto/Com/Book.elm"
-        # out = ctx.actions.declare_file(output_path)
-        out = ctx.actions.declare_directory("Proto")
-        elm_srcs.append(out)
+    # additional_args = ctx.actions.args()
+    # additional_args.add_all(
+    #     [opt for opt in [ctx.attr.plugin_opt_json, ctx.attr.plugin_opt_grpc] if opt],
+    #     format_each = "--elm_opt=%s"
+    # )
 
-        # Determine the base output directory for --elm_out.
-        if outpath == None:
-            outpath = out.root.path + "/" + ctx.label.workspace_root + "/" + ctx.label.package
+    if proto_info.direct_sources:
+        # Handles multiple repository and virtual import cases
+        if proto_root.startswith(ctx.bin_dir.path):
+            proto_root = proto_root[len(ctx.bin_dir.path) + 1:]
 
-    if elm_srcs:
-        # Invoke the compiler, as one or more source files were provided
-        # that actually need building.
-        args.add_all([
-            "--plugin",
-            # EXECUTABLE may be of the form
-            # NAME=PATH, in which case the given plugin name
-            # is mapped to the given executable even if
-            # the executable's own name differs.
-            "{NAME}={PATH}".format(NAME = "protoc-gen-elm", PATH = ctx.executable._plugin.path),
-            "--elm_out",
-            "bazel-out/k8-fastbuild/bin"
-            # "."
-            # outpath,
-        ])
-        args.add_all(["json"], before_each = "--elm_opt")
-        args.add_all(proto.transitive_proto_path, before_each = "-I")
-
-
-        # TODO(edsch): This should be removed once this is resolved:
-        # https://github.com/bazelbuild/bazel/issues/7964
-        args.add_all([
-            ctx.genfiles_dir.path + "/" + p
-            for p in proto.transitive_proto_path.to_list()
-        ], before_each = "-I")
-        ctx.actions.run(
-            executable = ctx.executable._protoc,
-            arguments = [args],
-            inputs = proto.transitive_sources.to_list() + [ctx.executable._plugin],
-            tools = [ctx.executable._plugin],
-            outputs = [
-                # out_dir,
-                out
-                # elm_srcs
-            ],
+        elm_proto_files = paths.join(proto_root, "Proto")
+        generated_files = ctx.actions.declare_directory(elm_proto_files)
+        elm_out = paths.join(ctx.bin_dir.path, proto_root)
+        
+        proto_common.compile(
+            actions = ctx.actions,
+            proto_info = proto_info,
+            proto_lang_toolchain_info = proto_lang_toolchain_info,
+            generated_files = [generated_files],
+            plugin_output = elm_out,
+            # additional_args = additional_args,
         )
+
         return [
             _create_elm_library_provider(
                 ctx.rule.attr.deps,
                 [],
                 [],
-                [outpath],
-                # []
-                elm_srcs,
+                [elm_out],
+                [generated_files],
             ),
         ]
     else:
@@ -97,36 +71,32 @@ def _elm_proto_aspect_impl(target, ctx):
 _elm_proto_aspect = aspect(
     implementation = _elm_proto_aspect_impl,
     attrs = {
-        "_protoc": attr.label(
-            allow_single_file = True,
-            executable = True,
-            cfg = "exec",
-            default = Label("@com_google_protobuf//:protoc"),
+        # "plugin_opt_json": attr.string(
+            # values = ["", "json", "json=encode", "json=decode"]
+        # ),
+        # "plugin_opt_grpc": attr.string(
+            # values = ["", "grpc", "grpc=false", "grpc=true"]
+        # ),
+    } | ({} if _incompatible_toolchains_enabled() else {
+        "_aspect_proto_toolchain": attr.label(
+            default = ":default_elm_proto_toolchain",
         ),
-        "_plugin": attr.label(
-            allow_single_file = True,
-            executable = True,
-            cfg = "exec",
-            default = Label("@com_github_edschouten_rules_elm//tools/protoc-gen-elm:bin"),
-        ),
-    },
-
-    # {} if _incompatible_toolchains_enabled() else {
-    #     "_aspect_proto_toolchain": attr.label(
-    #         default = ":python_toolchain",
-    #     ),
-    # },
+    }),
     attr_aspects = ["deps"],
     required_providers = [ProtoInfo],
     provides = [_ElmLibrary],
-    # toolchains = [
-        # "@rules_proto//proto:toolchain_type"
-    # ]
-    # toolchains = [PY_PROTO_TOOLCHAIN] if _incompatible_toolchains_enabled() else [],
+    toolchains = [ELM_PROTO_TOOLCHAIN] if _incompatible_toolchains_enabled() else [],
 )
 
 def _elm_proto_library_rule(ctx):
-    return ctx.attr.proto[_ElmLibrary]
+    aspect_elm_lib = ctx.attr.proto[_ElmLibrary]
+    return _create_elm_library_provider(
+        ctx.attr.deps,
+        aspect_elm_lib.dependencies.to_list(),
+        aspect_elm_lib.package_directories.to_list(),
+        aspect_elm_lib.source_directories.to_list(),
+        aspect_elm_lib.source_files.to_list(),
+    )
 
 elm_proto_library = rule(
     implementation = _elm_proto_library_rule,
@@ -141,6 +111,11 @@ elm_proto_library = rule(
             providers = [ProtoInfo],
             aspects = [_elm_proto_aspect],
         ),
+        "deps": attr.label_list(
+            providers = [_ElmLibrary],
+        ),
     },
     provides = [_ElmLibrary],
 )
+
+

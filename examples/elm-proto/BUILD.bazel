@@ -1,4 +1,5 @@
 load("@com_github_edschouten_rules_elm//proto:def2.bzl", "elm_proto_library")
+load("@com_github_edschouten_rules_elm//proto:proto_elm_toolchain.bzl", "elm_proto_toolchain")
 load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_test")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 # load("@rules_proto//proto:proto_toolchain.bzl", "proto_toolchain")
@@ -18,26 +19,6 @@ toolchain(
     toolchain_type = "@rules_nodejs//nodejs:toolchain_type",
 )
 
-# proto_toolchain(
-#     name = "nixpkgs_protoc_toolchain",
-#     proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
-#     visibility = ["//visibility:public"],
-# )
-
-# proto_lang_toolchain(
-# proto_lang_toolchain(
-#     name = "nixpkgs_elm_toolchain",
-#     command_line = "--elm_out=%s",
-#     progress_message = "Generating Elm proto_library %{label}",
-#     plugin = "@com_github_edschouten_rules_elm//tools/protoc-gen-elm:bin",
-#     # output_files = "multiple",
-#     toolchain_type = "@com_github_edschouten_rules_elm//proto:toolchain_type",
-#     # toolchain_type = "@rules_proto//proto:toolchain_type",
-#     # 
-#     # exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
-#     visibility = ["//visibility:public"],
-# )
-
 proto_toolchain(
     name = "nixpkgs_protoc_toolchain",
     proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
@@ -47,8 +28,24 @@ proto_toolchain(
 toolchain(
     name = "nixpkgs_protobuf_toolchain",
     toolchain_type = "@rules_proto//proto:toolchain_type",
-    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
+    exec_compatible_with = [
+        "@rules_nixpkgs_core//constraints:support_nix"
+    ],
     toolchain = ":nixpkgs_protoc_toolchain",
+)
+
+
+elm_proto_toolchain(
+    name = "elm_proto_toolchain_opt_json",
+    protoc_opts = ["--elm_opt=json"],
+    proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
+)
+
+toolchain(
+    name = "nixpkgs_elm_protobuf_toolchain",
+    toolchain_type = "@com_github_edschouten_rules_elm//proto:toolchain_type", #"@rules_proto//proto:toolchain_type",
+    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
+    toolchain = ":elm_proto_toolchain_opt_json",
 )
 
 proto_library(
@@ -67,16 +64,17 @@ test_deps = [
 ]
 
 elm_proto_library(
-    name = "elm_book_proto1",
+    name = "elm_book_proto",
     proto = ":book_proto",
+    deps = test_deps,
 )
 
 elm_test(
     name = "spec_proto",
     main = "Spec.elm",
     deps = [
-        ":elm_book_proto1",
+        ":elm_book_proto",
         "@elm_package_elm_test",
-    ] + test_deps,
+    ]
 )
 
