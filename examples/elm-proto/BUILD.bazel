@@ -1,5 +1,4 @@
-# load("@com_github_edschouten_rules_elm//proto:def.bzl", "elm_proto_library", "elm_grpc_library")
-load("@com_github_edschouten_rules_elm//proto:def2.bzl", "elm_proto_library", "elm_proto_library1")
+load("@com_github_edschouten_rules_elm//proto:def2.bzl", "elm_proto_library")
 load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_test")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 # load("@rules_proto//proto:proto_toolchain.bzl", "proto_toolchain")
@@ -57,22 +56,6 @@ proto_library(
     srcs = [ "book.proto" ]
 )
 
-elm_proto_library(
-    name = "elm_book_proto",
-    # protos = [ "book_proto" ],
-    proto = ":book_proto",
-    # plugin_opts = [ "json" ],
-    # deps = [
-        # "@elm_package_anmolitor_elm_protocol_buffers",
-        # "@elm_package_elm_protoc_utils",
-        # "@elm_package_danfishgold_base64_bytes",
-        # "@elm_package_rtfeldman_elm_iso8601_date_strings",
-        # "@elm_package_elm_http",
-        # "@elm_package_elm_file",
-        # "@elm_package_elm_parser",
-    # ]
-)
-
 test_deps = [
     "@elm_package_anmolitor_elm_protocol_buffers",
     "@elm_package_elm_protoc_utils",
@@ -83,22 +66,9 @@ test_deps = [
     "@elm_package_elm_parser",
 ]
 
-elm_proto_library1(
+elm_proto_library(
     name = "elm_book_proto1",
     proto = ":book_proto",
-    # plugin_opts = [ "json" ],
-    # protos = [ "book_proto" ],
-    # proto = ":booyk_proto",
-    # plugin_opts = [ "json" ],
-    # deps = [
-    #     "@elm_package_anmolitor_elm_protocol_buffers",
-    #     "@elm_package_elm_protoc_utils",
-    #     "@elm_package_danfishgold_base64_bytes",
-    #     "@elm_package_rtfeldman_elm_iso8601_date_strings",
-    #     "@elm_package_elm_http",
-    #     "@elm_package_elm_file",
-    #     "@elm_package_elm_parser",
-    # ]
 )
 
 elm_test(
