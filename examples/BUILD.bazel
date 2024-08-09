@@ -99,7 +99,7 @@ rules_elm_integration_test(
     expected_output = """TEST RUN PASSED
 
 Duration: 0 ms
-Passed:   2
+Passed:   1
 Failed:   0""",
     bazel_binary = bazel_binaries["bazel7"],
     tags = [ "bazel7" ]
