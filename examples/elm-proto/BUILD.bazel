@@ -47,7 +47,8 @@ toolchain(
 
 proto_library(
     name = "book_proto",
-    srcs = [ "book.proto" ]
+    srcs = [ "book.proto" ],
+    visibility = ["//visibility:public"],
 )
 
 elm_proto_library(
@@ -58,7 +59,7 @@ elm_proto_library(
 )
 
 elm_test(
-    name = "spec_proto",
+    name = "spec",
     main = "Spec.elm",
     deps = [
         ":elm_book_proto",

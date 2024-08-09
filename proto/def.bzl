@@ -6,24 +6,26 @@ load(
     _create_elm_library_provider = "create_elm_library_provider",
 )
 
-_WELL_KNOWN_PROTOS = [
-    "google/protobuf/timestamp.proto",
-    "google/protobuf/wrappers.proto",
-]
-
 ELM_PROTO_TOOLCHAIN = "@com_github_edschouten_rules_elm//proto:toolchain_type"
 ELM_PROTO_DEPS = [
-    "@elm_package_anmolitor_elm_protocol_buffers",
-    "@elm_package_elm_protoc_utils",
+    "@elm_package_eriktim_elm_protocol_buffers",
+    "@elm_package_anmolitor_elm_protoc_types",
     "@elm_package_danfishgold_base64_bytes",
-    "@elm_package_rtfeldman_elm_iso8601_date_strings",
-    "@elm_package_elm_http",
     "@elm_package_elm_file",
+    "@elm_package_elm_http",
     "@elm_package_elm_parser",
+    "@elm_package_anmolitor_elm_protoc_utils",
+    "@elm_package_rtfeldman_elm_iso8601_date_strings",
 ]
 
 def _incompatible_toolchains_enabled():
     return getattr(proto_common, "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION", False)
+
+# skip "well-known-protos" which are handled by elm-protoc-types
+def _well_known_proto(direct_srcs):
+    return (direct_srcs and
+        direct_srcs[0].owner.package == "src/google/protobuf" and
+        direct_srcs[0].owner.repo_name.startswith("protobuf"))
 
 def _elm_proto_aspect_impl(target, ctx):
     if _incompatible_toolchains_enabled():
@@ -35,22 +37,17 @@ def _elm_proto_aspect_impl(target, ctx):
         proto_lang_toolchain_info = getattr(ctx.attr, "_aspect_proto_toolchain")[proto_common.ProtoLangToolchainInfo]
 
     proto_info = target[ProtoInfo]
-    proto_root = proto_info.proto_source_root
 
     additional_args = ctx.actions.args()
+    plugin_opts = [ctx.attr.plugin_opt_json, ctx.attr.plugin_opt_grpc, ctx.attr.plugin_opt_grpc]
     additional_args.add_all(
-        [opt for opt in [ctx.attr.plugin_opt_json, ctx.attr.plugin_opt_grpc] if opt],
+        [opt for opt in plugin_opts if opt],
         format_each = "--elm_opt=%s"
     )
 
-    if proto_info.direct_sources:
-        # Handles multiple repository and virtual import cases
-        if proto_root.startswith(ctx.bin_dir.path):
-            proto_root = proto_root[len(ctx.bin_dir.path) + 1:]
-
-        elm_proto_files = paths.join(proto_root, "Proto")
-        generated_files = ctx.actions.declare_directory(elm_proto_files)
-        elm_out = paths.join(ctx.bin_dir.path, proto_root)
+    if proto_info.direct_sources and not _well_known_proto(proto_info.direct_sources):
+        generated_files = ctx.actions.declare_directory("Proto")
+        elm_out = generated_files.dirname
         
         proto_common.compile(
             actions = ctx.actions,
@@ -81,10 +78,13 @@ _elm_proto_aspect = aspect(
     implementation = _elm_proto_aspect_impl,
     attrs = {
         "plugin_opt_json": attr.string(
-            values = ["", "json", "json=encode", "json=decode"]
+            values = ["", "json", "json=encode", "json=decode"],
         ),
         "plugin_opt_grpc": attr.string(
-            values = ["", "grpc", "grpc=false", "grpc=true"]
+            values = ["", "grpc", "grpc=false", "grpc=true"],
+        ),
+        "plugin_opt_grpc_dev": attr.string(
+            values = ["", "grpcDevTools"],
         ),
     } | ({} if _incompatible_toolchains_enabled() else {
         "_aspect_proto_toolchain": attr.label(
@@ -113,20 +113,39 @@ elm_proto_library = rule(
     attrs = {
         "proto": attr.label(
             doc = """
-              The list of `proto_library` rules to generate Python libraries for.
-
-              Usually this is just the one target: the proto library of interest.
-              It can be any target providing `ProtoInfo`.""",
+              The `proto_library` rule to generate Python libraries for.
+              It must be any target providing `ProtoInfo`.""",
+            mandatory = True,
             providers = [ProtoInfo],
             aspects = [_elm_proto_aspect],
         ),
         "plugin_opt_json": attr.string(
+            doc = """
+              Plugin opt which controls JSON encoders/decoders generation.
+              One of: ["", "json", "json=encode", "json=decode"]
+            """,
             default = "",
         ),
         "plugin_opt_grpc": attr.string(
+            doc = """
+              Plugin opt which controls GRPC related code generation.
+              One of: ["", "grpc", "grpc=false", "grpc=true"]
+            """,
+            default = "",
+        ),
+        "plugin_opt_grpc_dev": attr.string(
+            doc = """
+              Plugin opt which controls grpc-dev-tools related code generation.
+              One of: ["", "grpcDevTools"]
+            """,
             default = "",
         ),
         "deps": attr.label_list(
+            doc = """
+              Possible Elm dependencies like elm-protoc-types or elm-protoc-utils
+              which are required to compile generated code. Defaults to //proto:def.bzl:ELM_PROTO_DEPS
+            """,
+            default = ELM_PROTO_DEPS,
             providers = [_ElmLibrary],
         ),
     },

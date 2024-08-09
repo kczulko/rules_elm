@@ -4,7 +4,7 @@ bazel_dep(name = "rules_nodejs", version = "6.1.0")
 bazel_dep(name = "aspect_bazel_lib", version = "2.7.7")
 bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc4")
 bazel_dep(name = "rules_proto", version = "6.0.2")
-bazel_dep(name = "protobuf", version = "23.1", dev_dependency = True, repo_name = "com_google_protobuf")
+bazel_dep(name = "protobuf", version = "23.1", repo_name = "com_google_protobuf")
 
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
 nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
