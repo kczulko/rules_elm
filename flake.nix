@@ -24,6 +24,7 @@
               nix
               libtool # for macos build
               protobuf
+              nodejs
             ];
           };
         };

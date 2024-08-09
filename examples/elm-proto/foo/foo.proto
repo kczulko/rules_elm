@@ -13,6 +13,6 @@ option java_package = "proto";
 message Foo {
     string msg = 1;
     repeated google.protobuf.Any details = 2;
-    google.protobuf.Timestamp my_field = 3;
+    google.protobuf.Timestamp myField = 3;
     com.book.Book book = 4;
 }
