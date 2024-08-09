@@ -6,25 +6,15 @@ module(
     compatibility_level = 1,
 )
 
-# bazel_dep(name = "rules_nixpkgs_core", version = "0.11.1")
 bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc4")
 bazel_dep(name = "platforms", version = "0.0.10")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "aspect_bazel_lib", version = "2.7.7")
 bazel_dep(name = "rules_nodejs", version = "6.1.0")
-bazel_dep(name = "rules_proto_grpc", version = "5.0.0")
-archive_override(
-    module_name = "rules_proto_grpc",
-    urls = [
-        "https://github.com/rules-proto-grpc/rules_proto_grpc/archive/refs/tags/5.0.0.tar.gz"
-    ],
-    strip_prefix = "rules_proto_grpc-5.0.0/modules/core",
-    integrity = "sha256-xrMPlUcHkvmJTjtrasJxgTp7WfbLQ6CbyhUhPTCdRfk="
-)
-
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.20.2")
+bazel_dep(name = "rules_proto", version = "6.0.2")
 bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0", dev_dependency = True)
 bazel_dep(name = "rules_bazel_integration_test", version = "0.24.1", dev_dependency = True)
-bazel_dep(name = "cgrindel_bazel_starlib", version = "0.20.2", dev_dependency = True)
 
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm", dev_dependency = True)
 npm.npm_translate_lock(

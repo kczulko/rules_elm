@@ -75,13 +75,13 @@ Passed:   4
 Failed:   0""",
 )
 
-# Due to macos protoc compilation issues, this test works only with bazel7
+# Due to macos protoc compilation issues, protoc test works only with bazel7
 # as it is using bazel7's --incompatible_enable_proto_toolchain_resolution
 rules_elm_integration_test(
-    name = "elm_proto",
+    name = "elm_proto_simple",
     test_runner = ":output_match_runner",
     workspace_path = "elm-proto",
-    bazel_cmd = "test :spec_proto --test_output=all",
+    bazel_cmd = "test :spec --test_output=all",
     expected_output = """TEST RUN PASSED
 
 Duration: 0 ms
@@ -91,10 +91,20 @@ Failed:   0""",
     tags = [ "bazel7" ]
 )
 
-# bazel7 cmd:
-# bazel query 'attr("tags", "[\[ ]bazel7[,\]]", deps("//examples:integration_tests"))' | xargs -L1 bazel run --config=nix
-# bazel6 cmd:
-# bazel test //examples:integration_tests --config=nix --test_tag_filters=bazel6
+rules_elm_integration_test(
+    name = "elm_proto_complex",
+    test_runner = ":output_match_runner",
+    workspace_path = "elm-proto",
+    bazel_cmd = "test //foo:spec --test_output=all",
+    expected_output = """TEST RUN PASSED
+
+Duration: 0 ms
+Passed:   1
+Failed:   0""",
+    bazel_binary = bazel_binaries["bazel7"],
+    tags = [ "bazel7" ]
+)
+
 test_suite(
     name = "integration_tests",
     tests = gen_test_names_each(
@@ -107,7 +117,8 @@ test_suite(
         ],
         bazel_binaries = bazel_binaries,
     ) + [
-        "elm_proto"
+        "elm_proto_simple",
+        "elm_proto_complex",
     ],
     visibility = ["//:__subpackages__"],
 )

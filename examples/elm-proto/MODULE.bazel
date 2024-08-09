@@ -4,24 +4,7 @@ bazel_dep(name = "rules_nodejs", version = "6.1.0")
 bazel_dep(name = "aspect_bazel_lib", version = "2.7.7")
 bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc4")
 bazel_dep(name = "rules_proto", version = "6.0.2")
-bazel_dep(name = "rules_proto_grpc", version = "5.0.0")
-archive_override(
-    module_name = "rules_proto_grpc",
-    urls = [
-        "https://github.com/rules-proto-grpc/rules_proto_grpc/archive/refs/tags/5.0.0.tar.gz"
-    ],
-    strip_prefix = "rules_proto_grpc-5.0.0/modules/core",
-    integrity = "sha256-xrMPlUcHkvmJTjtrasJxgTp7WfbLQ6CbyhUhPTCdRfk="
-)
-
-# TODO: remove rules_proto dependency
-# In the time of writing, there still exists wired dependency between protobuf <-> rules_proto
-# To get rid of this mess, git_override was used.
-# git_override(
-#     module_name = "protobuf",
-#     remote = "https://github.com/protocolbuffers/protobuf",
-#     commit = "eceb8ccc0db3512e305c1b5a6128d7c421f62655"
-# )
+bazel_dep(name = "protobuf", version = "23.1", repo_name = "com_google_protobuf")
 
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
 nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
@@ -44,69 +27,15 @@ nix_pkg.attr(
     repo = "@nixpkgs",
 )
 
-nix_pkg.expr(
-    name = "com_github_tiziano88_elm_protobuf",
-    repo = "@nixpkgs",
-    attr = "",
-    expr = """
-{ pkgs ? import <nixpkgs> {} }:
-
-with pkgs;
-let
-    osSuffix = if stdenv.isDarwin then "osx" else "linux";
-    sha256Darwin = "sha256-lD73CVQC6srB2/3bg6J5BiOSWUvN+1V8UZ2Eg1Atn5k=";
-    sha256Linux = "sha256-0JZ3WCGybG4pVC0JYVnX3KlC9U1R7s0so4l7fLbaaF4=";
-    checkSum = if stdenv.isDarwin then sha256Darwin else sha256Linux;
-in
-pkgs.stdenv.mkDerivation {
-    name = "protoc-gen-elm";
-    src = fetchurl {
-      url = "https://github.com/tiziano88/elm-protobuf/releases/download/3.0.0/elm-protobuf-3.0.0-${osSuffix}-x86_64.tar.gz";
-      sha256 = checkSum;
-    };
-
-    sourceRoot = "bin/elm-protobuf-3.0.0-${osSuffix}-x86_64";
-    
-    installPhase = ''
-      install -m755 -D protoc-gen-elm $out/bin/protoc-gen-elm
-      mkdir -p $out/protoc-gen-elm/
-      ln -sf $out/bin/protoc-gen-elm $out/protoc-gen-elm/protoc-elm
-      cat <<EOF > $out/protoc-gen-elm/BUILD
-      filegroup(
-          name = "protoc-gen-elm",
-          srcs = ["protoc-elm"],
-          visibility = ["//visibility:public"],
-      )
-      EOF
-    '';
-  }""",
-    build_file_content = """
-package(default_visibility = ["//visibility:public"])
-""",
-)
-
-# nix_pkg.attr(
-#     name = "com_google_protobuf",
-#     repo = "@nixpkgs",
-#     attr = "protobuf",
-#     build_file_content = """
-# package(default_visibility = ["//visibility:public"])
-# filegroup(
-#    name = "protoc",
-#    srcs = ["bin/protoc"],
-# )""",
-# )
-
 use_repo(
     nix_pkg,
     "nixpkgs_nodejs",
     "nixpkgs_protobuf",
-    "com_github_tiziano88_elm_protobuf",
-    # "com_google_protobuf",
 )
 
 register_toolchains(
     "//:nixpkgs_nodejs_toolchain",
+    "//:nixpkgs_elm_protobuf_toolchain",
     "//:nixpkgs_protobuf_toolchain",
 )
 

@@ -17,6 +17,7 @@ with open(tests_found_filepath) as f:
 
 all_tests = tests_found
 
+# TODO: there's a bug: when multiple functions are found, then List.map fails to unify the type
 # Emit a main source file that calls the tests.
 # TODO(edsch): What about the seed?
 with open(output_file, "w") as f:

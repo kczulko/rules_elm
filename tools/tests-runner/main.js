@@ -8,7 +8,7 @@ function handleResults(response) {
             if (result.type == "complete") {
                 if (result.status == "fail") {
                     failures++;
-                    console.log(result)
+                    console.log(result.failure)
                 } else if (result.status == "todo") {
                     todos.push(result)
                 }
@@ -25,7 +25,6 @@ app.ports.elmTestPort__send.subscribe(function(msg) {
     response = JSON.parse(msg)
     switch (response.type) {
         case "BEGIN":
-            // console.log(response.message)
             break
         case "ERROR":
             throw new Error(response.message)
@@ -42,7 +41,6 @@ app.ports.elmTestPort__send.subscribe(function(msg) {
             handleResults(response)
             break
         case "SUMMARY":
-            // console.log(response)
             console.log(response.message.summary)
             process.exit(response.exitCode)
         default:

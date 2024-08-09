@@ -12,6 +12,19 @@ load("@com_github_edschouten_rules_elm_npm//:repositories.bzl", elm_npm_reposito
 elm_npm_repositories()
 
 load("@com_github_edschouten_rules_elm//repository:def.bzl", "elm_repository")
+
+elm_repository(
+    name = "elm_package_eriktim_elm_protocol_buffers",
+    sha256 = "e929bc551ca939bcca2855ed2560930415b60f1101c0c2e8accfc26eedb51413",
+    strip_prefix = "elm-protocol-buffers-1.2.0",
+    urls = [ "https://github.com/eriktim/elm-protocol-buffers/archive/refs/tags/1.2.0.tar.gz", ],
+)
+elm_repository(
+    name = "elm_package_anmolitor_elm_protoc_types",
+    sha256 = "e12f17d9a746de19c0bd530bd72de616b86307a10d82639fee194c268516848a",
+    strip_prefix = "elm-protoc-types-2.0.0",
+    urls = [ "https://github.com/anmolitor/elm-protoc-types/archive/refs/tags/2.0.0.tar.gz", ],
+)
 elm_repository(
     name = "elm_package_elm_file",
     sha256 = "c85b4025e12c1bf2dee9e4d853459ead7d1fa917304adfa2af27d116c86292e6",
@@ -25,31 +38,23 @@ elm_repository(
     urls = ["https://github.com/elm/http/archive/2.0.0.tar.gz"],
 )
 elm_repository(
-    name = "elm_package_elm_protoc_utils",
+    name = "elm_package_anmolitor_elm_protoc_utils",
     sha256 = "4dad004fca078f677ee8a4a01eeb4f74816f278d076d8bb37a5fe7cc7bf60223",
     strip_prefix = "elm-protoc-utils-2.3.0",
     urls = [ "https://github.com/anmolitor/elm-protoc-utils/archive/refs/tags/2.3.0.tar.gz", ],
-    patches = [
-        "//:elm_protoc_utils_elm_json.patch",
-    ],
-    patch_args = ["-p1"],
 )
-
-# elm_package_elm_parser
 elm_repository(
     name = "elm_package_elm_parser",
     sha256 = "2294a3274ee08fdb6fec78983c00d71f9516e53e175a3f7d7abc9eba76ee6c28",
     strip_prefix = "parser-1.1.0",
     urls = [ "https://github.com/elm/parser/archive/refs/tags/1.1.0.tar.gz", ],
 )
-# "rtfeldman/elm-iso8601-date-strings": "1.1.4 <= v < 2.0.0"
 elm_repository(
     name = "elm_package_rtfeldman_elm_iso8601_date_strings",
     sha256 = "2a2ce3d4c3bbfa21b66610d8fa6652feac0f37a6ded7c482df8f45ff664804aa",
     strip_prefix = "elm-iso8601-date-strings-1.1.4",
     urls = [ "https://github.com/rtfeldman/elm-iso8601-date-strings/archive/refs/tags/1.1.4.tar.gz", ],
 )
-
 elm_repository(
     name = "elm_package_danfishgold_base64_bytes",
     sha256 = "413ede3c324c666b3d4812c4b1756f9ce4fa1f9b9c5bc60922fd7e920f9e84f7",
@@ -128,55 +133,3 @@ elm_repository(
     strip_prefix = "regex-1.0.0",
     urls = ["https://github.com/elm/regex/archive/refs/tags/1.0.0.tar.gz"],
 )
-
-# nixpkgs_package(
-#     name = "com_github_tiziano88_elm_protobuf",
-#     repository = "@nixpkgs",
-#     nix_file_content = """
-# { pkgs ? import <nixpkgs> {} }:
-
-# with pkgs;
-# let
-#     osSuffix = if stdenv.isDarwin then "osx" else "linux";
-#     sha256Darwin = "sha256-lD73CVQC6srB2/3bg6J5BiOSWUvN+1V8UZ2Eg1Atn5k=";
-#     sha256Linux = "sha256-0JZ3WCGybG4pVC0JYVnX3KlC9U1R7s0so4l7fLbaaF4=";
-#     checkSum = if stdenv.isDarwin then sha256Darwin else sha256Linux;
-# in
-# pkgs.stdenv.mkDerivation {
-#     name = "protoc-gen-elm";
-#     src = fetchurl {
-#       url = "https://github.com/tiziano88/elm-protobuf/releases/download/3.0.0/elm-protobuf-3.0.0-${osSuffix}-x86_64.tar.gz";
-#       sha256 = checkSum;
-#     };
-
-#     sourceRoot = "bin/elm-protobuf-3.0.0-${osSuffix}-x86_64";
-    
-#     installPhase = ''
-#       install -m755 -D protoc-gen-elm $out/bin/protoc-gen-elm
-#       mkdir -p $out/protoc-gen-elm/
-#       ln -sf $out/bin/protoc-gen-elm $out/protoc-gen-elm/protoc-elm
-#       cat <<EOF > $out/protoc-gen-elm/BUILD
-#       filegroup(
-#           name = "protoc-gen-elm",
-#           srcs = ["protoc-elm"],
-#           visibility = ["//visibility:public"],
-#       )
-#       EOF
-#     '';
-#   }""",
-#     build_file_content = """
-# package(default_visibility = ["//visibility:public"])
-# """,
-# )
-
-# nixpkgs_package(
-#     name = "com_google_protobuf",
-#     repository = "@nixpkgs",
-#     attribute_path = "protobuf",
-#     build_file_content = """
-# package(default_visibility = ["//visibility:public"])
-# filegroup(
-#    name = "protoc",
-#    srcs = ["bin/protoc"],
-# )""",
-# )

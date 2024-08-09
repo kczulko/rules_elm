@@ -1,8 +1,8 @@
-load("@com_github_edschouten_rules_elm//proto:def.bzl", "elm_proto_library", "elm_grpc_library")
+load("@com_github_edschouten_rules_elm//proto:def.bzl", "elm_proto_library", "ELM_PROTO_TOOLCHAIN", "ELM_PROTO_DEPS")
+load("@com_github_edschouten_rules_elm//proto:elm_proto_toolchain_rule.bzl", "elm_proto_toolchain")
 load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_test")
-load("@rules_proto//proto:defs.bzl", "proto_library")
-load("@rules_proto//proto:proto_toolchain.bzl", "proto_toolchain")
 load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
+load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_proto//proto/private/rules:proto_toolchain_rule.bzl", "proto_toolchain")
 
 nodejs_toolchain(
@@ -27,36 +27,43 @@ proto_toolchain(
 toolchain(
     name = "nixpkgs_protobuf_toolchain",
     toolchain_type = "@rules_proto//proto:toolchain_type",
-    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
+    exec_compatible_with = [
+        "@rules_nixpkgs_core//constraints:support_nix"
+    ],
     toolchain = ":nixpkgs_protoc_toolchain",
+)
+
+elm_proto_toolchain(
+    name = "elm_proto_toolchain_opt_json",
+    proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
+)
+
+toolchain(
+    name = "nixpkgs_elm_protobuf_toolchain",
+    toolchain_type = ELM_PROTO_TOOLCHAIN,
+    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
+    toolchain = ":elm_proto_toolchain_opt_json",
 )
 
 proto_library(
     name = "book_proto",
-    srcs = [ "book.proto" ]
+    srcs = [ "book.proto" ],
+    visibility = ["//visibility:public"],
 )
 
 elm_proto_library(
     name = "elm_book_proto",
-    protos = [ "book_proto" ],
-    plugin_opts = [ "json" ],
-    deps = [
-        "@elm_package_anmolitor_elm_protocol_buffers",
-        "@elm_package_elm_protoc_utils",
-        "@elm_package_danfishgold_base64_bytes",
-        "@elm_package_rtfeldman_elm_iso8601_date_strings",
-        "@elm_package_elm_http",
-        "@elm_package_elm_file",
-        "@elm_package_elm_parser",
-    ]
+    proto = ":book_proto",
+    plugin_opt_json = "json=decode",
+    deps = ELM_PROTO_DEPS,
 )
 
 elm_test(
-    name = "spec_proto",
+    name = "spec",
     main = "Spec.elm",
     deps = [
         ":elm_book_proto",
         "@elm_package_elm_test",
-    ],
+    ]
 )
 
