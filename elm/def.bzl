@@ -29,9 +29,8 @@ def _do_elm_make(
         for name, version in dep[_ElmLibrary].dependencies.to_list():
             dependencies[name] = version
     elm_json = ctx.actions.declare_file(ctx.attr.name + "-elm.json" + suffix)
-    # since 0.19.1 elm doesn't tolerate empty source-directories...
-    # TODO: move to source_directories
-    source_dirs = [ main.dirname ] if source_directories.to_list() == [] else source_directories.to_list()
+    # since 0.19.1, elm doesn't tolerate empty source-directories...
+    source_dirs = source_directories.to_list() if source_directories else [ main.dirname ]
     ctx.actions.write(
         elm_json,
         """{
