@@ -10,6 +10,8 @@ import Test exposing (..)
 import Json.Decode as JD
 import Json.Encode as JE
 
+someOtherNotUselessFunctionWhichIsNotATest = "dummy string"
+
 decodersTest =
     describe "Decoders usage"
         [ test "EnumSample" <|
