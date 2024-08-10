@@ -8,7 +8,6 @@ filegroup(
 
 bin.protoc_gen_elm_binary(
     name = "bin",
-    # tratratra = "fdas",
     visibility = ["//visibility:public"],
     env = {
         "BAZEL_BINDIR": "."

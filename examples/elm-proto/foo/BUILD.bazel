@@ -19,7 +19,6 @@ elm_proto_library(
     name = "elm_foo_proto",
     proto = ":foo_proto",
     plugin_opt_json = "json=decode"
-    # deps = ELM_PROTO_DEPS,
 )
 
 elm_test(

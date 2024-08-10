@@ -1,4 +1,3 @@
-# load("@com_google_protobuf//bazel/common:proto_lang_toolchain_info.bzl", "ProtoLangToolchainInfo")
 load("@rules_proto//proto:defs.bzl", "ProtoInfo", "proto_common")
 
 def _elm_proto_toolchain_impl(ctx):

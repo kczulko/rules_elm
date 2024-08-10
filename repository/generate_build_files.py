@@ -11,7 +11,7 @@ deps = sorted(
     for name in metadata["dependencies"].keys()
 )
 
-# getting rid of canonical repo name representation
+# getting rid of the canonical repo name representation
 def fix_bzl_mod_repo_name(name):
     return name.split("~")[-1]
 
