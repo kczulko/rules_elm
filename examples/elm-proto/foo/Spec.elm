@@ -12,9 +12,11 @@ import Test exposing (..)
 import Json.Decode as JD
 import Json.Encode as JE
 
--- TODO: uncomment when tests runner bug gets fixed!
--- expectedFoo : Proto__Foo__Foo
--- expectedFoo = Proto__Foo__Foo "" [] (Just (Proto__Google__Protobuf__Timestamp (fromInts 0 1) 0)) (Just (Proto__Com__Book__Book (fromInts 0 1) "someTitle" "someAuthor"))
+expectedTimestamp = Proto__Google__Protobuf__Timestamp (fromInts 0 947203200) 0 |> Just
+
+expectedBook = Proto__Com__Book__Book (fromInts 0 0) "someTitle" "someAuthor" |> Just
+
+expectedFoo = Proto__Foo__Foo "" [] expectedTimestamp expectedBook
 
 decodersTest =
     describe "Decoders usage"
@@ -28,5 +30,5 @@ decodersTest =
                                                       "title": "someTitle",
                                                       "author": "someAuthor"
                                                     }
-                                                  }""" |> Expect.equal (Ok (Proto__Foo__Foo "" [] (Just (Proto__Google__Protobuf__Timestamp (fromInts 0 947203200) 0)) (Just (Proto__Com__Book__Book (fromInts 0 0) "someTitle" "someAuthor"))))
+                                                  }""" |> Expect.equal (Ok expectedFoo)
         ]

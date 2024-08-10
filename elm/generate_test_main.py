@@ -30,8 +30,8 @@ import Test.Runner.Node
 
 import %(module_name)s
 
-maybeTests : List (Maybe Test)        
-maybeTests = List.map Test.Runner.Node.check [ %(tests)s ]
+maybeTests : List (Maybe Test)
+maybeTests = [ %(tests)s ]
 
 main : Test.Runner.Node.TestProgram
 main = Test.Runner.Node.run {
@@ -45,7 +45,7 @@ main = Test.Runner.Node.run {
         % {
             "source_file": output_file,
             "module_name": module_name,
-            "tests": ", ".join("%s.%s" % (module_name, test) for test in all_tests),
+            "tests": ", ".join("Test.Runner.Node.check %s.%s" % (module_name, test) for test in all_tests),
         }
     )
 
