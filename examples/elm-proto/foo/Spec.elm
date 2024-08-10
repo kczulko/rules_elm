@@ -5,7 +5,6 @@ import Proto.Foo exposing (..)
 import Proto.Foo.Internals_ exposing (Proto__Foo__Foo)
 import Proto.Google.Protobuf.Internals_ exposing (Proto__Google__Protobuf__Timestamp)
 import Proto.Com.Book.Internals_ exposing (Proto__Com__Book__Book)
--- import Proto.Com.Book.EnumSample exposing (..)
 import Protobuf.Types.Int64 exposing (fromInts)
 import Test exposing (..)
 
