@@ -15,7 +15,6 @@ def _do_elm_make(
         additional_source_files,
         outputs,
         js_path,
-        elmi_path,
         suffix):
     toolchain = ctx.toolchains[_TOOLCHAIN]
 
@@ -66,7 +65,6 @@ def _do_elm_make(
             elm_json.path,
             main.path,
             js_path,
-            elmi_path,
         ] + package_directories.to_list(),
         inputs = toolchain_elm_files_list +
                  ctx.files._compile + [elm_json, main] + source_files.to_list(),
@@ -88,7 +86,6 @@ def _elm_binary_impl(ctx):
             [],
             [js1_file],
             js1_file.path,
-            "",
             "",
         )
 
@@ -138,7 +135,6 @@ def _elm_binary_impl(ctx):
             [],
             [js_file],
             js_file.path,
-            "",
             "",
         )
     return [DefaultInfo(files = depset([js_file]))]
@@ -275,7 +271,6 @@ def _elm_test_impl(ctx):
         ctx.files.main,
         [js_file_with_placeholders],
         js_file_with_placeholders.path,
-        "",
         "-2",
     )
 

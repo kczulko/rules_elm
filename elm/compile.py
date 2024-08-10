@@ -20,8 +20,7 @@ mkdir(PACKAGES_DIR)
     arg_elm_json,
     arg_main,
     arg_out_js,
-    arg_out_elmi, # TODO: to be removed:
-) = sys.argv[1:7]
+) = sys.argv[1:6]
 
 # Construct an ELM_HOME directory, containing symlinks to all the
 # packages we want to be available to the build.
