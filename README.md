@@ -28,11 +28,6 @@ load("@com_github_edschouten_rules_elm//elm:deps.bzl", "elm_register_toolchains"
 elm_register_toolchains()
 ```
 
-As some of these rules depend on Node.js and UglifyJS, you should also
-add [rules\_nodejs](https://github.com/bazelbuild/rules_nodejs) to your
-`WORKSPACE` file, calling `yarn_install()` on a `yarn.lock` file that
-provides UglifyJS.
-
 ## Examples on how to use these rules
 
 [The Bazel Elm SPA Example repository](https://github.com/EdSchouten/bazel-elm-spa-example)
