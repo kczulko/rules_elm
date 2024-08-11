@@ -20,7 +20,7 @@ def elm_register_toolchains(register = True):
     )
 
     http_file(
-        name = "com_github_elm_compiler_oxs_x86_64",
+        name = "com_github_elm_compiler_osx_x86_64",
         sha256 = "05289f0e3d4f30033487c05e689964c3bb17c0c48012510dbef1df43868545d1",
         urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit.gz"],
     )
