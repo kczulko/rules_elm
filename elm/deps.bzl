@@ -20,12 +20,12 @@ def elm_register_toolchains(register = True):
     )
 
     http_file(
-        name = "com_github_elm_compiler_mac_x86_64",
+        name = "com_github_elm_compiler_oxs_x86_64",
         sha256 = "05289f0e3d4f30033487c05e689964c3bb17c0c48012510dbef1df43868545d1",
         urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit.gz"],
     )
     http_file(
-        name = "com_github_elm_compiler_mac_arm64",
+        name = "com_github_elm_compiler_osx_arm64",
         sha256 = "552c8300b55dafdf52073b095e7bc6afc1b2ea2a600fbc7654bca8a241e38689",
         urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit-ARM.gz"],
     )
@@ -46,27 +46,10 @@ elm_library(
         urls = ["https://github.com/rtfeldman/node-test-runner/archive/0.19.1-revision12.tar.gz"],
     )
 
-    http_archive(
-        name = "com_github_tiziano88_elm_protobuf_linux",
-        build_file_content = """exports_files(glob(["**/*"]))""",
-        sha256 = "d096775821b26c6e29542d096159d7dca942f54d51eecd2ca3897b7cb6da685e",
-        urls = [
-            "https://github.com/tiziano88/elm-protobuf/releases/download/3.0.0/elm-protobuf-3.0.0-linux-x86_64.tar.gz",
-        ],
-    )
-    http_archive(
-        name = "com_github_tiziano88_elm_protobuf_mac",
-        build_file_content = """exports_files(glob(["**/*"]))""",
-        sha256 = "d096775821b26c6e29542d096159d7dca942f54d51eecd2ca3897b7cb6da685e",
-        urls = [
-            "https://github.com/tiziano88/elm-protobuf/releases/download/3.0.0/elm-protobuf-3.0.0-osx-x86_64.tar.gz",
-        ],
-    )
-
     if register:
         rules_js_register_toolchains(node_version = DEFAULT_NODE_VERSION)
         
-        platforms = [ 'linux_x86_64', 'mac_x86_64', 'mac_arm64' ]
+        platforms = [ 'linux_x86_64', 'osx_x86_64', 'osx_arm64' ]
         for platform in platforms:
            native.register_toolchains("@com_github_edschouten_rules_elm//elm/toolchain:%s" % platform)
 

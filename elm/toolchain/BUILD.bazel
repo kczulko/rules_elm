@@ -9,7 +9,7 @@ elm_toolchain(
 )
 
 elm_toolchain(
-    name = "mac_x86_64",
+    name = "osx_x86_64",
     exec_compatible_with = [
         "@platforms//os:osx",
         "@platforms//cpu:x86_64",
@@ -17,7 +17,7 @@ elm_toolchain(
 )
 
 elm_toolchain(
-    name = "mac_arm64",
+    name = "osx_arm64",
     exec_compatible_with = [
         "@platforms//os:osx",
         "@platforms//cpu:arm64",
