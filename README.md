@@ -11,6 +11,13 @@ any libraries used may be versioned as part of your Bazel project.
 
 ## Adding these rules to your project
 
+### bzlmod migration status
+
+This project is not fully ported to bzlmod, therefore some `WORKSPACE.bzlmod`
+entries are still required. See [examples](./examples) for more info.
+
+### Legacy WORKSPACE
+
 Add the following declarations to your `WORKSPACE` file:
 
 ```python
@@ -24,8 +31,9 @@ http_archive(
 )
 
 load("@com_github_edschouten_rules_elm//elm:deps.bzl", "elm_register_toolchains")
-
 elm_register_toolchains()
+load("@com_github_edschouten_rules_elm_npm//:repositories.bzl", elm_npm_repositories = "npm_repositories")
+elm_npm_repositories()
 ```
 
 ## Examples on how to use these rules
