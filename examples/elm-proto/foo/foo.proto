@@ -1,0 +1,18 @@
+// taken from toolchains_protoc examples
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "book.proto";
+
+package foo;
+
+option go_package = "example.com/foo_proto";
+option java_package = "proto";
+
+message Foo {
+    string msg = 1;
+    repeated google.protobuf.Any details = 2;
+    google.protobuf.Timestamp myField = 3;
+    com.book.Book book = 4;
+}

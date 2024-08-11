@@ -1,0 +1,26 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  protoc-gen-elm:
+    specifier: ^4.0.3
+    version: 4.0.3
+  uglify-js:
+    specifier: ^3.18.0
+    version: 3.18.0
+
+packages:
+
+  /protoc-gen-elm@4.0.3:
+    resolution: {integrity: sha512-cn33v6+TXFAcEJsfAqaZKhjBKDn5n5oMGbiZzmOBQTgh/1kkbSmgyJHXMBXte5x5eaLK20ancXH9A2r4IG8Nag==}
+    hasBin: true
+    dev: false
+
+  /uglify-js@3.18.0:
+    resolution: {integrity: sha512-SyVVbcNBCk0dzr9XL/R/ySrmYf0s372K6/hFklzgcp2lBFyXtw4I7BOdDjlLhE1aVqaI/SHWXWmYdlZxuyF38A==}
+    engines: {node: '>=0.8.0'}
+    hasBin: true
+    dev: false

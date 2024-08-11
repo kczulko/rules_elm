@@ -1,6 +1,7 @@
 filegroup(
     name = "local_repository_files",
     srcs = [
+        ".bazelignore",
         "BUILD.bazel",
         "WORKSPACE",
         "//proto:all_files",
@@ -8,6 +9,12 @@ filegroup(
         "//elm/private:all_files",
         "//elm/toolchain:all_files",
         "//repository:all_files",
+        "//tools/uglifyjs:all_files",
+        "//tools/npm:all_files",
+        "//tools/tests-finder:all_files",
+        "//tools/tests-runner:all_files",
+        "//tools/tests-placeholder-repairer:all_files",
+        "//tools/protoc-gen-elm:all_files",
     ],
     visibility = ["//visibility:public"],
 )

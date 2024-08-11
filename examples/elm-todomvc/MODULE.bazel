@@ -1,0 +1,39 @@
+bazel_dep(name = "bazel_skylib", version = "1.5.0")
+bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0")
+bazel_dep(name = "rules_nodejs", version = "6.1.0")
+bazel_dep(name = "aspect_bazel_lib", version = "2.7.7")
+bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc4")
+
+nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
+nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
+
+nix_repo.github(
+    name = "nixpkgs",
+    commit = "cfd6b5fc90b15709b780a5a1619695a88505a176",
+)
+use_repo(nix_repo, "nixpkgs")
+
+nix_pkg.attr(
+    name = "nixpkgs_nodejs",
+    attr = "nodejs",
+    repo = "@nixpkgs",
+)
+
+use_repo(
+    nix_pkg,
+    "nixpkgs_nodejs",
+)
+
+register_toolchains(
+    "//:nixpkgs_nodejs_toolchain"
+)
+
+npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm", dev_dependency = True)
+npm.npm_translate_lock(
+    name = "npm",
+    pnpm_lock = "//:pnpm-lock.yaml",
+    verify_node_modules_ignored = "//:.bazelignore",
+)
+
+use_repo(npm, "npm")
+

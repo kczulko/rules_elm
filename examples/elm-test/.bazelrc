@@ -1,4 +1,5 @@
-build --host_platform=@io_tweag_rules_nixpkgs//nixpkgs/platforms:host
-build --java_runtime_version=nixpkgs_java
-build --tool_java_runtime_version=nixpkgs_java
+build --host_platform=@rules_nixpkgs_core//platforms:host
+build --enable_bzlmod
+
+
 

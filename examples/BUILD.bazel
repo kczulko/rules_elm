@@ -1,7 +1,13 @@
-load("@com_github_edschouten_rules_elm_examples//:defs.bzl",
+load("@com_github_edschouten_rules_elm//examples:defs.bzl",
      "rules_elm_integration_test_each_bazel",
-     "gen_test_names_each"
+     "rules_elm_integration_test",
+     "gen_test_names_each",
 )
+
+bazel_binaries = {
+    "bazel6" : "@bazel6//:bin/bazel",
+    "bazel7" : "@bazel7//:bin/bazel",
+}
 
 sh_binary(
     name = "output_match_runner",
@@ -13,38 +19,52 @@ sh_binary(
     ],
 )
 
-bazel_versions = ["bazel5", "bazel6"]
+rules_elm_integration_test_each_bazel(
+    name = "elm_binary",
+    bazel_binaries = bazel_binaries,
+    workspace_path = "elm-binary",
+    bazel_cmd = "build :main",
+    expected_output = "INFO: Build completed successfully, 4 total actions",
+)
 
 rules_elm_integration_test_each_bazel(
-    name = "main_no_deps",
-    bazel_versions = bazel_versions,
-    workspace_path = "main-no-deps",
-    bazel_cmd = "build :main",
-    expected_output = """Use --sandbox_debug to see verbose messages from the sandbox and retain the sandbox build root for debugging
--- MISSING DEPENDENCY ------------------------------------------------- elm.json
+    name = "elm_binary_opt",
+    bazel_binaries = bazel_binaries,
+    workspace_path = "elm-binary",
+    bazel_cmd = "build :main -c opt",
+    expected_output = """(UglifyJS main.2.js)?.*
+INFO: Build completed successfully, 12 total actions""",
+)
 
-An application must have "elm/core" as a dependency. Try running:
+rules_elm_integration_test_each_bazel(
+    name = "elm_binary_no_deps_negative",
+    bazel_binaries = bazel_binaries,
+    workspace_path = "elm-binary",
+    bazel_cmd = "build :main-no-deps",
+    expected_output = """-- MISSING DEPENDENCY ------------------------------------------------- elm.json
 
-    elm install elm/core
+I need to see an "elm/core" dependency your elm.json file. The default imports
+of `List` and `Maybe` do not work without it.
 
-It has some supporting code that is needed by every Elm application!
+If you modified your elm.json by hand, try to change it back! And if you are
+having trouble getting back to a working elm.json, it may be easier to delete it
+and use `elm init` to start fresh.
 
-Target //:main failed to build
-Use --verbose_failures to see the command lines of failed build steps.""",
+ERROR:""",
 )
 
 rules_elm_integration_test_each_bazel(
     name = "elm_todo_mvc",
-    bazel_versions = bazel_versions,
+    bazel_binaries = bazel_binaries,
     test_runner = ":output_match_runner",
     workspace_path = "elm-todomvc",
-    bazel_cmd = "build :elm",
-    expected_output = """INFO: Build completed successfully, 3 total actions""",
+    bazel_cmd = "build :bin",
+    expected_output = """INFO: Build completed successfully, 4 total actions""",
 )
 
 rules_elm_integration_test_each_bazel(
     name = "elm_test",
-    bazel_versions = bazel_versions,
+    bazel_binaries = bazel_binaries,
     test_runner = ":output_match_runner",
     workspace_path = "elm-test",
     bazel_cmd = "test :spec --test_output=all",
@@ -55,9 +75,10 @@ Passed:   4
 Failed:   0""",
 )
 
-rules_elm_integration_test_each_bazel(
-    name = "elm_proto",
-    bazel_versions = bazel_versions,
+# Due to macos protoc compilation issues, protoc test works only with bazel7
+# as it is using bazel7's --incompatible_enable_proto_toolchain_resolution
+rules_elm_integration_test(
+    name = "elm_proto_simple",
     test_runner = ":output_match_runner",
     workspace_path = "elm-proto",
     bazel_cmd = "test :spec --test_output=all",
@@ -66,18 +87,38 @@ rules_elm_integration_test_each_bazel(
 Duration: 0 ms
 Passed:   2
 Failed:   0""",
+    bazel_binary = bazel_binaries["bazel7"],
+    tags = [ "bazel7" ]
+)
+
+rules_elm_integration_test(
+    name = "elm_proto_complex",
+    test_runner = ":output_match_runner",
+    workspace_path = "elm-proto",
+    bazel_cmd = "test //foo:spec --test_output=all",
+    expected_output = """TEST RUN PASSED
+
+Duration: 0 ms
+Passed:   1
+Failed:   0""",
+    bazel_binary = bazel_binaries["bazel7"],
+    tags = [ "bazel7" ]
 )
 
 test_suite(
     name = "integration_tests",
     tests = gen_test_names_each(
         name_prefixes = [
+            "elm_binary",
+            "elm_binary_no_deps_negative",
+            "elm_binary_opt",
             "elm_test",
-            "elm_proto",
             "elm_todo_mvc",
-            "main_no_deps",
         ],
-        bazel_versions = bazel_versions
-    ),
+        bazel_binaries = bazel_binaries,
+    ) + [
+        "elm_proto_simple",
+        "elm_proto_complex",
+    ],
     visibility = ["//:__subpackages__"],
 )

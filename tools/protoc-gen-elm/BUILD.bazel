@@ -1,0 +1,15 @@
+load("@com_github_edschouten_rules_elm_npm//tools/npm:protoc-gen-elm/package_json.bzl", "bin")
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
+
+bin.protoc_gen_elm_binary(
+    name = "bin",
+    visibility = ["//visibility:public"],
+    env = {
+        "BAZEL_BINDIR": "."
+    }
+)

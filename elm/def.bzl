@@ -15,7 +15,6 @@ def _do_elm_make(
         additional_source_files,
         outputs,
         js_path,
-        elmi_path,
         suffix):
     toolchain = ctx.toolchains[_TOOLCHAIN]
 
@@ -30,16 +29,18 @@ def _do_elm_make(
         for name, version in dep[_ElmLibrary].dependencies.to_list():
             dependencies[name] = version
     elm_json = ctx.actions.declare_file(ctx.attr.name + "-elm.json" + suffix)
+    # since 0.19.1, elm doesn't tolerate empty source-directories...
+    source_dirs = source_directories.to_list() if source_directories else [ main.dirname ]
     ctx.actions.write(
         elm_json,
         """{
     "type": "application",
     "dependencies": {"direct": %s, "indirect": {}},
-    "elm-version": "0.19.0",
+    "elm-version": "0.19.1",
     "source-directories": %s,
     "test-dependencies": {"direct": {}, "indirect": {}}
 }""" %
-        (repr(dependencies), repr(source_directories.to_list())),
+        (repr(dependencies), repr(source_dirs)),
     )
 
     # Invoke Elm through a wrapper script that generates an ELM_HOME and
@@ -52,6 +53,7 @@ def _do_elm_make(
         transitive = [dep[_ElmLibrary].package_directories for dep in deps],
     )
     toolchain_elm_files_list = toolchain.elm.files.to_list()
+
     ctx.actions.run(
         mnemonic = "Elm",
         executable = "python",
@@ -62,7 +64,6 @@ def _do_elm_make(
             elm_json.path,
             main.path,
             js_path,
-            elmi_path,
         ] + package_directories.to_list(),
         inputs = toolchain_elm_files_list +
                  ctx.files._compile + [elm_json, main] + source_files.to_list(),
@@ -85,21 +86,23 @@ def _elm_binary_impl(ctx):
             [js1_file],
             js1_file.path,
             "",
-            "",
         )
 
         # Step 2: Compress the resulting Javascript.
         js2_file = ctx.actions.declare_file(ctx.attr.name + ".2.js")
         ctx.actions.run(
             mnemonic = "UglifyJS",
-            executable = ctx.executable.uglifyjs,
+            executable = ctx.executable._uglifyjs,
             arguments = [
-                js1_file.path,
+                js1_file.basename,
                 "--compress",
                 "pure_funcs=[F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9],pure_getters,keep_fargs=false,unsafe_comps,unsafe",
                 "--output",
-                js2_file.path,
+                js2_file.basename,
             ],
+            env = {
+                "BAZEL_BINDIR": ctx.bin_dir.path,
+            },
             inputs = [js1_file],
             outputs = [js2_file],
         )
@@ -107,13 +110,16 @@ def _elm_binary_impl(ctx):
         # Step 3: Mangle the resulting Javascript.
         ctx.actions.run(
             mnemonic = "UglifyJS",
-            executable = ctx.executable.uglifyjs,
+            executable = ctx.executable._uglifyjs,
             arguments = [
-                js2_file.path,
+                js2_file.basename,
                 "--mangle",
                 "--output",
-                js_file.path,
+                js_file.basename,
             ],
+            env = {
+                "BAZEL_BINDIR": ctx.bin_dir.path,
+            },
             inputs = [js2_file],
             outputs = [js_file],
         )
@@ -129,7 +135,6 @@ def _elm_binary_impl(ctx):
             [js_file],
             js_file.path,
             "",
-            "",
         )
     return [DefaultInfo(files = depset([js_file]))]
 
@@ -144,9 +149,9 @@ elm_binary = rule(
             allow_single_file = True,
             default = Label("@com_github_edschouten_rules_elm//elm:compile.py"),
         ),
-        "uglifyjs": attr.label(
+        "_uglifyjs": attr.label(
             cfg = "host",
-            default = Label("@npm//uglify-js/bin:uglifyjs"),
+            default = Label("@com_github_edschouten_rules_elm//tools/uglifyjs:bin"),
             executable = True,
         ),
     },
@@ -219,45 +224,43 @@ elm_package = rule(
 )
 
 def _elm_test_impl(ctx):
-    # Generate an .elmi file corresponding with the source file
-    # containing the tests. This file contains a machine-readable list
-    # of all top-level declarations.
-    elmi_filename = ctx.files.main[0].basename
-    if elmi_filename.endswith(".elm"):
-        elmi_filename = elmi_filename[:-4]
-    elmi_filename += ".elmi"
-    elmi_file = ctx.actions.declare_file(elmi_filename)
-    _do_elm_make(
-        ctx,
-        "fastbuild",
-        ctx.files.main[0],
-        ctx.attr.deps,
-        [],
-        [],
-        [elmi_file],
-        "unused.js",
-        elmi_file.path,
-        "-1",
+    module_name = ctx.files.main[0].basename[:-4]
+
+    # Find tests:
+    tests_found_filename = ctx.attr.name + "_tests_found.json"
+    tests_found_file = ctx.actions.declare_file(tests_found_filename)
+    ctx.actions.run_shell(
+        mnemonic = "EmlFindTests",
+        tools = [
+            ctx.executable._tests_finder
+        ],
+        command = "exec %s $(readlink -f %s) $(pwd)/%s\n" % (ctx.executable._tests_finder.path, ctx.files.main[0].short_path, tests_found_file.path),
+        env = {
+            "BAZEL_BINDIR": ctx.bin_dir.path,
+        },
+        inputs = ctx.files.main,
+        outputs = [ tests_found_file ]
     )
 
     # Create a main source file for the test that runs all the tests.
-    # Obtain the list of tests to run from the .elmi file.
+    # Obtain the list of tests to run from the .elm file.
     main_filename = ctx.attr.name + "_main.elm"
     main_file = ctx.actions.declare_file(main_filename)
     ctx.actions.run(
-        mnemonic = "Elmi2Main",
+        mnemonic = "ElmGenTest",
         executable = "python",
         arguments = [
             ctx.files._generate_test_main[0].path,
-            elmi_file.path,
+            module_name,
+            tests_found_file.path,
             main_file.path,
         ],
-        inputs = ctx.files._generate_test_main + [elmi_file],
+        inputs = ctx.files._generate_test_main + [tests_found_file],
         outputs = [main_file],
     )
 
     # Build the new main file.
-    js_file = ctx.actions.declare_file(ctx.attr.name + ".js")
+    js_file_with_placeholders = ctx.actions.declare_file(ctx.attr.name + "_with_placehoders.js")
     _do_elm_make(
         ctx,
         "fastbuild",
@@ -265,23 +268,43 @@ def _elm_test_impl(ctx):
         ctx.attr.deps + [ctx.attr._node_test_runner],
         [ctx.files.main[0].dirname],
         ctx.files.main,
-        [js_file],
-        js_file.path,
-        "",
+        [js_file_with_placeholders],
+        js_file_with_placeholders.path,
         "-2",
+    )
+
+    # Placeholders removal
+    # This is required to adapt the final file to run under nodejs
+    # see: https://github.com/rtfeldman/node-test-runner/blob/eedf853fc9b45afd73a0db72decebdb856a69771/lib/Generate.js#L56-L74
+    js_file = ctx.actions.declare_file(ctx.attr.name + ".js")
+    ctx.actions.run_shell(
+        mnemonic = "EmlTestReplacePlacehoders",
+        tools = [ ctx.executable._tests_placehoder_repairer ],
+        command = "exec %s $(readlink -f %s) $(pwd)/%s\n" % (ctx.executable._tests_placehoder_repairer.path, js_file_with_placeholders.path, js_file.path),
+        env = {
+            "BAZEL_BINDIR": ctx.bin_dir.path,
+        },
+        inputs = [ js_file_with_placeholders ],
+        outputs = [ js_file ]
     )
 
     runner_filename = ctx.attr.name + ".sh"
     runner_file = ctx.actions.declare_file(runner_filename)
+
     ctx.actions.write(
         runner_file,
-        "#!/usr/bin/env sh\nexec %s %s $(pwd)/%s\n" % (ctx.files.node[0].short_path, ctx.files._run_test[0].short_path, js_file.short_path),
+        content = """
+#!/usr/bin/env bash
+exec {bin} {args}""".format(
+            bin = ctx.executable._tests_runner.short_path,
+            args = " ".join(["$(pwd)/%s" % js_file.short_path])
+        ),
         is_executable = True,
     )
 
     return [DefaultInfo(
         executable = runner_file,
-        runfiles = ctx.runfiles(ctx.files.node + ctx.files._run_test + [js_file]),
+        runfiles = ctx.runfiles([js_file]).merge(ctx.attr._tests_runner.default_runfiles),
     )]
 
 elm_test = rule(
@@ -290,10 +313,6 @@ elm_test = rule(
         "main": attr.label(
             allow_files = True,
             mandatory = True,
-        ),
-        "node": attr.label(
-            allow_single_file = True,
-            default = Label("@nodejs//:node"),
         ),
         "_compile": attr.label(
             allow_single_file = True,
@@ -311,9 +330,23 @@ elm_test = rule(
                 "@com_github_rtfeldman_node_test_runner//:node_test_runner",
             ),
         ),
-        "_run_test": attr.label(
+        "_tests_finder": attr.label(
             allow_single_file = True,
-            default = Label("@com_github_edschouten_rules_elm//elm:run_test.js"),
+            default = Label("@com_github_edschouten_rules_elm//tools/tests-finder:bin"),
+            executable = True,
+            cfg = "exec"
+        ),
+        "_tests_placehoder_repairer": attr.label(
+            allow_single_file = True,
+            default = Label("@com_github_edschouten_rules_elm//tools/tests-placeholder-repairer:bin"),
+            executable = True,
+            cfg = "exec"
+        ),
+        "_tests_runner": attr.label(
+            allow_single_file = True,
+            default = Label("@com_github_edschouten_rules_elm//tools/tests-runner:bin"),
+            executable = True,
+            cfg = "exec"
         ),
     },
     test = True,

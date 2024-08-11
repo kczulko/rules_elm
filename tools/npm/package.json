@@ -1,0 +1,6 @@
+{
+	"dependencies": {
+		"protoc-gen-elm": "^4.0.3",
+		"uglify-js": "^3.18.0"
+	}
+}

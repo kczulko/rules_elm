@@ -1,0 +1,26 @@
+bazel_dep(name = "bazel_skylib", version = "1.5.0")
+bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0", dev_dependency = True)
+bazel_dep(name = "rules_nodejs", version = "6.1.0")
+bazel_dep(name = "aspect_bazel_lib", version = "2.7.7")
+bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc4")
+
+nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
+nix_repo.default(name = "nixpkgs")
+use_repo(nix_repo, "nixpkgs")
+
+nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
+nix_pkg.attr(
+    name = "nixpkgs_nodejs",
+    attr = "nodejs",
+    repo = "@nixpkgs",
+)
+
+use_repo(
+    nix_pkg,
+    "nixpkgs_nodejs",
+)
+
+register_toolchains(
+    "//:nixpkgs_nodejs_toolchain"
+)
+

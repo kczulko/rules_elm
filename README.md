@@ -11,6 +11,13 @@ any libraries used may be versioned as part of your Bazel project.
 
 ## Adding these rules to your project
 
+### bzlmod migration status
+
+This project is not fully ported to bzlmod, therefore some `WORKSPACE.bzlmod`
+entries are still required. See [examples](./examples) for more info.
+
+### Legacy WORKSPACE
+
 Add the following declarations to your `WORKSPACE` file:
 
 ```python
@@ -24,14 +31,10 @@ http_archive(
 )
 
 load("@com_github_edschouten_rules_elm//elm:deps.bzl", "elm_register_toolchains")
-
 elm_register_toolchains()
+load("@com_github_edschouten_rules_elm_npm//:repositories.bzl", elm_npm_repositories = "npm_repositories")
+elm_npm_repositories()
 ```
-
-As some of these rules depend on Node.js and UglifyJS, you should also
-add [rules\_nodejs](https://github.com/bazelbuild/rules_nodejs) to your
-`WORKSPACE` file, calling `yarn_install()` on a `yarn.lock` file that
-provides UglifyJS.
 
 ## Examples on how to use these rules
 
@@ -109,14 +112,19 @@ sufficient to use `elm_repository()`.
 ```python
 load("@com_github_edschouten_rules_elm//proto:def.bzl", "elm_proto_library")
 
-elm_proto_library(name, proto, visibility)
+elm_proto_library(name, proto, deps, plugin_opt_json, plugin_opt_grpc, visibility)
 ```
 
 **Purpose:** generate Elm bindings for [Protocol Buffers](https://developers.google.com/protocol-buffers/)
-definitions using [tiziano88/elm-protobuf](https://github.com/tiziano88/elm-protobuf)
+definitions using [protoc-gen-elm](https://www.npmjs.com/package/protoc-gen-elm)
 and package them as an `elm_library()`.
 
 - `proto`: The `proto_library()` that should be converted to Elm.
+- `deps`: Elm deps required to compile generated code.
+- `plugin_opt_json`: One of {json, json=encode, json=decode},
+   see [protoc-gen-elm docs](https://www.npmjs.com/package/protoc-gen-elm)
+- `plugin_opt_grpc`: One of {grpc, grpc=false, grpc=true},
+   see [protoc-gen-elm docs](https://www.npmjs.com/package/protoc-gen-elm)
 
 **Note:** This function is implemented using [Bazel aspects](https://docs.bazel.build/versions/master/skylark/aspects.html),
 meaning that it automatically instantiates build rules for all

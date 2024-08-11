@@ -1,5 +1,21 @@
+load("@rules_proto//proto:defs.bzl", "proto_lang_toolchain")
+
 filegroup(
     name = "all_files",
     srcs = glob(["*"]),
     visibility = ["//:__subpackages__"],
+)
+
+proto_lang_toolchain(
+    name = "default_elm_proto_toolchain",
+    command_line = "--elm_out=%s",
+    progress_message = "Generating Elm proto_library %{label}",
+    plugin = "@com_github_edschouten_rules_elm//tools/protoc-gen-elm:bin",
+    plugin_format_flag = "--plugin=protoc-gen-elm=%s",
+    visibility = ["//visibility:public"],
+)
+
+toolchain_type(
+    name = "toolchain_type",
+    visibility = ["//visibility:public"],
 )

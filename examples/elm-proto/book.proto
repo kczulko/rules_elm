@@ -24,8 +24,7 @@ service BookService {
 }
 
 enum EnumSample {
-    option allow_alias = true;
     UNKNOWN = 0;
     STARTED = 1;
-    RUNNING = 1;
+    RUNNING = 2;
 }

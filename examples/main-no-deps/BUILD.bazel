@@ -1,8 +1,0 @@
-load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_binary")
-
-elm_binary(
-    name = "main",
-    main = "Main.elm",
-    uglifyjs = "@uglifyjs//:bin",
-    deps = [],
-)
