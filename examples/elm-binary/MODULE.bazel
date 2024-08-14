@@ -1,4 +1,4 @@
-module(name = "my-module", version = "1.0")
+module(name = "elm-binary", version = "1.0")
 
 bazel_dep(name = "com_github_edschouten_rules_elm")
 local_path_override(
