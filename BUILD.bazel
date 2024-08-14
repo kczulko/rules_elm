@@ -3,6 +3,7 @@ filegroup(
     srcs = [
         ".bazelignore",
         "BUILD.bazel",
+        "MODULE.bazel",
         "WORKSPACE",
         "//proto:all_files",
         "//elm:all_files",
