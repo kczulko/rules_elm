@@ -1,4 +1,8 @@
 load("@rules_proto//proto:defs.bzl", "ProtoInfo", "proto_common")
+load(
+    "//elm/private:providers.bzl",
+    _ElmLibrary = "ElmLibrary",
+)
 
 def _elm_proto_toolchain_impl(ctx):
     proto_lang_toolchain = proto_common.ProtoLangToolchainInfo(
@@ -16,7 +20,7 @@ def _elm_proto_toolchain_impl(ctx):
 
     return [
         DefaultInfo(files = depset(), runfiles = ctx.runfiles()),
-        platform_common.ToolchainInfo(proto = proto_lang_toolchain),
+        platform_common.ToolchainInfo(proto = proto_lang_toolchain, deps = ctx.attr.deps),
     ]
 
 elm_proto_toolchain = rule(
@@ -45,7 +49,11 @@ elm_proto_toolchain = rule(
             allow_files = True,
             default = "@com_google_protobuf//:protoc"
         ),
-        "protoc_opts": attr.string_list()
+        "protoc_opts": attr.string_list(),
+        "deps": attr.label_list(
+            default = [],
+            providers = [_ElmLibrary]
+        ),
     },
     provides = [platform_common.ToolchainInfo]
 )

@@ -1,4 +1,7 @@
-module(name = "elm-proto", version = "1.0")
+module(
+    name = "elm-proto",
+    version = "1.0",
+)
 
 bazel_dep(name = "com_github_edschouten_rules_elm")
 local_path_override(
@@ -9,19 +12,20 @@ local_path_override(
 bazel_dep(name = "rules_nixpkgs_core", version = "0.11.1")
 bazel_dep(name = "rules_nodejs", version = "6.1.0")
 bazel_dep(name = "rules_proto", version = "6.0.2")
+bazel_dep(name = "protobuf", version = "23.1", repo_name = "com_google_protobuf")
 
 elm = use_extension("@com_github_edschouten_rules_elm//elm:extensions.bzl", "elm")
 elm.repository(
     name = "elm_package_eriktim_elm_protocol_buffers",
     sha256 = "e929bc551ca939bcca2855ed2560930415b60f1101c0c2e8accfc26eedb51413",
     strip_prefix = "elm-protocol-buffers-1.2.0",
-    urls = [ "https://github.com/eriktim/elm-protocol-buffers/archive/refs/tags/1.2.0.tar.gz", ],
+    urls = ["https://github.com/eriktim/elm-protocol-buffers/archive/refs/tags/1.2.0.tar.gz"],
 )
 elm.repository(
     name = "elm_package_anmolitor_elm_protoc_types",
     sha256 = "e12f17d9a746de19c0bd530bd72de616b86307a10d82639fee194c268516848a",
     strip_prefix = "elm-protoc-types-2.0.0",
-    urls = [ "https://github.com/anmolitor/elm-protoc-types/archive/refs/tags/2.0.0.tar.gz", ],
+    urls = ["https://github.com/anmolitor/elm-protoc-types/archive/refs/tags/2.0.0.tar.gz"],
 )
 elm.repository(
     name = "elm_package_elm_file",
@@ -39,19 +43,19 @@ elm.repository(
     name = "elm_package_anmolitor_elm_protoc_utils",
     sha256 = "4dad004fca078f677ee8a4a01eeb4f74816f278d076d8bb37a5fe7cc7bf60223",
     strip_prefix = "elm-protoc-utils-2.3.0",
-    urls = [ "https://github.com/anmolitor/elm-protoc-utils/archive/refs/tags/2.3.0.tar.gz", ],
+    urls = ["https://github.com/anmolitor/elm-protoc-utils/archive/refs/tags/2.3.0.tar.gz"],
 )
 elm.repository(
     name = "elm_package_elm_parser",
     sha256 = "2294a3274ee08fdb6fec78983c00d71f9516e53e175a3f7d7abc9eba76ee6c28",
     strip_prefix = "parser-1.1.0",
-    urls = [ "https://github.com/elm/parser/archive/refs/tags/1.1.0.tar.gz", ],
+    urls = ["https://github.com/elm/parser/archive/refs/tags/1.1.0.tar.gz"],
 )
 elm.repository(
     name = "elm_package_rtfeldman_elm_iso8601_date_strings",
     sha256 = "2a2ce3d4c3bbfa21b66610d8fa6652feac0f37a6ded7c482df8f45ff664804aa",
     strip_prefix = "elm-iso8601-date-strings-1.1.4",
-    urls = [ "https://github.com/rtfeldman/elm-iso8601-date-strings/archive/refs/tags/1.1.4.tar.gz", ],
+    urls = ["https://github.com/rtfeldman/elm-iso8601-date-strings/archive/refs/tags/1.1.4.tar.gz"],
 )
 elm.repository(
     name = "elm_package_danfishgold_base64_bytes",
@@ -84,12 +88,6 @@ elm.repository(
     urls = ["https://github.com/elm-explorations/test/archive/2.1.1.tar.gz"],
 )
 elm.repository(
-    name = "elm_package_elm_bytes",
-    sha256 = "922f3526e3b430e947d1d2eac5965e4caae625013649de2f657d4f258a5bdc0b",
-    strip_prefix = "bytes-1.0.8",
-    urls = ["https://github.com/elm/bytes/archive/1.0.8.tar.gz"],
-)
-elm.repository(
     name = "elm_package_elm_virtual_dom",
     sha256 = "cf87286ed5d1b31aaf99c6a3368ccd340d1356b1973f1afe5f668c47e22b3b60",
     strip_prefix = "virtual-dom-1.0.2",
@@ -114,49 +112,34 @@ elm.repository(
     urls = ["https://github.com/elm/time/archive/1.0.0.tar.gz"],
 )
 elm.repository(
-    name = "elm_package_tiziano88_elm_protobuf",
-    sha256 = "624d6d1501d701bf04547558d7bc26f7f995493930d7d94854f782aaf9091303",
-    strip_prefix = "elm-protobuf-3.0.0",
-    urls = ["https://github.com/tiziano88/elm-protobuf/archive/3.0.0.tar.gz"],
+    name = "elm_package_elm_bytes",
+    sha256 = "922f3526e3b430e947d1d2eac5965e4caae625013649de2f657d4f258a5bdc0b",
+    strip_prefix = "bytes-1.0.8",
+    urls = ["https://github.com/elm/bytes/archive/1.0.8.tar.gz"],
 )
-elm.repository(
-    name = "elm_package_jweir_elm_iso8601",
-    sha256 = "6d9db7fee3b4d89714d133ef82d68d25cab348089073c9aa39264bfe5e5a341f",
-    strip_prefix = "elm-iso8601-7.0.1",
-    urls = ["https://github.com/jweir/elm-iso8601/archive/7.0.1.tar.gz"],
-)
-elm.repository(
-    name = "elm_package_elm_regex",
-    sha256 = "42e98d657040339c05c4001ea0f7469ec29beca5cc3c594fb1c11e0ecad53252",
-    strip_prefix = "regex-1.0.0",
-    urls = ["https://github.com/elm/regex/archive/refs/tags/1.0.0.tar.gz"],
-)
-
 use_repo(
     elm,
-    "elm_package_eriktim_elm_protocol_buffers",
     "elm_package_anmolitor_elm_protoc_types",
+    "elm_package_anmolitor_elm_protoc_utils",
+    "elm_package_anmolitor_elm_protocol_buffers",
+    "elm_package_danfishgold_base64_bytes",
     "elm_package_elm_file",
     "elm_package_elm_http",
-    "elm_package_anmolitor_elm_protoc_utils",
     "elm_package_elm_parser",
+    "elm_package_eriktim_elm_protocol_buffers",
     "elm_package_rtfeldman_elm_iso8601_date_strings",
-    "elm_package_danfishgold_base64_bytes",
-    "elm_package_anmolitor_elm_protocol_buffers",
     "elm_package_elm_core",
     "elm_package_elm_json",
     "elm_package_elm_test",
-    "elm_package_elm_bytes",
     "elm_package_elm_virtual_dom",
     "elm_package_elm_random",
     "elm_package_elm_html",
+    "elm_package_elm_bytes",
     "elm_package_elm_time",
-    "elm_package_tiziano88_elm_protobuf",
-    "elm_package_jweir_elm_iso8601",
-    "elm_package_elm_regex",
 )
 
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
+
 nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
 
 nix_repo.github(
@@ -170,13 +153,11 @@ nix_pkg.attr(
     attr = "nodejs",
     repo = "@nixpkgs",
 )
-
 nix_pkg.attr(
     name = "nixpkgs_protobuf",
     attr = "protobuf",
     repo = "@nixpkgs",
 )
-
 use_repo(
     nix_pkg,
     "nixpkgs_nodejs",
@@ -188,4 +169,3 @@ register_toolchains(
     "//:nixpkgs_elm_protobuf_toolchain",
     "//:nixpkgs_protobuf_toolchain",
 )
-
