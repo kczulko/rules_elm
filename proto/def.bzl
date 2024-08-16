@@ -7,16 +7,6 @@ load(
 )
 
 ELM_PROTO_TOOLCHAIN = "@com_github_edschouten_rules_elm//proto:toolchain_type"
-ELM_PROTO_DEPS = [
-    "@elm_package_eriktim_elm_protocol_buffers",
-    "@elm_package_anmolitor_elm_protoc_types",
-    "@elm_package_danfishgold_base64_bytes",
-    "@elm_package_elm_file",
-    "@elm_package_elm_http",
-    "@elm_package_elm_parser",
-    "@elm_package_anmolitor_elm_protoc_utils",
-    "@elm_package_rtfeldman_elm_iso8601_date_strings",
-]
 
 def _incompatible_toolchains_enabled():
     return getattr(proto_common, "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION", False)
@@ -58,9 +48,17 @@ def _elm_proto_aspect_impl(target, ctx):
             additional_args = additional_args,
         )
 
+        elm_proto_toolchain_deps = []
+        # TODO: refactor code repetition
+        if _incompatible_toolchains_enabled():
+            toolchain = ctx.toolchains[ELM_PROTO_TOOLCHAIN]
+            if not toolchain:
+                fail("No toolchains registered for '%s'." % ELM_PROTO_TOOLCHAIN)
+            elm_proto_toolchain_deps = toolchain.deps
+
         return [
             _create_elm_library_provider(
-                ctx.rule.attr.deps,
+                ctx.rule.attr.deps + elm_proto_toolchain_deps,
                 [],
                 [],
                 [elm_out],
@@ -143,9 +141,9 @@ elm_proto_library = rule(
         "deps": attr.label_list(
             doc = """
               Possible Elm dependencies like elm-protoc-types or elm-protoc-utils
-              which are required to compile generated code. Defaults to //proto:def.bzl:ELM_PROTO_DEPS
+              which are required to compile generated code.
             """,
-            default = ELM_PROTO_DEPS,
+            default = [],
             providers = [_ElmLibrary],
         ),
     },

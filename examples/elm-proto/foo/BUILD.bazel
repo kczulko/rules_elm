@@ -1,9 +1,6 @@
-load("@com_github_edschouten_rules_elm//proto:def.bzl", "elm_proto_library", "ELM_PROTO_TOOLCHAIN", "ELM_PROTO_DEPS")
-load("@com_github_edschouten_rules_elm//proto:elm_proto_toolchain_rule.bzl", "elm_proto_toolchain")
+load("@com_github_edschouten_rules_elm//proto:def.bzl", "elm_proto_library")
 load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_test")
-load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
 load("@rules_proto//proto:defs.bzl", "proto_library")
-load("@rules_proto//proto/private/rules:proto_toolchain_rule.bzl", "proto_toolchain")
 
 proto_library(
     name = "foo_proto",

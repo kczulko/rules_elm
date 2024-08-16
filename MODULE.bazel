@@ -13,12 +13,32 @@ bazel_dep(name = "aspect_bazel_lib", version = "2.7.7")
 bazel_dep(name = "rules_nodejs", version = "6.1.0")
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.20.2")
 bazel_dep(name = "rules_proto", version = "6.0.2")
+bazel_dep(name = "protobuf", version = "23.1", repo_name = "com_google_protobuf")
 bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0", dev_dependency = True)
 bazel_dep(name = "rules_bazel_integration_test", version = "0.24.1", dev_dependency = True)
 
-npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm", dev_dependency = True)
+elm = use_extension("//elm:extensions.bzl", "elm")
+# TODO: define toolchain repo
+elm.toolchain()
+use_repo(
+    elm,
+    "com_github_elm_compiler_linux_x86_64",
+    "com_github_elm_compiler_osx_x86_64",
+    "com_github_elm_compiler_osx_arm64",
+    # TODO: define as elm_repository and link Parser.js via rules_js
+    "com_github_rtfeldman_node_test_runner"
+)
+
+register_toolchains(
+    "@com_github_edschouten_rules_elm//elm/toolchain:linux_x86_64",
+    "@com_github_edschouten_rules_elm//elm/toolchain:osx_x86_64",
+    "@com_github_edschouten_rules_elm//elm/toolchain:osx_arm64",
+)
+
+npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
 npm.npm_translate_lock(
     name = "com_github_edschouten_rules_elm_npm",
+    link_workspace = "com_github_edschouten_rules_elm",
     pnpm_lock = "//tools/npm:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
 )

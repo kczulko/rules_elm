@@ -1,8 +1,46 @@
-bazel_dep(name = "bazel_skylib", version = "1.5.0")
+module(name = "elm-binary", version = "1.0")
+
+bazel_dep(name = "com_github_edschouten_rules_elm")
+local_path_override(
+    module_name = "com_github_edschouten_rules_elm",
+    path = "../..",
+)
+
 bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0", dev_dependency = True)
 bazel_dep(name = "rules_nodejs", version = "6.1.0")
-bazel_dep(name = "aspect_bazel_lib", version = "2.7.7")
-bazel_dep(name = "aspect_rules_js", version = "2.0.0-rc4")
+
+elm = use_extension("@com_github_edschouten_rules_elm//elm:extensions.bzl", "elm")
+elm.repository(
+    name = "elm_package_elm_html",
+    sha256 = "73b885e0a3d2f9781b1c9bbcc1ee9ac032f503f5ef46a27da3ba617cebbf6fd8",
+    strip_prefix = "html-1.0.0",
+    urls = ["https://github.com/elm/html/archive/1.0.0.tar.gz"],
+)
+elm.repository(
+    name = "elm_package_elm_json",
+    sha256 = "d0635f33137e4ad3fc323f96ba280e45dc41afa51076c53d9f04fd92c2cf5c4e",
+    strip_prefix = "json-1.1.3",
+    urls = ["https://github.com/elm/json/archive/1.1.3.tar.gz"],
+)
+elm.repository(
+    name = "elm_package_elm_virtual_dom",
+    sha256 = "cf87286ed5d1b31aaf99c6a3368ccd340d1356b1973f1afe5f668c47e22b3b60",
+    strip_prefix = "virtual-dom-1.0.2",
+    urls = ["https://github.com/elm/virtual-dom/archive/1.0.2.tar.gz"],
+)
+elm.repository(
+    name = "elm_package_elm_core",
+    sha256 = "6e37b11c88c89a68d19d0c7625f1ef39ed70c59e443def95e4de98d6748c80a7",
+    strip_prefix = "core-1.0.5",
+    urls = ["https://github.com/elm/core/archive/1.0.5.tar.gz"],
+)
+use_repo(
+    elm,
+    "elm_package_elm_html",
+    "elm_package_elm_json",
+    "elm_package_elm_core",
+    "elm_package_elm_virtual_dom",
+)
 
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
 nix_repo.default(name = "nixpkgs")
