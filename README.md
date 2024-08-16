@@ -11,10 +11,29 @@ any libraries used may be versioned as part of your Bazel project.
 
 ## Adding these rules to your project
 
-### bzlmod migration status
+### Using bzlmod with Bazel 6 or later:
 
-This project is not fully ported to bzlmod, therefore some `WORKSPACE.bzlmod`
-entries are still required. See [examples](./examples) for more info.
+Add the following to your `MODULE.bazel` file:
+
+```python
+bazel_dep(name = "com_github_edschouten_rules_elm")
+# not yet published to Bazel Central Registry
+git_override(
+  module_name = "com_github_edschouten_rules_elm",
+  remote = "https://github.com/kczulko/rules_elm.git",
+  commit = <arbitrary-commit-hash>,
+)
+
+# adding external elm dependencies:
+elm = use_extension("@com_github_edschouten_rules_elm//elm:extensions.bzl", "elm")
+elm.repository(
+    name = "elm_package_elm_core",
+    sha256 = "6e37b11c88c89a68d19d0c7625f1ef39ed70c59e443def95e4de98d6748c80a7",
+    strip_prefix = "core-1.0.5",
+    urls = ["https://github.com/elm/core/archive/1.0.5.tar.gz"],
+)
+use_repo(elm, "elm_package_elm_core")
+```
 
 ### Legacy WORKSPACE
 
@@ -38,11 +57,13 @@ elm_npm_repositories()
 
 ## Examples on how to use these rules
 
-[The Bazel Elm SPA Example repository](https://github.com/EdSchouten/bazel-elm-spa-example)
-contains a concrete example of how these rules may be used to build a
-web application written in Elm. This repository contains a copy of a
-well-known demonstration application that has been adjusted to be
-buildable using Bazel.
+- [examples directory](./examples) - contains several 'end to end' projects consuming
+  the rules provided by this repository.
+- [The Bazel Elm SPA Example repository](https://github.com/EdSchouten/bazel-elm-spa-example) -
+  contains a concrete example of how these rules may be used to build a
+  web application written in Elm. Might be a bit out of date, however this
+  repository contains a copy of a well-known demonstration application that
+  has been adjusted to be buildable using Bazel.
 
 ## Build rules provided by this project
 
