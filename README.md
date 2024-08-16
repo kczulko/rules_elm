@@ -1,6 +1,9 @@
 # Bazel build rules for Elm
 
 ![CI](https://github.com/kczulko/rules_elm/actions/workflows/workflow.yaml/badge.svg)
+![osx_amd64](https://img.shields.io/badge/platform-linux__amd64-orange)
+![osx_amd64](https://img.shields.io/badge/platform-osx__arm64-orange)
+![osx_amd64](https://img.shields.io/badge/platform-osx__amd64-orange)
 
 [Elm](https://elm-lang.org/) is a functional programming language that
 can be [transpiled](https://en.wikipedia.org/wiki/Source-to-source_compiler)
