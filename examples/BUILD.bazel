@@ -54,7 +54,7 @@ ERROR:""",
 )
 
 rules_elm_integration_test_each_bazel(
-    name = "elm_todo_mvc",
+    name = "elm_todomvc",
     bazel_binaries = bazel_binaries,
     test_runner = ":output_match_runner",
     workspace_path = "elm-todomvc",
@@ -113,7 +113,7 @@ test_suite(
             "elm_binary_no_deps_negative",
             "elm_binary_opt",
             "elm_test",
-            "elm_todo_mvc",
+            "elm_todomvc",
         ],
         bazel_binaries = bazel_binaries,
     ) + [
