@@ -1,5 +1,6 @@
 {
 	"dependencies": {
+		"elm-test": "0.19.1-revision12",
 		"protoc-gen-elm": "^4.0.3",
 		"uglify-js": "^3.18.0"
 	}

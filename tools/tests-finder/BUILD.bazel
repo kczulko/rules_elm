@@ -6,20 +6,9 @@ filegroup(
     visibility = ["//:__subpackages__"],
 )
 
-genrule(
-    name = "mk-tests-finder",
-    srcs = [
-        "@com_github_rtfeldman_node_test_runner//:lib/Parser.js",
-        "main.js"
-    ],
-    outs = [ "tests-finder.js" ],
-    cmd = """
-      cat $(SRCS) >> $@
-    """,
-)
-
 js_binary(
     name = "bin",
-    entry_point = ":mk-tests-finder",
+    entry_point = "main.js",
+    data = ["//tools/npm:node_modules/elm-test"],
     visibility = ["//visibility:public"],
 )

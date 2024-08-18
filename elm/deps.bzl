@@ -30,11 +30,10 @@ def elm_register_toolchains(register = True):
         urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit-ARM.gz"],
     )
 
+    # TODO: replace with elm_repository()
     http_archive(
         name = "com_github_rtfeldman_node_test_runner",
         build_file_content = """load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_library")
-exports_files(["lib/Parser.js"])
-
 elm_library(
     name = "node_test_runner",
     srcs = glob(["elm/src/**/*.elm"]),
