@@ -7,7 +7,7 @@ local_path_override(
 )
 
 bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0", dev_dependency = True)
-bazel_dep(name = "rules_nodejs", version = "6.1.0")
+bazel_dep(name = "rules_nodejs", version = "6.2.0")
 
 elm = use_extension("@com_github_edschouten_rules_elm//elm:extensions.bzl", "elm")
 elm.repository(
