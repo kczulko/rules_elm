@@ -1,7 +1,15 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", _http_archive = "http_archive", _http_file = "http_file")
+load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
+load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
+load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
+load("@aspect_rules_js//js:toolchains.bzl", "DEFAULT_NODE_VERSION", "rules_js_register_toolchains")
+
+def http_archive(**kwargs):
+    maybe(_http_archive, **kwargs)
 
 SUPPORTED_ELM_VERSION = "0.19.1"
 
-ELM_VERSION = {
+ELM_VERSIONS = {
     SUPPORTED_ELM_VERSION: {
         "x86_64-linux": {
             "sha256": "e44af52bb27f725a973478e589d990a6428e115fe1bb14f03833134d6c0f155c",
@@ -41,7 +49,7 @@ PLATFORMS = {
 
 def _elm_compiler_repo_impl(repository_ctx):
     platform = repository_ctx.attr.platform
-    elm_version = ELM_VERSION[repository_ctx.attr._elm_version]
+    elm_version = ELM_VERSIONS[repository_ctx.attr._elm_version]
     compatible_with = PLATFORMS[platform].compatible_with
     url = elm_version[platform]["url"]
     sha256 = elm_version[platform]["sha256"]
@@ -103,7 +111,7 @@ toolchain(
 
     repository_ctx.file("BUILD.bazel", content = build_content)
 
-elm_toolchains_repo = repository_rule(
+elm_toolchains_repository = repository_rule(
     _elm_toolchains_repo_impl,
     doc = "All default elm toolchains",
     attrs = {
@@ -112,7 +120,7 @@ elm_toolchains_repo = repository_rule(
     }
 )
 
-elm_compiler_repositories = repository_rule(
+elm_compiler_repository = repository_rule(
     _elm_compiler_repo_impl,
     doc = "Fetching external elm compiler",
     attrs = {
@@ -120,3 +128,45 @@ elm_compiler_repositories = repository_rule(
         "_elm_version": attr.string(default = SUPPORTED_ELM_VERSION),
     }
 )
+
+def elm_register_toolchains(register = True):
+
+    http_archive(
+        name = "com_github_rtfeldman_node_test_runner",
+        build_file_content = """load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_library")
+elm_library(
+    name = "node_test_runner",
+    srcs = glob(["elm/src/**/*.elm"]),
+    strip_import_prefix = "elm/src",
+    visibility = ["//visibility:public"],
+)""",
+        sha256 = "03d4f0950527599ebe2be4d8d8abc9c8638d93abe5e667d5d3427fcecc6dc24d",
+        strip_prefix = "node-test-runner-0.19.1-revision12",
+        urls = ["https://github.com/rtfeldman/node-test-runner/archive/0.19.1-revision12.tar.gz"],
+    )
+
+    elm_compilers_toolchain_repo_name = "elm_compiler_toolchains"
+
+    for platform in PLATFORMS:
+        elm_compiler_repository(
+            name = "elm_{platform}".format(platform = platform),
+            platform = platform
+        )
+
+        if register:
+            native.register_toolchains("@{}//:{}_toolchain".format(elm_compilers_toolchain_repo_name, platform))
+
+    elm_toolchains_repository(
+        name = elm_compilers_toolchain_repo_name,
+        toolchain = "@elm_{platform}//:elm_toolchain_info",
+    )
+
+    if register:
+        rules_js_register_toolchains(node_version = DEFAULT_NODE_VERSION)
+
+        npm_translate_lock(
+            name = "com_github_edschouten_rules_elm_npm",
+            pnpm_lock = "@com_github_edschouten_rules_elm//tools/npm:pnpm-lock.yaml",
+            verify_node_modules_ignored = "@com_github_edschouten_rules_elm//:.bazelignore",
+        )
+
