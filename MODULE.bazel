@@ -14,6 +14,7 @@ bazel_dep(name = "rules_nodejs", version = "6.2.0")
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.20.2")
 bazel_dep(name = "rules_proto", version = "6.0.2")
 bazel_dep(name = "protobuf", version = "23.1", repo_name = "com_google_protobuf")
+
 bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0", dev_dependency = True)
 bazel_dep(name = "rules_bazel_integration_test", version = "0.24.1", dev_dependency = True)
 
@@ -23,7 +24,7 @@ use_repo(
     elm,
     "elm_compiler_toolchains",
     # TODO: define as elm_repository and link Parser.js via rules_js
-    "com_github_rtfeldman_node_test_runner"
+    "com_github_rtfeldman_node_test_runner",
 )
 
 register_toolchains("@elm_compiler_toolchains//:all")
@@ -38,23 +39,31 @@ npm.npm_translate_lock(
 use_repo(npm, "com_github_edschouten_rules_elm_npm")
 
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo", dev_dependency = True)
+
 nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg", dev_dependency = True)
 
 nix_repo.file(
     name = "nixpkgs",
     file = "//:nixpkgs.nix",
-    file_deps = [ "//:flake.lock" ],
+    file_deps = ["//:flake.lock"],
 )
 use_repo(nix_repo, "nixpkgs")
 
-nix_pkg.attr(name = "nixpkgs_nodejs", attr = "nodejs", repo = "@nixpkgs")
-nix_pkg.attr(name = "bazel6", attr = "bazel_6", repo = "@nixpkgs")
+nix_pkg.attr(
+    name = "nixpkgs_nodejs",
+    attr = "nodejs",
+    repo = "@nixpkgs",
+)
+nix_pkg.attr(
+    name = "bazel6",
+    attr = "bazel_6",
+    repo = "@nixpkgs",
+)
 nix_pkg.file(
     name = "bazel7",
     attr = "",
     file = "//:nix/bazel7.nix",
-    file_deps = [ "//:nix/overlays/bazel7.nix"],
+    file_deps = ["//:nix/overlays/bazel7.nix"],
     repo = "@nixpkgs",
 )
 use_repo(nix_pkg, "bazel6", "bazel7", "nixpkgs_nodejs")
-

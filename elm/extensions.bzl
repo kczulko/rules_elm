@@ -35,6 +35,10 @@ def _elm_module_extension_impl(module_ctx):
                 sets.insert(deps, repository.name)
 
         for toolchain in mod.tags.toolchain:
+            if mod.is_root:
+                deps = root_direct_dev_deps if module_ctx.is_dev_dependency(toolchain) else root_direct_deps
+                sets.insert(deps, "elm_compiler_toolchains")
+                sets.insert(deps, "com_github_rtfeldman_node_test_runner")
             _toolchain_fun(toolchain)
 
     return module_ctx.extension_metadata(
