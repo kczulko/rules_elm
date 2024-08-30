@@ -3,6 +3,7 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
 load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
 load("@aspect_rules_js//js:toolchains.bzl", "DEFAULT_NODE_VERSION", "rules_js_register_toolchains")
+load("@com_github_edschouten_rules_elm//elm/private:elm_toolchain_repo.bzl", "elm_toolchains_repo", "elm_compiler_repositories", "PLATFORMS")
 
 def http_archive(**kwargs):
     maybe(_http_archive, **kwargs)
@@ -12,25 +13,7 @@ def http_file(**kwargs):
 
 def elm_register_toolchains(register = True):
     rules_js_dependencies()
-    
-    http_file(
-        name = "com_github_elm_compiler_linux_x86_64",
-        sha256 = "e44af52bb27f725a973478e589d990a6428e115fe1bb14f03833134d6c0f155c",
-        urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz"],
-    )
 
-    http_file(
-        name = "com_github_elm_compiler_osx_x86_64",
-        sha256 = "05289f0e3d4f30033487c05e689964c3bb17c0c48012510dbef1df43868545d1",
-        urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit.gz"],
-    )
-    http_file(
-        name = "com_github_elm_compiler_osx_arm64",
-        sha256 = "552c8300b55dafdf52073b095e7bc6afc1b2ea2a600fbc7654bca8a241e38689",
-        urls = ["https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit-ARM.gz"],
-    )
-
-    # TODO: replace with elm_repository()
     http_archive(
         name = "com_github_rtfeldman_node_test_runner",
         build_file_content = """load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_library")
@@ -45,12 +28,24 @@ elm_library(
         urls = ["https://github.com/rtfeldman/node-test-runner/archive/0.19.1-revision12.tar.gz"],
     )
 
+    elm_compilers_toolchain_repo_name = "elm_compiler_toolchains"
+
+    for platform in PLATFORMS:
+        elm_compiler_repositories(
+            name = "elm_{platform}".format(platform = platform),
+            platform = platform
+        )
+
+        if register:
+            native.register_toolchains("@{}//:{}_toolchain".format(elm_compilers_toolchain_repo_name, platform))
+
+    elm_toolchains_repo(
+        name = elm_compilers_toolchain_repo_name,
+        toolchain = "@elm_{platform}//:elm_toolchain_info",
+    )
+
     if register:
         rules_js_register_toolchains(node_version = DEFAULT_NODE_VERSION)
-        
-        platforms = [ 'linux_x86_64', 'osx_x86_64', 'osx_arm64' ]
-        for platform in platforms:
-           native.register_toolchains("@com_github_edschouten_rules_elm//elm/toolchain:%s" % platform)
 
         npm_translate_lock(
             name = "com_github_edschouten_rules_elm_npm",

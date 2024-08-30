@@ -36,7 +36,6 @@ def _elm_module_extension_impl(module_ctx):
                 sets.insert(deps, repository.name)
 
         for toolchain in mod.tags.toolchain:
-            print(toolchain)
             _toolchain_fun(toolchain)
 
     return module_ctx.extension_metadata(

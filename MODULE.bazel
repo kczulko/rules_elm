@@ -18,22 +18,15 @@ bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0", dev_dependency = True
 bazel_dep(name = "rules_bazel_integration_test", version = "0.24.1", dev_dependency = True)
 
 elm = use_extension("//elm:extensions.bzl", "elm")
-# TODO: define toolchain repo
 elm.toolchain()
 use_repo(
     elm,
-    "com_github_elm_compiler_linux_x86_64",
-    "com_github_elm_compiler_osx_x86_64",
-    "com_github_elm_compiler_osx_arm64",
+    "elm_compiler_toolchains",
     # TODO: define as elm_repository and link Parser.js via rules_js
     "com_github_rtfeldman_node_test_runner"
 )
 
-register_toolchains(
-    "@com_github_edschouten_rules_elm//elm/toolchain:linux_x86_64",
-    "@com_github_edschouten_rules_elm//elm/toolchain:osx_x86_64",
-    "@com_github_edschouten_rules_elm//elm/toolchain:osx_arm64",
-)
+register_toolchains("@elm_compiler_toolchains//:all")
 
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
 npm.npm_translate_lock(
