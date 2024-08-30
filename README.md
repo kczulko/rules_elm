@@ -52,7 +52,9 @@ http_archive(
     urls = ["https://github.com/EdSchouten/rules_elm/archive/v0.3.tar.gz"],
 )
 
-load("@com_github_edschouten_rules_elm//elm:deps.bzl", "elm_register_toolchains")
+load("@com_github_edschouten_rules_elm//elm:repositories.bzl", "elm_register_toolchains")
+load("@com_github_edschouten_rules_elm//elm:dependencies.bzl", "elm_dependencies")
+elm_dependencies()
 elm_register_toolchains()
 load("@com_github_edschouten_rules_elm_npm//:repositories.bzl", elm_npm_repositories = "npm_repositories")
 elm_npm_repositories()

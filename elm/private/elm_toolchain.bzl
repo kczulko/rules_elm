@@ -3,7 +3,7 @@ def _elm_toolchain_impl(ctx):
         elm = ctx.attr.elm,
     )]
 
-_elm_toolchain = rule(
+elm_toolchain = rule(
     attrs = {
         "elm": attr.label(
             allow_files = True,
@@ -13,7 +13,7 @@ _elm_toolchain = rule(
     implementation = _elm_toolchain_impl,
 )
 
-def elm_toolchain(name, exec_compatible_with):
+def elm_toolchain_macro(name, exec_compatible_with):
     native.genrule(
         name = "elm_compiler_{}".format(name),
         srcs = ["@com_github_elm_compiler_{}//file".format(name)],
@@ -21,7 +21,7 @@ def elm_toolchain(name, exec_compatible_with):
         cmd = "gunzip -c $(SRCS) > $@ && chmod +x $@"
     )
 
-    _elm_toolchain(
+    elm_toolchain(
         name = name + "_info",
         elm = ":elm_compiler_{}".format(name),
         visibility = ["//visibility:public"],

@@ -1,7 +1,7 @@
 load("@com_github_edschouten_rules_elm//repository:def.bzl", "elm_repository")
 
 load("@bazel_skylib//lib:sets.bzl", "sets")
-load(":deps.bzl", "elm_register_toolchains")
+load(":repositories.bzl", "elm_register_toolchains")
 
 def _repository_fun(attrs):
     elm_repository(
@@ -19,7 +19,6 @@ def _repository_fun(attrs):
 def _toolchain_fun(attrs):
     elm_register_toolchains(register = False)
 
-
 def _elm_module_extension_impl(module_ctx):
     root_direct_deps = sets.make()
     root_direct_dev_deps = sets.make()
@@ -36,7 +35,10 @@ def _elm_module_extension_impl(module_ctx):
                 sets.insert(deps, repository.name)
 
         for toolchain in mod.tags.toolchain:
-            print(toolchain)
+            if mod.is_root:
+                deps = root_direct_dev_deps if module_ctx.is_dev_dependency(toolchain) else root_direct_deps
+                sets.insert(deps, "elm_compiler_toolchains")
+                sets.insert(deps, "com_github_rtfeldman_node_test_runner")
             _toolchain_fun(toolchain)
 
     return module_ctx.extension_metadata(

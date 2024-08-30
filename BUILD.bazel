@@ -8,7 +8,6 @@ filegroup(
         "//proto:all_files",
         "//elm:all_files",
         "//elm/private:all_files",
-        "//elm/toolchain:all_files",
         "//repository:all_files",
         "//tools/uglifyjs:all_files",
         "//tools/npm:all_files",
