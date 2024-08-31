@@ -3,6 +3,8 @@ from __future__ import print_function
 import json
 import sys
 
+name_arg = sys.argv[1]
+
 with open("elm.json") as f:
     metadata = json.load(f)
 
@@ -38,7 +40,7 @@ elm_package(
     visibility = ["//visibility:public"],
 )"""
             % {
-                "name": json.dumps(fix_bzl_mod_repo_name(sys.argv[1])),
+                "name": json.dumps(fix_bzl_mod_repo_name(name_arg)),
                 "deps": json.dumps(deps),
                 "package_name": json.dumps(metadata["name"]),
                 "package_version": json.dumps(metadata["version"]),
@@ -61,6 +63,6 @@ elm_library(
     strip_import_prefix = "src",
     visibility = ["//visibility:public"],
 )"""
-            % {"name": json.dumps(fix_bzl_mod_repo_name(sys.argv[1])), "deps": json.dumps(deps)},
+            % {"name": json.dumps(fix_bzl_mod_repo_name(name_arg)), "deps": json.dumps(deps)},
             file=build_file,
         )
