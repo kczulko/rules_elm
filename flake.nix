@@ -1,5 +1,5 @@
 {
-  description = "canton-drivers nix flake for dev env and abci app mostly";
+  description = "rules_elm nix flake";
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
