@@ -49,7 +49,7 @@ http_archive(
     name = "rules_elm",
     sha256 = "0b8a4e288ce9fe255074adb07be443cdda3a9fa9667de775b01decb93507a6d7",
     strip_prefix = "rules_elm-0.3",
-    urls = ["https://github.com/EdSchouten/rules_elm/archive/v0.3.tar.gz"],
+    urls = ["https://github.com/kczulko/rules_elm/archive/v0.3.tar.gz"],
 )
 
 load("@rules_elm//elm:repositories.bzl", "elm_register_toolchains")
