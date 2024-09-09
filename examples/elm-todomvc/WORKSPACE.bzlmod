@@ -1,17 +1,17 @@
 # load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 # local_repository(
-#     name = "com_github_edschouten_rules_elm",
+#     name = "rules_elm",
 #     path = "../.."
 # )
 
-# load("@com_github_edschouten_rules_elm//elm:deps.bzl", "elm_register_toolchains")
+# load("@rules_elm//elm:deps.bzl", "elm_register_toolchains")
 # elm_register_toolchains()
 
-# load("@com_github_edschouten_rules_elm_npm//:repositories.bzl", elm_npm_repositories = "npm_repositories")
+# load("@rules_elm_npm//:repositories.bzl", elm_npm_repositories = "npm_repositories")
 # elm_npm_repositories()
 
-# load("@com_github_edschouten_rules_elm//repository:def.bzl", "elm_repository")
+# load("@rules_elm//repository:def.bzl", "elm_repository")
 # elm_repository(
 #     name = "elm_package_elm_core",
 #     sha256 = "6e37b11c88c89a68d19d0c7625f1ef39ed70c59e443def95e4de98d6748c80a7",

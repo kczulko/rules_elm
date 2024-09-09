@@ -3,9 +3,9 @@ module(
     version = "1.0",
 )
 
-bazel_dep(name = "com_github_edschouten_rules_elm")
+bazel_dep(name = "rules_elm")
 local_path_override(
-    module_name = "com_github_edschouten_rules_elm",
+    module_name = "rules_elm",
     path = "../..",
 )
 
@@ -14,7 +14,7 @@ bazel_dep(name = "rules_nodejs", version = "6.2.0")
 bazel_dep(name = "rules_proto", version = "6.0.2")
 bazel_dep(name = "protobuf", version = "23.1", repo_name = "com_google_protobuf")
 
-elm = use_extension("@com_github_edschouten_rules_elm//elm:extensions.bzl", "elm")
+elm = use_extension("@rules_elm//elm:extensions.bzl", "elm")
 elm.repository(
     name = "elm_package_eriktim_elm_protocol_buffers",
     sha256 = "e929bc551ca939bcca2855ed2560930415b60f1101c0c2e8accfc26eedb51413",

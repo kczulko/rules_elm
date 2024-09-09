@@ -3,9 +3,9 @@ module(
     version = "1.0",
 )
 
-bazel_dep(name = "com_github_edschouten_rules_elm")
+bazel_dep(name = "rules_elm")
 local_path_override(
-    module_name = "com_github_edschouten_rules_elm",
+    module_name = "rules_elm",
     path = "../..",
 )
 
@@ -13,7 +13,7 @@ bazel_dep(name = "aspect_rules_js", version = "2.0.0")
 bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0")
 bazel_dep(name = "rules_nodejs", version = "6.2.0")
 
-elm = use_extension("@com_github_edschouten_rules_elm//elm:extensions.bzl", "elm")
+elm = use_extension("@rules_elm//elm:extensions.bzl", "elm")
 elm.repository(
     name = "elm_package_elm_core",
     sha256 = "6e37b11c88c89a68d19d0c7625f1ef39ed70c59e443def95e4de98d6748c80a7",

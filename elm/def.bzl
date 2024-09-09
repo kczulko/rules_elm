@@ -4,7 +4,7 @@ load(
     _create_elm_library_provider = "create_elm_library_provider",
 )
 
-_TOOLCHAIN = "@com_github_edschouten_rules_elm//elm:toolchain"
+_TOOLCHAIN = "@rules_elm//elm:toolchain"
 
 def _do_elm_make(
         ctx,
@@ -147,11 +147,11 @@ elm_binary = rule(
         ),
         "_compile": attr.label(
             allow_single_file = True,
-            default = Label("@com_github_edschouten_rules_elm//elm:compile.py"),
+            default = Label("@rules_elm//elm:compile.py"),
         ),
         "_uglifyjs": attr.label(
             cfg = "host",
-            default = Label("@com_github_edschouten_rules_elm//tools/uglifyjs:bin"),
+            default = Label("@rules_elm//tools/uglifyjs:bin"),
             executable = True,
         ),
     },
@@ -316,12 +316,12 @@ elm_test = rule(
         ),
         "_compile": attr.label(
             allow_single_file = True,
-            default = Label("@com_github_edschouten_rules_elm//elm:compile.py"),
+            default = Label("@rules_elm//elm:compile.py"),
         ),
         "_generate_test_main": attr.label(
             allow_single_file = True,
             default = Label(
-                "@com_github_edschouten_rules_elm//elm:generate_test_main.py",
+                "@rules_elm//elm:generate_test_main.py",
             ),
         ),
         "_node_test_runner": attr.label(
@@ -332,19 +332,19 @@ elm_test = rule(
         ),
         "_tests_finder": attr.label(
             allow_single_file = True,
-            default = Label("@com_github_edschouten_rules_elm//tools/tests-finder:bin"),
+            default = Label("@rules_elm//tools/tests-finder:bin"),
             executable = True,
             cfg = "exec"
         ),
         "_tests_placehoder_repairer": attr.label(
             allow_single_file = True,
-            default = Label("@com_github_edschouten_rules_elm//tools/tests-placeholder-repairer:bin"),
+            default = Label("@rules_elm//tools/tests-placeholder-repairer:bin"),
             executable = True,
             cfg = "exec"
         ),
         "_tests_runner": attr.label(
             allow_single_file = True,
-            default = Label("@com_github_edschouten_rules_elm//tools/tests-runner:bin"),
+            default = Label("@rules_elm//tools/tests-runner:bin"),
             executable = True,
             cfg = "exec"
         ),

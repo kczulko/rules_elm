@@ -1,5 +1,5 @@
-load("@com_github_edschouten_rules_elm//proto:def.bzl", "elm_proto_library")
-load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_test")
+load("@rules_elm//proto:def.bzl", "elm_proto_library")
+load("@rules_elm//elm:def.bzl", "elm_test")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 
 proto_library(

@@ -1,4 +1,4 @@
-load("@com_github_edschouten_rules_elm//repository:def.bzl", "elm_repository")
+load("@rules_elm//repository:def.bzl", "elm_repository")
 
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load(":repositories.bzl", "elm_register_toolchains")

@@ -1,4 +1,4 @@
-load("@com_github_edschouten_rules_elm_npm//tools/npm:protoc-gen-elm/package_json.bzl", "bin")
+load("@rules_elm_npm//tools/npm:protoc-gen-elm/package_json.bzl", "bin")
 
 filegroup(
     name = "all_files",

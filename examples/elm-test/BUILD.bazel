@@ -1,4 +1,4 @@
-load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_library", "elm_test")
+load("@rules_elm//elm:def.bzl", "elm_library", "elm_test")
 load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
 
 nodejs_toolchain(

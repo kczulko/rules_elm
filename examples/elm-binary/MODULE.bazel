@@ -1,15 +1,15 @@
 module(name = "elm-binary", version = "1.0")
 
-bazel_dep(name = "com_github_edschouten_rules_elm")
+bazel_dep(name = "rules_elm")
 local_path_override(
-    module_name = "com_github_edschouten_rules_elm",
+    module_name = "rules_elm",
     path = "../..",
 )
 
 bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0", dev_dependency = True)
 bazel_dep(name = "rules_nodejs", version = "6.2.0")
 
-elm = use_extension("@com_github_edschouten_rules_elm//elm:extensions.bzl", "elm")
+elm = use_extension("@rules_elm//elm:extensions.bzl", "elm")
 elm.repository(
     name = "elm_package_elm_html",
     sha256 = "73b885e0a3d2f9781b1c9bbcc1ee9ac032f503f5ef46a27da3ba617cebbf6fd8",
