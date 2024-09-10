@@ -1,4 +1,4 @@
-load("@com_github_edschouten_rules_elm//examples:defs.bzl",
+load("@rules_elm//examples:defs.bzl",
      "rules_elm_integration_test_each_bazel",
      "rules_elm_integration_test",
      "gen_test_names_each",

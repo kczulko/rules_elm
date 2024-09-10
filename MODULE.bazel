@@ -1,7 +1,7 @@
-"com_github_edschouten_rules_elm"
+"rules_elm"
 
 module(
-    name = "com_github_edschouten_rules_elm",
+    name = "rules_elm",
     version = "0.0.0",
     compatibility_level = 1,
 )
@@ -31,12 +31,12 @@ register_toolchains("@elm_compiler_toolchains//:all")
 
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
 npm.npm_translate_lock(
-    name = "com_github_edschouten_rules_elm_npm",
-    link_workspace = "com_github_edschouten_rules_elm",
+    name = "rules_elm_npm",
+    link_workspace = "rules_elm",
     pnpm_lock = "//tools/npm:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
 )
-use_repo(npm, "com_github_edschouten_rules_elm_npm")
+use_repo(npm, "rules_elm_npm")
 
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo", dev_dependency = True)
 

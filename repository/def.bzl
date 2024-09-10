@@ -11,7 +11,7 @@ def _elm_repository_impl(ctx):
 
     result = ctx.execute([
         "python",
-        ctx.path(Label("@com_github_edschouten_rules_elm//repository:generate_build_files.py")),
+        ctx.path(Label("@rules_elm//repository:generate_build_files.py")),
         ctx.attr.name,
     ])
     if result.return_code:

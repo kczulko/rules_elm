@@ -24,7 +24,7 @@ with open("BUILD.bazel", "w") as build_file:
         # true elm_package(). These packages tend to rely on features
         # that are not exposed publicly (e.g., Elm.Kernel.*).
         print(
-            """load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_package")
+            """load("@rules_elm//elm:def.bzl", "elm_package")
 
 elm_package(
     name = %(name)s,
@@ -54,7 +54,7 @@ elm_package(
         # in our case. By declaring a library, we disable package
         # version checking entirely.
         print(
-            """load("@com_github_edschouten_rules_elm//elm:def.bzl", "elm_library")
+            """load("@rules_elm//elm:def.bzl", "elm_library")
 
 elm_library(
     name = %(name)s,

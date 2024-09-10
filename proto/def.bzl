@@ -6,7 +6,7 @@ load(
     _create_elm_library_provider = "create_elm_library_provider",
 )
 
-ELM_PROTO_TOOLCHAIN = "@com_github_edschouten_rules_elm//proto:toolchain_type"
+ELM_PROTO_TOOLCHAIN = "@rules_elm//proto:toolchain_type"
 
 def _incompatible_toolchains_enabled():
     return getattr(proto_common, "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION", False)

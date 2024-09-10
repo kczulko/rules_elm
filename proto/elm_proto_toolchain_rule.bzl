@@ -15,7 +15,7 @@ def _elm_proto_toolchain_impl(ctx):
         protoc_opts = ctx.attr.protoc_opts,
         progress_message = "ElmGenProto %{label}",
         mnemonic = "ElmGenProto",
-        toolchain_type = "@com_github_edschouten_rules_elm//proto:toolchain_type",
+        toolchain_type = "@rules_elm//proto:toolchain_type",
     )
 
     return [
@@ -38,7 +38,7 @@ elm_proto_toolchain = rule(
             cfg = "exec",
             executable = True,
             allow_files = True,
-            default = "@com_github_edschouten_rules_elm//tools/protoc-gen-elm:bin",
+            default = "@rules_elm//tools/protoc-gen-elm:bin",
         ),
         "runtime": attr.label(
             default = None

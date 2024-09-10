@@ -33,7 +33,7 @@ def rules_elm_integration_test(
         test_runner = test_runner,
         workspace_path = workspace_path,
         workspace_files = integration_test_utils.glob_workspace_files(workspace_path) + [
-            "@com_github_edschouten_rules_elm//:local_repository_files"
+            "@rules_elm//:local_repository_files"
         ],
         env = {
             "BAZEL_CMD": bazel_cmd,
