@@ -1,9 +1,12 @@
-load("@bazel_tools//tools/build_defs/repo:http.bzl", _http_archive = "http_archive")
-load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 
-def http_archive(**kwargs):
-    maybe(_http_archive, **kwargs)
-
-# TODO: add all non bzlmod deps here!
 def elm_dependencies():
-    rules_js_dependencies()
+    maybe(
+        http_archive,
+        name = "aspect_rules_js",
+        sha256 = "6b7e73c35b97615a09281090da3645d9f03b2a09e8caa791377ad9022c88e2e6",
+        strip_prefix = "rules_js-2.0.0",
+        url = "https://github.com/aspect-build/rules_js/releases/download/v2.0.0/rules_js-v2.0.0.tar.gz",
+    )
+

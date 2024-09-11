@@ -33,7 +33,7 @@ rules_elm_integration_test_each_bazel(
     workspace_path = "elm-binary",
     bazel_cmd = "build :main -c opt",
     expected_output = """(UglifyJS main.2.js)?.*
-INFO: Build completed successfully, 12 total actions""",
+INFO: Build completed successfully, .. total actions""",
 )
 
 rules_elm_integration_test_each_bazel(
@@ -88,7 +88,10 @@ Duration: 0 ms
 Passed:   2
 Failed:   0""",
     bazel_binary = bazel_binaries["bazel7"],
-    tags = [ "bazel7" ]
+    tags = [
+        "bazel7",
+        "no-sandbox",
+    ]
 )
 
 rules_elm_integration_test(
@@ -102,7 +105,10 @@ Duration: 0 ms
 Passed:   1
 Failed:   0""",
     bazel_binary = bazel_binaries["bazel7"],
-    tags = [ "bazel7" ]
+    tags = [
+        "bazel7",
+        "no-sandbox",
+    ]
 )
 
 test_suite(
