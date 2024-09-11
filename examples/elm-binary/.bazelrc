@@ -1,2 +1,3 @@
-build --host_platform=@rules_nixpkgs_core//platforms:host
-build --enable_bzlmod
+common --host_platform=@rules_nixpkgs_core//platforms:host
+build:bzlmod --enable_bzlmod
+build:nobzlmod --noenable_bzlmod
