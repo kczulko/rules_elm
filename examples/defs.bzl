@@ -58,5 +58,10 @@ def rules_elm_integration_test_each_bazel(
             expected_output = expected_output,
             test_runner = test_runner,
             bazel_binary = bazel_binaries[bazel_binary_name],
-            tags = [bazel_binary_name],
+            tags = [
+                bazel_binary_name,
+                # for bazel7 sandboxing issue
+                # https://github.com/bazelbuild/bazel/issues/1990
+                "no-sandbox",
+            ],
         )

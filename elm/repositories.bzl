@@ -1,7 +1,6 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", _http_archive = "http_archive", _http_file = "http_file")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
-load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
 load("@aspect_rules_js//js:toolchains.bzl", "DEFAULT_NODE_VERSION", "rules_js_register_toolchains")
 
 def http_archive(**kwargs):

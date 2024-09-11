@@ -52,9 +52,11 @@ http_archive(
     urls = ["https://github.com/kczulko/rules_elm/archive/v0.3.tar.gz"],
 )
 
-load("@rules_elm//elm:repositories.bzl", "elm_register_toolchains")
 load("@rules_elm//elm:dependencies.bzl", "elm_dependencies")
 elm_dependencies()
+load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
+rules_js_dependencies() # rules_elm depends on rules_js
+load("@rules_elm//elm:repositories.bzl", "elm_register_toolchains")
 elm_register_toolchains()
 load("@rules_elm_npm//:repositories.bzl", elm_npm_repositories = "npm_repositories")
 elm_npm_repositories()
