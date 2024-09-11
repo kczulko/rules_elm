@@ -25,6 +25,7 @@ rules_elm_integration_test_each_bazel(
     workspace_path = "elm-binary",
     bazel_cmd = "build :main",
     expected_output = "INFO: Build completed successfully, 4 total actions",
+    run_legacy = True,
 )
 
 rules_elm_integration_test_each_bazel(
@@ -34,6 +35,7 @@ rules_elm_integration_test_each_bazel(
     bazel_cmd = "build :main -c opt",
     expected_output = """(UglifyJS main.2.js)?.*
 INFO: Build completed successfully, .. total actions""",
+    run_legacy = True,
 )
 
 rules_elm_integration_test_each_bazel(
@@ -115,13 +117,18 @@ test_suite(
     name = "integration_tests",
     tests = gen_test_names_each(
         name_prefixes = [
-            "elm_binary",
             "elm_binary_no_deps_negative",
-            "elm_binary_opt",
             "elm_test",
             "elm_todomvc",
         ],
         bazel_binaries = bazel_binaries,
+    ) + gen_test_names_each(
+        name_prefixes = [
+            "elm_binary",
+            "elm_binary_opt",
+        ],
+        bazel_binaries = bazel_binaries,
+        add_legacy = True,
     ) + [
         "elm_proto_simple",
         "elm_proto_complex",
