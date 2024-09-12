@@ -69,7 +69,7 @@ elm_npm_repositories()
 - [The Bazel Elm SPA Example repository](https://github.com/EdSchouten/bazel-elm-spa-example) -
   contains a concrete example of how these rules may be used to build a
   web application written in Elm. Might be a bit out of date, however this
-  repository contains a copy of a well-known demonstration application that
+  example brings a copy of a well-known demonstration application that
   has been adjusted to be buildable using Bazel.
 
 ## Build rules provided by this project
