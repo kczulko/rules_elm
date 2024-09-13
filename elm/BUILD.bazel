@@ -1,7 +1,6 @@
 exports_files([
     "compile.py",
     "generate_test_main.py",
-    "run_test.js",
 ])
 
 toolchain_type(

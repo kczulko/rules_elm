@@ -7,25 +7,41 @@ load(
 )
 
 ELM_PROTO_TOOLCHAIN = "@rules_elm//proto:toolchain_type"
+INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION = getattr(proto_common, "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION", False)
 
-def _incompatible_toolchains_enabled():
-    return getattr(proto_common, "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION", False)
 
-# skip "well-known-protos" which are handled by elm-protoc-types
-def _well_known_proto(direct_srcs):
-    return (direct_srcs and
-        direct_srcs[0].owner.package == "src/google/protobuf" and
-        direct_srcs[0].owner.repo_name.startswith("protobuf"))
+# _find_toolchain and _if_legacy_toolchain were copied from rules_proto
+# if used as imports from rules_proto then an error occurs in bzlmod case
+# their impl wants to retrieve e.g. rules_elm toolchain which is impossible
+# from the context of rules_proto
+def _find_toolchain(ctx, legacy_attr, toolchain_type):
+    if INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION:
+        toolchain = ctx.toolchains[toolchain_type]
+        if not toolchain:
+            fail("No toolchains registered for '%s'." % toolchain_type)
+        return toolchain.proto
+    else:
+        return getattr(ctx.attr, legacy_attr)[proto_common.ProtoLangToolchainInfo]
+
+def _if_legacy_toolchain(legacy_attr_dict):
+    if INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION:
+        return {}
+    else:
+        return legacy_attr_dict
+
+def _well_known_proto(direct_srcs, well_known_protos):
+    if direct_srcs:
+        for well_known_proto in well_known_protos:
+            candidate = direct_srcs[0]
+            if (well_known_proto.basename == candidate.basename and
+                well_known_proto.owner.package == candidate.owner.package and
+                well_known_proto.owner.repo_name == candidate.owner.repo_name):
+                return True
+    return False
 
 def _elm_proto_aspect_impl(target, ctx):
-    if _incompatible_toolchains_enabled():
-        toolchain = ctx.toolchains[ELM_PROTO_TOOLCHAIN]
-        if not toolchain:
-            fail("No toolchains registered for '%s'." % ELM_PROTO_TOOLCHAIN)
-        proto_lang_toolchain_info = toolchain.proto
-    else:
-        proto_lang_toolchain_info = getattr(ctx.attr, "_aspect_proto_toolchain")[proto_common.ProtoLangToolchainInfo]
 
+    proto_lang_toolchain_info = _find_toolchain(ctx, "_aspect_proto_toolchain", ELM_PROTO_TOOLCHAIN)
     proto_info = target[ProtoInfo]
 
     additional_args = ctx.actions.args()
@@ -35,7 +51,8 @@ def _elm_proto_aspect_impl(target, ctx):
         format_each = "--elm_opt=%s"
     )
 
-    if proto_info.direct_sources and not _well_known_proto(proto_info.direct_sources):
+    # skip "well-known-protos" which are handled by elm-protoc-types
+    if proto_info.direct_sources and not _well_known_proto(proto_info.direct_sources, ctx.files._well_known_protos):
         generated_files = ctx.actions.declare_directory("Proto")
         elm_out = generated_files.dirname
         
@@ -48,13 +65,7 @@ def _elm_proto_aspect_impl(target, ctx):
             additional_args = additional_args,
         )
 
-        elm_proto_toolchain_deps = []
-        # TODO: refactor code repetition
-        if _incompatible_toolchains_enabled():
-            toolchain = ctx.toolchains[ELM_PROTO_TOOLCHAIN]
-            if not toolchain:
-                fail("No toolchains registered for '%s'." % ELM_PROTO_TOOLCHAIN)
-            elm_proto_toolchain_deps = toolchain.deps
+        elm_proto_toolchain_deps = ctx.toolchains[ELM_PROTO_TOOLCHAIN].deps if INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION else []
 
         return [
             _create_elm_library_provider(
@@ -84,7 +95,10 @@ _elm_proto_aspect = aspect(
         "plugin_opt_grpc_dev": attr.string(
             values = ["", "grpcDevTools"],
         ),
-    } | ({} if _incompatible_toolchains_enabled() else {
+        "_well_known_protos": attr.label(
+            default = "@com_google_protobuf//:well_known_protos"
+        )
+    } | _if_legacy_toolchain({
         "_aspect_proto_toolchain": attr.label(
             default = ":default_elm_proto_toolchain",
         ),
@@ -92,7 +106,7 @@ _elm_proto_aspect = aspect(
     attr_aspects = ["deps"],
     required_providers = [ProtoInfo],
     provides = [_ElmLibrary],
-    toolchains = [ELM_PROTO_TOOLCHAIN] if _incompatible_toolchains_enabled() else [],
+    toolchains = [ELM_PROTO_TOOLCHAIN] if INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION else [],
 )
 
 def _elm_proto_library_rule(ctx):
@@ -111,7 +125,7 @@ elm_proto_library = rule(
     attrs = {
         "proto": attr.label(
             doc = """
-              The `proto_library` rule to generate Python libraries for.
+              The `proto_library` rule to generate Elm libraries for.
               It must be any target providing `ProtoInfo`.""",
             mandatory = True,
             providers = [ProtoInfo],
@@ -149,5 +163,3 @@ elm_proto_library = rule(
     },
     provides = [_ElmLibrary],
 )
-
-

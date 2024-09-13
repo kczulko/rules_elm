@@ -1,6 +1,17 @@
-load("@rules_elm//proto:def.bzl", "elm_proto_library")
+load("@rules_elm//proto:def.bzl", "elm_proto_library", "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION")
 load("@rules_elm//elm:def.bzl", "elm_test")
 load("@rules_proto//proto:defs.bzl", "proto_library")
+
+elm_proto_deps = [
+    "@elm_package_eriktim_elm_protocol_buffers",
+    "@elm_package_anmolitor_elm_protoc_types",
+    "@elm_package_danfishgold_base64_bytes",
+    "@elm_package_elm_file",
+    "@elm_package_elm_http",
+    "@elm_package_elm_parser",
+    "@elm_package_anmolitor_elm_protoc_utils",
+    "@elm_package_rtfeldman_elm_iso8601_date_strings",
+]
 
 proto_library(
     name = "foo_proto",
@@ -15,7 +26,9 @@ proto_library(
 elm_proto_library(
     name = "elm_foo_proto",
     proto = ":foo_proto",
-    plugin_opt_json = "json=decode"
+    # for bazel6 compatibility
+    plugin_opt_json = "" if INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION else "json=decode",
+    deps = [] if INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION else elm_proto_deps,
 )
 
 elm_test(

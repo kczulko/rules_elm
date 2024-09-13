@@ -65,7 +65,7 @@ def rules_elm_integration_test_each_bazel(
                 rules_elm_integration_test(
                     name = gen_name(name, bazel_binary_name, config),
                     workspace_path = workspace_path,
-                    bazel_cmd = bazel_cmd + " --config={}".format(config),
+                    bazel_cmd = bazel_cmd + " --config={}_{}".format(bazel_binary_name, config),
                     expected_output = expected_output,
                     test_runner = test_runner,
                     bazel_binary = bazel_binaries[bazel_binary_name],

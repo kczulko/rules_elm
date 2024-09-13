@@ -1,1 +1,178 @@
-WORKSPACE.bzlmod
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
+
+local_repository(
+    name = "rules_elm",
+    path = "../..",
+)
+
+load("@rules_elm//elm:dependencies.bzl", "elm_dependencies")
+elm_dependencies()
+load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
+rules_js_dependencies()
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies")
+rules_proto_dependencies()
+load("@rules_proto//proto:setup.bzl", "rules_proto_setup")
+rules_proto_setup()
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+protobuf_deps()
+load("@rules_python//python:repositories.bzl", "py_repositories")
+py_repositories()
+
+_rules_nixpkgs_version = "0.12.0"
+strip_prefix = "rules_nixpkgs-%s" % _rules_nixpkgs_version
+rules_nixpkgs_url = \
+    "https://github.com/tweag/rules_nixpkgs/releases/download/v{version}/{prefix}.tar.gz".format(
+        version = _rules_nixpkgs_version,
+        prefix = strip_prefix,
+    )
+http_archive(
+    name = "rules_nixpkgs_core",
+    strip_prefix = strip_prefix + "/core",
+    urls = [rules_nixpkgs_url],
+    sha256 = "1adb04dc0416915fef427757f4272c4f7dacefeceeefc50f683aec7f7e9b787a",
+)
+
+load("@rules_nixpkgs_core//:nixpkgs.bzl", "nixpkgs_local_repository", "nixpkgs_package")
+nixpkgs_local_repository(name = "nixpkgs", nix_file = "//:nixpkgs.nix", nix_file_deps = ["//:flake.lock"])
+nixpkgs_package(
+    name = "nixpkgs_nodejs",
+    attribute_path = "nodejs",
+    repository = "@nixpkgs"
+)
+nixpkgs_package(
+    name = "nixpkgs_protobuf",
+    attribute_path = "protobuf",
+    repository = "@nixpkgs"
+)
+register_toolchains(
+    "//:nixpkgs_nodejs_toolchain",
+    "//:nixpkgs_protobuf_toolchain",
+    "//:nixpkgs_elm_protobuf_toolchain",
+)
+
+load("@rules_elm//elm:repositories.bzl", "elm_register_toolchains")
+elm_register_toolchains()
+load("@rules_elm_npm//:repositories.bzl", elm_npm_repositories = "npm_repositories")
+elm_npm_repositories()
+
+load("@rules_elm//repository:def.bzl", "elm_repository")
+elm_repository(
+    name = "elm_package_eriktim_elm_protocol_buffers",
+    sha256 = "e929bc551ca939bcca2855ed2560930415b60f1101c0c2e8accfc26eedb51413",
+    strip_prefix = "elm-protocol-buffers-1.2.0",
+    urls = [ "https://github.com/eriktim/elm-protocol-buffers/archive/refs/tags/1.2.0.tar.gz", ],
+)
+elm_repository(
+    name = "elm_package_anmolitor_elm_protoc_types",
+    sha256 = "e12f17d9a746de19c0bd530bd72de616b86307a10d82639fee194c268516848a",
+    strip_prefix = "elm-protoc-types-2.0.0",
+    urls = [ "https://github.com/anmolitor/elm-protoc-types/archive/refs/tags/2.0.0.tar.gz", ],
+)
+elm_repository(
+    name = "elm_package_elm_file",
+    sha256 = "c85b4025e12c1bf2dee9e4d853459ead7d1fa917304adfa2af27d116c86292e6",
+    strip_prefix = "file-1.0.5",
+    urls = ["https://github.com/elm/file/archive/1.0.5.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_http",
+    sha256 = "619bc23d7753bc172016ea764233dd7dfded1d919263c41b59885c5bcdd10b01",
+    strip_prefix = "http-2.0.0",
+    urls = ["https://github.com/elm/http/archive/2.0.0.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_anmolitor_elm_protoc_utils",
+    sha256 = "4dad004fca078f677ee8a4a01eeb4f74816f278d076d8bb37a5fe7cc7bf60223",
+    strip_prefix = "elm-protoc-utils-2.3.0",
+    urls = [ "https://github.com/anmolitor/elm-protoc-utils/archive/refs/tags/2.3.0.tar.gz", ],
+)
+elm_repository(
+    name = "elm_package_elm_parser",
+    sha256 = "2294a3274ee08fdb6fec78983c00d71f9516e53e175a3f7d7abc9eba76ee6c28",
+    strip_prefix = "parser-1.1.0",
+    urls = [ "https://github.com/elm/parser/archive/refs/tags/1.1.0.tar.gz", ],
+)
+elm_repository(
+    name = "elm_package_rtfeldman_elm_iso8601_date_strings",
+    sha256 = "2a2ce3d4c3bbfa21b66610d8fa6652feac0f37a6ded7c482df8f45ff664804aa",
+    strip_prefix = "elm-iso8601-date-strings-1.1.4",
+    urls = [ "https://github.com/rtfeldman/elm-iso8601-date-strings/archive/refs/tags/1.1.4.tar.gz", ],
+)
+elm_repository(
+    name = "elm_package_danfishgold_base64_bytes",
+    sha256 = "413ede3c324c666b3d4812c4b1756f9ce4fa1f9b9c5bc60922fd7e920f9e84f7",
+    strip_prefix = "base64-bytes-1.1.0",
+    urls = ["https://github.com/danfishgold/base64-bytes/archive/1.1.0.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_anmolitor_elm_protocol_buffers",
+    sha256 = "e929bc551ca939bcca2855ed2560930415b60f1101c0c2e8accfc26eedb51413",
+    strip_prefix = "elm-protocol-buffers-1.2.0",
+    urls = ["https://github.com/eriktim/elm-protocol-buffers/archive/1.2.0.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_core",
+    sha256 = "6e37b11c88c89a68d19d0c7625f1ef39ed70c59e443def95e4de98d6748c80a7",
+    strip_prefix = "core-1.0.5",
+    urls = ["https://github.com/elm/core/archive/1.0.5.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_json",
+    sha256 = "d0635f33137e4ad3fc323f96ba280e45dc41afa51076c53d9f04fd92c2cf5c4e",
+    strip_prefix = "json-1.1.3",
+    urls = ["https://github.com/elm/json/archive/1.1.3.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_test",
+    sha256 = "e199eaa0ea31b61cf3ce521b3b34e9a94d8cce65862062b91a484dcb28935b74",
+    strip_prefix = "test-2.1.1",
+    urls = ["https://github.com/elm-explorations/test/archive/2.1.1.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_bytes",
+    sha256 = "922f3526e3b430e947d1d2eac5965e4caae625013649de2f657d4f258a5bdc0b",
+    strip_prefix = "bytes-1.0.8",
+    urls = ["https://github.com/elm/bytes/archive/1.0.8.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_virtual_dom",
+    sha256 = "cf87286ed5d1b31aaf99c6a3368ccd340d1356b1973f1afe5f668c47e22b3b60",
+    strip_prefix = "virtual-dom-1.0.2",
+    urls = ["https://github.com/elm/virtual-dom/archive/1.0.2.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_random",
+    sha256 = "b4b9dc99d5a064bc607684dd158199208bce51c0521b7e8a515c365e0a11168d",
+    strip_prefix = "random-1.0.0",
+    urls = ["https://github.com/elm/random/archive/1.0.0.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_html",
+    sha256 = "73b885e0a3d2f9781b1c9bbcc1ee9ac032f503f5ef46a27da3ba617cebbf6fd8",
+    strip_prefix = "html-1.0.0",
+    urls = ["https://github.com/elm/html/archive/1.0.0.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_time",
+    sha256 = "e18bca487adec67bfe4043a33b975d81527a7732377050d0421dd86d503c906d",
+    strip_prefix = "time-1.0.0",
+    urls = ["https://github.com/elm/time/archive/1.0.0.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_tiziano88_elm_protobuf",
+    sha256 = "624d6d1501d701bf04547558d7bc26f7f995493930d7d94854f782aaf9091303",
+    strip_prefix = "elm-protobuf-3.0.0",
+    urls = ["https://github.com/tiziano88/elm-protobuf/archive/3.0.0.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_jweir_elm_iso8601",
+    sha256 = "6d9db7fee3b4d89714d133ef82d68d25cab348089073c9aa39264bfe5e5a341f",
+    strip_prefix = "elm-iso8601-7.0.1",
+    urls = ["https://github.com/jweir/elm-iso8601/archive/7.0.1.tar.gz"],
+)
+elm_repository(
+    name = "elm_package_elm_regex",
+    sha256 = "42e98d657040339c05c4001ea0f7469ec29beca5cc3c594fb1c11e0ecad53252",
+    strip_prefix = "regex-1.0.0",
+    urls = ["https://github.com/elm/regex/archive/refs/tags/1.0.0.tar.gz"],
+)
