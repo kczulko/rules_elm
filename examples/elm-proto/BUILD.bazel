@@ -1,4 +1,7 @@
-load("@rules_elm//proto:def.bzl", "elm_proto_library", "ELM_PROTO_TOOLCHAIN")
+load("@rules_elm//proto:def.bzl",
+     "elm_proto_library",
+     "ELM_PROTO_TOOLCHAIN",
+     "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION")
 load("@rules_elm//proto:elm_proto_toolchain_rule.bzl", "elm_proto_toolchain")
 load("@rules_elm//elm:def.bzl", "elm_test")
 load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
@@ -33,19 +36,24 @@ toolchain(
     toolchain = ":nixpkgs_protoc_toolchain",
 )
 
+elm_proto_deps = [
+    "@elm_package_eriktim_elm_protocol_buffers",
+    "@elm_package_anmolitor_elm_protoc_types",
+    "@elm_package_danfishgold_base64_bytes",
+    "@elm_package_elm_file",
+    "@elm_package_elm_http",
+    "@elm_package_elm_parser",
+    "@elm_package_anmolitor_elm_protoc_utils",
+    "@elm_package_rtfeldman_elm_iso8601_date_strings",
+]
+
 elm_proto_toolchain(
     name = "elm_proto_toolchain_opt_json",
     proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
-    deps = [
-        "@elm_package_eriktim_elm_protocol_buffers",
-        "@elm_package_anmolitor_elm_protoc_types",
-        "@elm_package_danfishgold_base64_bytes",
-        "@elm_package_elm_file",
-        "@elm_package_elm_http",
-        "@elm_package_elm_parser",
-        "@elm_package_anmolitor_elm_protoc_utils",
-        "@elm_package_rtfeldman_elm_iso8601_date_strings",
-    ]
+    protoc_opts = [
+        "--elm_opt=json=decode",
+    ],
+    deps = elm_proto_deps,
 )
 
 toolchain(
@@ -64,7 +72,9 @@ proto_library(
 elm_proto_library(
     name = "elm_book_proto",
     proto = ":book_proto",
-    plugin_opt_json = "json=decode",
+    plugin_opt_json = "" if INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION else "json=decode",
+    # for bazel6 compatibility
+    deps = [] if INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION else elm_proto_deps,
 )
 
 elm_test(

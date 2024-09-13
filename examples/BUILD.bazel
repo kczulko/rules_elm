@@ -43,6 +43,7 @@ rules_elm_integration_test_each_bazel(
     bazel_binaries = bazel_binaries,
     workspace_path = "elm-binary",
     bazel_cmd = "build :main-no-deps",
+    run_legacy = True,
     expected_output = """-- MISSING DEPENDENCY ------------------------------------------------- elm.json
 
 I need to see an "elm/core" dependency your elm.json file. The default imports
@@ -77,61 +78,52 @@ Passed:   4
 Failed:   0""",
 )
 
-# Due to macos protoc compilation issues, protoc test works only with bazel7
-# as it is using bazel7's --incompatible_enable_proto_toolchain_resolution
-rules_elm_integration_test(
+rules_elm_integration_test_each_bazel(
     name = "elm_proto_simple",
+    bazel_binaries = bazel_binaries,
     test_runner = ":output_match_runner",
     workspace_path = "elm-proto",
     bazel_cmd = "test :spec --test_output=all",
+    run_legacy = True,
     expected_output = """TEST RUN PASSED
 
 Duration: 0 ms
 Passed:   2
 Failed:   0""",
-    bazel_binary = bazel_binaries["bazel7"],
-    tags = [
-        "bazel7",
-        "no-sandbox",
-    ]
 )
 
-rules_elm_integration_test(
+rules_elm_integration_test_each_bazel(
     name = "elm_proto_complex",
+    bazel_binaries = bazel_binaries,
     test_runner = ":output_match_runner",
     workspace_path = "elm-proto",
     bazel_cmd = "test //foo:spec --test_output=all",
+    run_legacy = True,
     expected_output = """TEST RUN PASSED
 
 Duration: 0 ms
 Passed:   1
 Failed:   0""",
-    bazel_binary = bazel_binaries["bazel7"],
-    tags = [
-        "bazel7",
-        "no-sandbox",
-    ]
 )
 
 test_suite(
     name = "integration_tests",
     tests = gen_test_names_each(
         name_prefixes = [
-            "elm_binary_no_deps_negative",
             "elm_test",
             "elm_todomvc",
         ],
         bazel_binaries = bazel_binaries,
     ) + gen_test_names_each(
         name_prefixes = [
+            "elm_proto_simple",
+            "elm_proto_complex",
             "elm_binary",
             "elm_binary_opt",
+            "elm_binary_no_deps_negative",
         ],
         bazel_binaries = bazel_binaries,
         add_legacy = True,
-    ) + [
-        "elm_proto_simple",
-        "elm_proto_complex",
-    ],
+    ),
     visibility = ["//:__subpackages__"],
 )
