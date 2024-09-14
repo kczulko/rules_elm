@@ -19,9 +19,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Cache SBT
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bazel-disk-cache
+          key: ${{ runner.os }}-bazel-ci-cache-1
       - name: Integration tests
         run: |
-          nix develop -i --command bazel test //examples:integration_tests --config=nix --test_output=all
+          nix develop -i --command bazel test //examples:integration_tests --config=nix --test_output=all --disk-cache=~/.bazel-disk-cache
 
 
 
