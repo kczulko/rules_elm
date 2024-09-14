@@ -6,3 +6,4 @@ build:nix --cxxopt=c++14
 build:nix --deleted_packages=examples/elm-binary,examples/elm-proto,examples/elm-proto/foo,examples/elm-test,examples/elm-todomvc
 query:nix --deleted_packages=examples/elm-binary,examples/elm-proto,examples/elm-proto/foo,examples/elm-test,examples/elm-todomvc
 
+build:ci --config=nix --test_output=all --disk_cache=~/.bazel-disk-cache

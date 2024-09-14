@@ -7,25 +7,22 @@ load(
 
 _configs = ["bzlmod", "nobzlmod"]
 
-def gen_name(name_prefix, bazel_binary_name, config = None):
-    if config:
-        return "{}_{}_{}".format(name_prefix, bazel_binary_name, config)
-    return "{}_{}".format(name_prefix, bazel_binary_name)
+def gen_name(name_prefix, bazel_binary_name, config):
+    return "{}_{}_{}".format(name_prefix, bazel_binary_name, config)
 
-def gen_test_names(name_prefix, bazel_binaries, config = None):
+
+def gen_test_names(name_prefix, bazel_binaries, config):
     return [
         gen_name(name_prefix, bazel_binary_name, config)
         for bazel_binary_name in bazel_binaries.keys()
     ]
 
-def gen_test_names_each(name_prefixes, bazel_binaries, add_legacy = False):
+def gen_test_names_each(name_prefixes, bazel_binaries):
     result = []
     for name_prefix in name_prefixes:
-        if add_legacy:
-            for config in _configs:
-                result += gen_test_names(name_prefix, bazel_binaries, config)
-        else:
-            result += gen_test_names(name_prefix, bazel_binaries)
+        for config in _configs:
+            result += gen_test_names(name_prefix, bazel_binaries, config)
+
     return result
 
 def rules_elm_integration_test(
@@ -57,31 +54,13 @@ def rules_elm_integration_test_each_bazel(
     bazel_cmd,
     expected_output,
     test_runner = ":output_match_runner",
-    run_legacy = False,
 ):
-    if run_legacy:
-        for config in _configs:
-            for bazel_binary_name in bazel_binaries:
-                rules_elm_integration_test(
-                    name = gen_name(name, bazel_binary_name, config),
-                    workspace_path = workspace_path,
-                    bazel_cmd = bazel_cmd + " --config={}_{}".format(bazel_binary_name, config),
-                    expected_output = expected_output,
-                    test_runner = test_runner,
-                    bazel_binary = bazel_binaries[bazel_binary_name],
-                    tags = [
-                        bazel_binary_name,
-                        # for bazel7 sandboxing issue
-                        # https://github.com/bazelbuild/bazel/issues/1990
-                        "no-sandbox",
-                    ],
-                )
-    else:
+    for config in _configs:
         for bazel_binary_name in bazel_binaries:
             rules_elm_integration_test(
-                name = gen_name(name, bazel_binary_name),
+                name = gen_name(name, bazel_binary_name, config),
                 workspace_path = workspace_path,
-                bazel_cmd = bazel_cmd,
+                bazel_cmd = bazel_cmd + " --config={}_{}".format(bazel_binary_name, config),
                 expected_output = expected_output,
                 test_runner = test_runner,
                 bazel_binary = bazel_binaries[bazel_binary_name],

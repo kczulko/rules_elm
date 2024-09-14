@@ -19,9 +19,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Bazel disk cache
+        uses: actions/cache@v4
+        env:
+          cache-id: 1
+        with:
+          save-always: true
+          path: |
+            ~/.bazel-disk-cache
+          key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
       - name: Integration tests
         run: |
-          nix develop -i --command bazel test //examples:integration_tests --config=nix --test_output=all
-
-
-
+          nix develop -i --command bazel test //examples:integration_tests --config=ci
