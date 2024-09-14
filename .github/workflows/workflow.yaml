@@ -26,7 +26,7 @@ jobs:
         with:
           path: |
             ~/.bazel-disk-cache
-          key: ${{ runner.os }}-bazel-ci-cache-${{ env.cache-id }}
+          key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
       - name: Integration tests
         run: |
           nix develop -i --command bazel test //examples:integration_tests --config=ci
