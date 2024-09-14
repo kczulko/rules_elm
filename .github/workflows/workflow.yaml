@@ -24,6 +24,7 @@ jobs:
         env:
           cache-id: 1
         with:
+          save-always: true
           path: |
             ~/.bazel-disk-cache
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
