@@ -9,11 +9,10 @@ load(
 ELM_PROTO_TOOLCHAIN = "@rules_elm//proto:toolchain_type"
 INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION = getattr(proto_common, "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION", False)
 
-
-# _find_toolchain and _if_legacy_toolchain were copied from rules_proto
-# if used as imports from rules_proto then an error occurs in bzlmod case
-# their impl wants to retrieve e.g. rules_elm toolchain which is impossible
-# from the context of rules_proto
+# _find_toolchain and _if_legacy_toolchain were copied from rules_proto.
+# If used as imports from rules_proto then an error occurs in bzlmod case.
+# Their impl wants to retrieve e.g. rules_elm toolchain which is impossible
+# from the context of rules_proto.
 def _find_toolchain(ctx, legacy_attr, toolchain_type):
     if INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION:
         toolchain = ctx.toolchains[toolchain_type]
@@ -51,7 +50,7 @@ def _elm_proto_aspect_impl(target, ctx):
         format_each = "--elm_opt=%s"
     )
 
-    # skip "well-known-protos" which are handled by elm-protoc-types
+    # Skip "well-known-protos" which are handled by elm-protoc-types
     if proto_info.direct_sources and not _well_known_proto(proto_info.direct_sources, ctx.files._well_known_protos):
         generated_files = ctx.actions.declare_directory("Proto")
         elm_out = generated_files.dirname
