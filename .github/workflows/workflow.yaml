@@ -27,7 +27,4 @@ jobs:
           key: ${{ runner.os }}-bazel-ci-cache-1
       - name: Integration tests
         run: |
-          nix develop -i --command bazel test //examples:integration_tests --config=nix --test_output=all --disk-cache=~/.bazel-disk-cache
-
-
-
+          nix develop -i --command bazel test //examples:integration_tests --config=nix --test_output=all --disk_cache=~/.bazel-disk-cache
