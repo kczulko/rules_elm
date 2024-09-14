@@ -25,7 +25,6 @@ rules_elm_integration_test_each_bazel(
     workspace_path = "elm-binary",
     bazel_cmd = "build :main",
     expected_output = "INFO: Build completed successfully, 4 total actions",
-    run_legacy = True,
 )
 
 rules_elm_integration_test_each_bazel(
@@ -35,7 +34,6 @@ rules_elm_integration_test_each_bazel(
     bazel_cmd = "build :main -c opt",
     expected_output = """(UglifyJS main.2.js)?.*
 INFO: Build completed successfully, .. total actions""",
-    run_legacy = True,
 )
 
 rules_elm_integration_test_each_bazel(
@@ -43,7 +41,6 @@ rules_elm_integration_test_each_bazel(
     bazel_binaries = bazel_binaries,
     workspace_path = "elm-binary",
     bazel_cmd = "build :main-no-deps",
-    run_legacy = True,
     expected_output = """-- MISSING DEPENDENCY ------------------------------------------------- elm.json
 
 I need to see an "elm/core" dependency your elm.json file. The default imports
@@ -71,7 +68,6 @@ rules_elm_integration_test_each_bazel(
     test_runner = ":output_match_runner",
     workspace_path = "elm-test",
     bazel_cmd = "test :spec --test_output=all",
-    run_legacy = True,
     expected_output = """TEST RUN PASSED
 
 Duration: 0 ms
@@ -85,7 +81,6 @@ rules_elm_integration_test_each_bazel(
     test_runner = ":output_match_runner",
     workspace_path = "elm-proto",
     bazel_cmd = "test :spec --test_output=all",
-    run_legacy = True,
     expected_output = """TEST RUN PASSED
 
 Duration: 0 ms
@@ -99,7 +94,6 @@ rules_elm_integration_test_each_bazel(
     test_runner = ":output_match_runner",
     workspace_path = "elm-proto",
     bazel_cmd = "test //foo:spec --test_output=all",
-    run_legacy = True,
     expected_output = """TEST RUN PASSED
 
 Duration: 0 ms
@@ -111,20 +105,15 @@ test_suite(
     name = "integration_tests",
     tests = gen_test_names_each(
         name_prefixes = [
+            "elm_binary",
+            "elm_binary_no_deps_negative",
+            "elm_binary_opt",
+            "elm_proto_complex",
+            "elm_proto_simple",
+            "elm_test",
             "elm_todomvc",
         ],
         bazel_binaries = bazel_binaries,
-    ) + gen_test_names_each(
-        name_prefixes = [
-            "elm_proto_simple",
-            "elm_proto_complex",
-            "elm_binary",
-            "elm_binary_opt",
-            "elm_binary_no_deps_negative",
-            "elm_test"
-        ],
-        bazel_binaries = bazel_binaries,
-        add_legacy = True,
     ),
     visibility = ["//:__subpackages__"],
 )

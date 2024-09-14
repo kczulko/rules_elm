@@ -70,9 +70,10 @@ use_repo(
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
 nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
 
-nix_repo.github(
+nix_repo.file(
     name = "nixpkgs",
-    commit = "cfd6b5fc90b15709b780a5a1619695a88505a176",
+    file = "//:nixpkgs.nix",
+    file_deps = ["//:flake.lock"],
 )
 use_repo(nix_repo, "nixpkgs")
 
