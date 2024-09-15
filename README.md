@@ -153,6 +153,8 @@ and package them as an `elm_library()`.
    see [protoc-gen-elm docs](https://www.npmjs.com/package/protoc-gen-elm)
 - `plugin_opt_grpc`: One of {grpc, grpc=false, grpc=true},
    see [protoc-gen-elm docs](https://www.npmjs.com/package/protoc-gen-elm)
+- `plugin_opt_grpc_dev`: Optional attr which can take following value: `grpcDevTools`,
+   see [protoc-gen-elm docs](https://www.npmjs.com/package/protoc-gen-elm)
 
 **Note:** This function is implemented using [Bazel aspects](https://docs.bazel.build/versions/master/skylark/aspects.html),
 meaning that it automatically instantiates build rules for all
