@@ -13,7 +13,6 @@ permissions:
 
 jobs:
   release:
-    needs: [tests]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
