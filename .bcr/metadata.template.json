@@ -1,0 +1,15 @@
+{
+  "homepage": "https://github.com/kczulko/rules_elm",
+  "maintainers": [
+    {
+      "name": "Karol Czułkowski",
+      "email": "karol.czulkowski@protonmail.com",
+      "github": "kczulko"
+    }
+  ],
+  "repository": [
+    "github:kczulko/rules_elm"
+  ],
+  "versions": [],
+  "yanked_versions": {}
+}
