@@ -14,53 +14,7 @@ any libraries used may be versioned as part of your Bazel project.
 
 ## Adding these rules to your project
 
-### Using bzlmod with Bazel 6 or later:
-
-Add the following to your `MODULE.bazel` file:
-
-```python
-bazel_dep(name = "rules_elm")
-# not yet published to Bazel Central Registry
-git_override(
-  module_name = "rules_elm",
-  remote = "https://github.com/kczulko/rules_elm.git",
-  commit = <arbitrary-commit-hash>,
-)
-
-# adding external elm dependencies:
-elm = use_extension("@rules_elm//elm:extensions.bzl", "elm")
-elm.repository(
-    name = "elm_package_elm_core",
-    sha256 = "6e37b11c88c89a68d19d0c7625f1ef39ed70c59e443def95e4de98d6748c80a7",
-    strip_prefix = "core-1.0.5",
-    urls = ["https://github.com/elm/core/archive/1.0.5.tar.gz"],
-)
-use_repo(elm, "elm_package_elm_core")
-```
-
-### Legacy WORKSPACE
-
-Add the following declarations to your `WORKSPACE` file:
-
-```python
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-
-http_archive(
-    name = "rules_elm",
-    sha256 = "0b8a4e288ce9fe255074adb07be443cdda3a9fa9667de775b01decb93507a6d7",
-    strip_prefix = "rules_elm-0.3",
-    urls = ["https://github.com/kczulko/rules_elm/archive/v0.3.tar.gz"],
-)
-
-load("@rules_elm//elm:dependencies.bzl", "elm_dependencies")
-elm_dependencies()
-load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
-rules_js_dependencies() # rules_elm depends on rules_js
-load("@rules_elm//elm:repositories.bzl", "elm_register_toolchains")
-elm_register_toolchains()
-load("@rules_elm_npm//:repositories.bzl", elm_npm_repositories = "npm_repositories")
-elm_npm_repositories()
-```
+Check the [releases](https://github.com/kczulko/rules_elm/releases) for detailed instructions.
 
 ## Examples on how to use these rules
 
@@ -77,7 +31,7 @@ elm_npm_repositories()
 ### `elm_binary()`
 
 ```python
-load("@rules_elm//elm:def.bzl", "elm_binary")
+load("@rules_elm//elm:defs.bzl", "elm_binary")
 
 elm_binary(name, main, deps, visibility)
 ```
@@ -98,7 +52,7 @@ resulting code is minified using UglifyJS.
 ### `elm_library()`
 
 ```python
-load("@rules_elm//elm:def.bzl", "elm_library")
+load("@rules_elm//elm:defs.bzl", "elm_library")
 
 elm_library(name, srcs, deps, strip_import_prefix, visibility)
 ```
@@ -118,7 +72,7 @@ by multiple `elm_binary()`s.
 ### `elm_package()`
 
 ```python
-load("@rules_elm//elm:def.bzl", "elm_package")
+load("@rules_elm//elm:defs.bzl", "elm_package")
 
 elm_package(name, package_name, package_version, srcs, deps, visibility)
 ```
@@ -138,7 +92,7 @@ sufficient to use `elm_repository()`.
 ### `elm_proto_library()`
 
 ```python
-load("@rules_elm//proto:def.bzl", "elm_proto_library")
+load("@rules_elm//proto:defs.bzl", "elm_proto_library")
 
 elm_proto_library(name, proto, deps, plugin_opt_json, plugin_opt_grpc, visibility)
 ```
@@ -182,7 +136,7 @@ execute it using Node.js.
 ### `elm_repository()`
 
 ```python
-load("@rules_elm//repository:def.bzl", "elm_repository")
+load("@rules_elm//repository:defs.bzl", "elm_repository")
 
 elm_repository(name, urls, sha256, strip_prefix, patches)
 ```

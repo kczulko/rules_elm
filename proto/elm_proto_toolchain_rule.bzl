@@ -1,5 +1,5 @@
 load("@rules_proto//proto:defs.bzl", "proto_common")
-load("@rules_elm//proto:def.bzl", "ELM_PROTO_TOOLCHAIN")
+load("@rules_elm//proto:defs.bzl", "ELM_PROTO_TOOLCHAIN")
 load(
     "@rules_elm//elm/private:providers.bzl",
     _ElmLibrary = "ElmLibrary",

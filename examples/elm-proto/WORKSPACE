@@ -55,7 +55,7 @@ elm_register_toolchains()
 load("@rules_elm_npm//:repositories.bzl", elm_npm_repositories = "npm_repositories")
 elm_npm_repositories()
 
-load("@rules_elm//repository:def.bzl", "elm_repository")
+load("@rules_elm//repository:defs.bzl", "elm_repository")
 elm_repository(
     name = "elm_package_eriktim_elm_protocol_buffers",
     sha256 = "e929bc551ca939bcca2855ed2560930415b60f1101c0c2e8accfc26eedb51413",
