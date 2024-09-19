@@ -1,4 +1,4 @@
-load("@rules_elm//elm:def.bzl", "elm_binary")
+load("@rules_elm//elm:defs.bzl", "elm_binary")
 load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
 
 nodejs_toolchain(

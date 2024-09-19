@@ -147,7 +147,7 @@ elm_binary = rule(
         ),
         "_compile": attr.label(
             allow_single_file = True,
-            default = Label("@rules_elm//elm:compile.py"),
+            default = Label("@rules_elm//elm/private:compile.py"),
         ),
         "_uglifyjs": attr.label(
             cfg = "host",
@@ -316,12 +316,12 @@ elm_test = rule(
         ),
         "_compile": attr.label(
             allow_single_file = True,
-            default = Label("@rules_elm//elm:compile.py"),
+            default = Label("@rules_elm//elm/private:compile.py"),
         ),
         "_generate_test_main": attr.label(
             allow_single_file = True,
             default = Label(
-                "@rules_elm//elm:generate_test_main.py",
+                "@rules_elm//elm/private:generate_test_main.py",
             ),
         ),
         "_node_test_runner": attr.label(

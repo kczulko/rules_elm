@@ -1,3 +1,8 @@
+exports_files([
+    "compile.py",
+    "generate_test_main.py",
+])
+
 filegroup(
     name = "all_files",
     srcs = glob(["*"]),

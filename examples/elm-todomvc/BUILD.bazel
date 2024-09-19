@@ -1,4 +1,4 @@
-load("@rules_elm//elm:def.bzl", "elm_binary", "elm_library")
+load("@rules_elm//elm:defs.bzl", "elm_binary", "elm_library")
 load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@npm//:http-server/package_json.bzl", http_server_bin = "bin")

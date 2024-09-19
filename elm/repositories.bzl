@@ -132,7 +132,7 @@ def elm_register_toolchains(register = True):
 
     http_archive(
         name = "com_github_rtfeldman_node_test_runner",
-        build_file_content = """load("@rules_elm//elm:def.bzl", "elm_library")
+        build_file_content = """load("@rules_elm//elm:defs.bzl", "elm_library")
 elm_library(
     name = "node_test_runner",
     srcs = glob(["elm/src/**/*.elm"]),
