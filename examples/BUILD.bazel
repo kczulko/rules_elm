@@ -25,6 +25,9 @@ rules_elm_integration_test_each_bazel(
     workspace_path = "elm-binary",
     bazel_cmd = "build :main",
     expected_output = "INFO: Build completed successfully, (8|7) total actions",
+    # sometimes it fails with an error:
+    # 0.19.1/d.dat: openBinaryFile: resource busy (file is locked)
+    flaky = True,
 )
 
 rules_elm_integration_test_each_bazel(
