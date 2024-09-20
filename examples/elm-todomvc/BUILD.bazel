@@ -1,23 +1,9 @@
 load("@rules_elm//elm:defs.bzl", "elm_binary", "elm_library")
-load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@npm//:http-server/package_json.bzl", http_server_bin = "bin")
 load("@aspect_rules_js//js:defs.bzl", "js_run_devserver")
 
 npm_link_all_packages(name = "node_modules")
-
-nodejs_toolchain(
-    name = "node_toolchain",
-    node = "@nixpkgs_nodejs//:bin/node",
-    npm = "@nixpkgs_nodejs//:bin/npm",
-)
-
-toolchain(
-    name = "nixpkgs_nodejs_toolchain",
-    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
-    toolchain = ":node_toolchain",
-    toolchain_type = "@rules_nodejs//nodejs:toolchain_type",
-)
 
 filegroup(
     name = "assets",

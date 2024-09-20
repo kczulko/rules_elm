@@ -8,6 +8,7 @@ local_path_override(
 
 bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0", dev_dependency = True)
 bazel_dep(name = "rules_nodejs", version = "6.2.0")
+bazel_dep(name = "rules_python", version = "0.35.0")
 
 elm = use_extension("@rules_elm//elm:extensions.bzl", "elm")
 elm.repository(
@@ -56,13 +57,19 @@ nix_pkg.attr(
     attr = "nodejs",
     repo = "@nixpkgs",
 )
-
+nix_pkg.attr(
+    name = "nixpkgs_python3",
+    attr = "python3",
+    repo = "@nixpkgs",
+)
 use_repo(
     nix_pkg,
     "nixpkgs_nodejs",
+    "nixpkgs_python3",
 )
 
 register_toolchains(
-    "//:nixpkgs_nodejs_toolchain"
+    "//nix-toolchains:nixpkgs_nodejs_toolchain",
+    "//nix-toolchains:nixpkgs_python_toolchain",
 )
 

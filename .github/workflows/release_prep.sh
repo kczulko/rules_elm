@@ -51,6 +51,8 @@ load("@rules_elm//elm:dependencies.bzl", "elm_dependencies")
 elm_dependencies()
 load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
 rules_js_dependencies() # rules_elm depends on rules_js
+load("@rules_python//python:repositories.bzl", "py_repositories")
+py_repositories() # rules_elm depends on rules_python
 load("@rules_elm//elm:repositories.bzl", "elm_register_toolchains")
 elm_register_toolchains()
 load("@rules_elm_npm//:repositories.bzl", elm_npm_repositories = "npm_repositories")

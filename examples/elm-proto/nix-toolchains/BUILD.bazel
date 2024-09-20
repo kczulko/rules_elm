@@ -1,0 +1,71 @@
+load("@rules_elm//proto:defs.bzl", "ELM_PROTO_TOOLCHAIN")
+load("@rules_elm//proto:elm_proto_toolchain_rule.bzl", "elm_proto_toolchain")
+load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
+load("@rules_proto//proto/private/rules:proto_toolchain_rule.bzl", "proto_toolchain")
+load("@rules_python//python:py_runtime.bzl", "py_runtime")
+load("@rules_python//python:py_runtime_pair.bzl", "py_runtime_pair")
+load(":proto_deps.bzl", "elm_proto_deps")
+
+nodejs_toolchain(
+    name = "node_toolchain",
+    node = "@nixpkgs_nodejs//:bin/node",
+    npm = "@nixpkgs_nodejs//:bin/npm",
+)
+
+toolchain(
+    name = "nixpkgs_nodejs_toolchain",
+    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
+    toolchain = ":node_toolchain",
+    toolchain_type = "@rules_nodejs//nodejs:toolchain_type",
+)
+
+proto_toolchain(
+    name = "nixpkgs_protoc_toolchain",
+    proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
+    visibility = ["//visibility:public"],
+)
+
+toolchain(
+    name = "nixpkgs_protobuf_toolchain",
+    toolchain_type = "@rules_proto//proto:toolchain_type",
+    exec_compatible_with = [
+        "@rules_nixpkgs_core//constraints:support_nix"
+    ],
+    toolchain = ":nixpkgs_protoc_toolchain",
+)
+
+elm_proto_toolchain(
+    name = "elm_proto_toolchain_opt_json",
+    proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
+    protoc_opts = [
+        "--elm_opt=json=decode",
+    ],
+    deps = elm_proto_deps,
+)
+
+toolchain(
+    name = "nixpkgs_elm_protobuf_toolchain",
+    toolchain_type = ELM_PROTO_TOOLCHAIN,
+    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
+    toolchain = ":elm_proto_toolchain_opt_json",
+)
+
+py_runtime(
+    name = "my_py3_runtime",
+    interpreter = "@nixpkgs_python3//:bin/python",
+    python_version = "PY3",
+)
+
+py_runtime_pair(
+    name = "my_py_runtime_pair",
+    py3_runtime = ":my_py3_runtime",
+)
+
+toolchain(
+    name = "nixpkgs_python_toolchain",
+    exec_compatible_with = [
+        "@rules_nixpkgs_core//constraints:support_nix"
+    ],
+    toolchain = ":my_py_runtime_pair",
+    toolchain_type = "@rules_python//python:toolchain_type",
+)

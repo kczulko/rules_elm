@@ -54,6 +54,7 @@ def rules_elm_integration_test_each_bazel(
     bazel_cmd,
     expected_output,
     test_runner = ":output_match_runner",
+    **kwargs,
 ):
     for config in _configs:
         for bazel_binary_name in bazel_binaries:
@@ -70,4 +71,5 @@ def rules_elm_integration_test_each_bazel(
                     # https://github.com/bazelbuild/bazel/issues/1990
                     "no-sandbox",
                 ],
+                **kwargs,
             )

@@ -1,7 +1,20 @@
-exports_files([
-    "compile.py",
-    "generate_test_main.py",
-])
+load("@rules_python//python:defs.bzl", "py_binary")
+
+py_binary(
+    name = "compile",
+    srcs = [
+        "compile.py"
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+py_binary(
+    name = "generate_test_main",
+    srcs = [
+        "generate_test_main.py"
+    ],
+    visibility = ["//:__subpackages__"],
+)
 
 filegroup(
     name = "all_files",

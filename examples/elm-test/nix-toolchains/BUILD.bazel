@@ -1,0 +1,36 @@
+load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
+load("@rules_python//python:py_runtime.bzl", "py_runtime")
+load("@rules_python//python:py_runtime_pair.bzl", "py_runtime_pair")
+
+nodejs_toolchain(
+    name = "node_toolchain",
+    node = "@nixpkgs_nodejs//:bin/node",
+    npm = "@nixpkgs_nodejs//:bin/npm",
+)
+
+toolchain(
+    name = "nixpkgs_nodejs_toolchain",
+    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
+    toolchain = ":node_toolchain",
+    toolchain_type = "@rules_nodejs//nodejs:toolchain_type",
+)
+
+py_runtime(
+    name = "my_py3_runtime",
+    interpreter = "@nixpkgs_python3//:bin/python",
+    python_version = "PY3",
+)
+
+py_runtime_pair(
+    name = "my_py_runtime_pair",
+    py3_runtime = ":my_py3_runtime",
+)
+
+toolchain(
+    name = "nixpkgs_python_toolchain",
+    exec_compatible_with = [
+        "@rules_nixpkgs_core//constraints:support_nix"
+    ],
+    toolchain = ":my_py_runtime_pair",
+    toolchain_type = "@rules_python//python:toolchain_type",
+)

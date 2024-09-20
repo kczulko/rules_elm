@@ -9,6 +9,8 @@ load("@rules_elm//elm:dependencies.bzl", "elm_dependencies")
 elm_dependencies()
 load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
 rules_js_dependencies()
+load("@rules_python//python:repositories.bzl", "py_repositories")
+py_repositories()
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies")
 rules_proto_dependencies()
 load("@rules_proto//proto:setup.bzl", "rules_proto_setup")
@@ -44,10 +46,16 @@ nixpkgs_package(
     attribute_path = "protobuf",
     repository = "@nixpkgs"
 )
+nixpkgs_package(
+    name = "nixpkgs_python3",
+    attribute_path = "python3",
+    repository = "@nixpkgs"
+)
 register_toolchains(
-    "//:nixpkgs_nodejs_toolchain",
-    "//:nixpkgs_protobuf_toolchain",
-    "//:nixpkgs_elm_protobuf_toolchain",
+    "//nix-toolchains:nixpkgs_nodejs_toolchain",
+    "//nix-toolchains:nixpkgs_protobuf_toolchain",
+    "//nix-toolchains:nixpkgs_elm_protobuf_toolchain",
+    "//nix-toolchains:nixpkgs_python_toolchain",
 )
 
 load("@rules_elm//elm:repositories.bzl", "elm_register_toolchains")
