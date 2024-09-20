@@ -53,7 +53,7 @@ If you modified your elm.json by hand, try to change it back! And if you are
 having trouble getting back to a working elm.json, it may be easier to delete it
 and use `elm init` to start fresh.
 
-ERROR:""",
+.*?ERROR:""",
 )
 
 rules_elm_integration_test_each_bazel(
