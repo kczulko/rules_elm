@@ -1,18 +1,4 @@
 load("@rules_elm//elm:defs.bzl", "elm_binary")
-load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
-
-nodejs_toolchain(
-    name = "node_toolchain",
-    node = "@nixpkgs_nodejs//:bin/node",
-    npm = "@nixpkgs_nodejs//:bin/npm",
-)
-
-toolchain(
-    name = "nixpkgs_nodejs_toolchain",
-    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
-    toolchain = ":node_toolchain",
-    toolchain_type = "@rules_nodejs//nodejs:toolchain_type",
-)
 
 elm_binary(
     name = "main",

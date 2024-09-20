@@ -56,9 +56,8 @@ def _do_elm_make(
 
     ctx.actions.run(
         mnemonic = "Elm",
-        executable = "python",
+        executable = ctx.executable._compile,
         arguments = [
-            ctx.files._compile[0].path,
             compilation_mode,
             toolchain_elm_files_list[0].path,
             elm_json.path,
@@ -146,11 +145,12 @@ elm_binary = rule(
             mandatory = True,
         ),
         "_compile": attr.label(
-            allow_single_file = True,
-            default = Label("@rules_elm//elm/private:compile.py"),
+            cfg = "exec",
+            default = Label("@rules_elm//elm/private:compile"),
+            executable = True,
         ),
         "_uglifyjs": attr.label(
-            cfg = "host",
+            cfg = "exec",
             default = Label("@rules_elm//tools/uglifyjs:bin"),
             executable = True,
         ),
@@ -248,9 +248,8 @@ def _elm_test_impl(ctx):
     main_file = ctx.actions.declare_file(main_filename)
     ctx.actions.run(
         mnemonic = "ElmGenTest",
-        executable = "python",
+        executable = ctx.executable._generate_test_main,
         arguments = [
-            ctx.files._generate_test_main[0].path,
             module_name,
             tests_found_file.path,
             main_file.path,
@@ -315,20 +314,18 @@ elm_test = rule(
             mandatory = True,
         ),
         "_compile": attr.label(
-            allow_single_file = True,
-            default = Label("@rules_elm//elm/private:compile.py"),
+            executable = True,
+            cfg = "exec",
+            default = Label("@rules_elm//elm/private:compile"),
         ),
         "_generate_test_main": attr.label(
-            allow_single_file = True,
-            default = Label(
-                "@rules_elm//elm/private:generate_test_main.py",
-            ),
+            executable = True,
+            cfg = "exec",
+            default = Label("@rules_elm//elm/private:generate_test_main"),
         ),
         "_node_test_runner": attr.label(
             providers = [_ElmLibrary],
-            default = Label(
-                "@com_github_rtfeldman_node_test_runner//:node_test_runner",
-            ),
+            default = Label("@com_github_rtfeldman_node_test_runner//:node_test_runner"),
         ),
         "_tests_finder": attr.label(
             allow_single_file = True,

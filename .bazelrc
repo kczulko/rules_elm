@@ -3,7 +3,7 @@ build:nix --host_platform=@rules_nixpkgs_core//platforms:host
 build:nix --host_cxxopt=-std=c++14
 build:nix --cxxopt=c++14
 # bazel run @rules_bazel_integration_test//tools:update_deleted_packages
-build:nix --deleted_packages=examples/elm-binary,examples/elm-proto,examples/elm-proto/foo,examples/elm-test,examples/elm-todomvc
-query:nix --deleted_packages=examples/elm-binary,examples/elm-proto,examples/elm-proto/foo,examples/elm-test,examples/elm-todomvc
+build:nix --deleted_packages=examples/elm-binary,examples/elm-binary/nix-toolchains,examples/elm-proto,examples/elm-proto/foo,examples/elm-proto/nix-toolchains,examples/elm-test,examples/elm-test/nix-toolchains,examples/elm-todomvc,examples/elm-todomvc/nix-toolchains
+query:nix --deleted_packages=examples/elm-binary,examples/elm-binary/nix-toolchains,examples/elm-proto,examples/elm-proto/foo,examples/elm-proto/nix-toolchains,examples/elm-test,examples/elm-test/nix-toolchains,examples/elm-todomvc,examples/elm-todomvc/nix-toolchains
 
 build:ci --config=nix --test_output=all --disk_cache=~/.bazel-disk-cache
