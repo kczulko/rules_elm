@@ -15,6 +15,7 @@ filegroup(
         "//tools/tests-runner:all_files",
         "//tools/tests-placeholder-repairer:all_files",
         "//tools/protoc-gen-elm:all_files",
+        "//tools/gzip:all_files",
     ],
     visibility = ["//visibility:public"],
 )
