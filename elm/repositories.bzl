@@ -66,7 +66,10 @@ genrule(
     name = "extract_elm_compiler",
     srcs = [":compiler.gz"],
     outs = [ "compiler" ],
-    cmd = "gzip -d -c $(SRCS) > $@ && chmod +x $@"
+    tools = [
+      "@rules_elm//tools/gzip:bin",
+    ],
+    cmd = "$(execpath @rules_elm//tools/gzip:bin) $(SRCS) $@",
 )
 
 elm_toolchain(
