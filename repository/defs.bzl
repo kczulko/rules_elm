@@ -1,9 +1,13 @@
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", _patch = "patch")
 
 # getting rid of the canonical repo name representation
-# TODO: handle possible +
+# should be compatible with https://github.com/bazelbuild/bazel/issues/23127
 def fix_bzl_mod_repo_name(name):
-    return name.split("~")[-1]
+    repo_name = name.split("~")[-1]
+    if repo_name != name:
+        return repo_name
+
+    return name.split("+")[-1]
 
 def _elm_repository_impl(rctx):
     rctx.download_and_extract(
