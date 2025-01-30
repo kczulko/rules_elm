@@ -142,9 +142,9 @@ elm_library(
     strip_import_prefix = "elm/src",
     visibility = ["//visibility:public"],
 )""",
-        sha256 = "03d4f0950527599ebe2be4d8d8abc9c8638d93abe5e667d5d3427fcecc6dc24d",
-        strip_prefix = "node-test-runner-0.19.1-revision12",
-        urls = ["https://github.com/rtfeldman/node-test-runner/archive/0.19.1-revision12.tar.gz"],
+        sha256 = "c644d88f758bc2779876e049fabef5bf47acb9a690cb0b4d9390142bd23f47e4",
+        strip_prefix = "node-test-runner-3.0.1",
+        urls = ["https://github.com/rtfeldman/node-test-runner/archive/3.0.1.tar.gz"],
     )
 
     elm_compilers_toolchain_repo_name = "elm_compiler_toolchains"
