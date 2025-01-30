@@ -10,7 +10,7 @@ dependencies:
     version: 0.19.1-revision12
   protoc-gen-elm:
     specifier: ^4.0.3
-    version: 4.0.3
+    version: 4.0.4
   uglify-js:
     specifier: ^3.18.0
     version: 3.18.0
@@ -238,8 +238,8 @@ packages:
     engines: {node: '>=8.6'}
     dev: false
 
-  /protoc-gen-elm@4.0.3:
-    resolution: {integrity: sha512-cn33v6+TXFAcEJsfAqaZKhjBKDn5n5oMGbiZzmOBQTgh/1kkbSmgyJHXMBXte5x5eaLK20ancXH9A2r4IG8Nag==}
+  /protoc-gen-elm@4.0.4:
+    resolution: {integrity: sha512-at4f1pa9cchVe+qYj49LMX9KThuYDJNtBa7wsmFFz1GdvfQljtO/zoadZsGfw73RAy2QEcXE++loY3TCL5qDBg==}
     hasBin: true
     dev: false
 
