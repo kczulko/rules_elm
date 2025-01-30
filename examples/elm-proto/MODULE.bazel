@@ -9,7 +9,7 @@ local_path_override(
     path = "../..",
 )
 
-bazel_dep(name = "rules_proto", version = "6.0.2")
+bazel_dep(name = "rules_proto", version = "7.1.0")
 bazel_dep(name = "rules_nixpkgs_core", version = "0.13.0")
 bazel_dep(name = "rules_nodejs", version = "6.3.3")
 bazel_dep(name = "rules_python", version = "0.35.0")
