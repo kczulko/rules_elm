@@ -9,7 +9,7 @@ load(
     "integration_test_utils",)
 
 bazel_binaries = {
-#    "bazel8" : "@bazel8//:bin/bazel",
+    "bazel8" : "@bazel8//:bin/bazel",
     "bazel7" : "@bazel7//:bin/bazel",
 }
 

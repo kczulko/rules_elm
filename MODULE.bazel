@@ -15,7 +15,7 @@ bazel_dep(name = "protobuf", version = "29.0-rc2", repo_name = "com_google_proto
 bazel_dep(name = "rules_python", version = "0.40.0")
 
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.21.0", dev_dependency = True)
-bazel_dep(name = "rules_nixpkgs_core", version = "0.12.0", dev_dependency = True)
+bazel_dep(name = "rules_nixpkgs_core", version = "0.13.0", dev_dependency = True)
 bazel_dep(name = "rules_bazel_integration_test", version = "0.31.0", dev_dependency = True)
 
 elm = use_extension("//elm:extensions.bzl", "elm")
@@ -35,7 +35,6 @@ npm.npm_translate_lock(
     link_workspace = "rules_elm",
     pnpm_lock = "//tools/npm:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
-    #lifecycle_hooks_use_default_shell_env = True,
     lifecycle_hooks_exclude = ["fsevents"]
 )
 use_repo(npm, "rules_elm_npm")
@@ -47,7 +46,6 @@ nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg"
 nix_repo.file(
     name = "nixpkgs",
     file = "//:nix/nixpkgsWithOverlay.nix",
-    # file = "//:nixpkgs.nix",
     file_deps = [
         "//:flake.lock",
         "//:nix/overlays/bazel.nix",
@@ -61,17 +59,17 @@ nix_pkg.attr(
     attr = "nodejs",
     repo = "@nixpkgs",
 )
-# nix_pkg.attr(
-#     name = "bazel8",
-#     attr = "rulesElm.bazel8",
-#     repo = "@nixpkgs",
-# )
+nix_pkg.attr(
+    name = "bazel8",
+    attr = "rulesElm.bazel8",
+    repo = "@nixpkgs",
+)
 nix_pkg.attr(
     name = "bazel7",
     attr = "rulesElm.bazel7",
     repo = "@nixpkgs",
 )
 use_repo(nix_pkg,
-         # "bazel8",
+         "bazel8",
          "bazel7",
          "nixpkgs_nodejs")

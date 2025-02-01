@@ -4,5 +4,5 @@ common --toolchain_resolution_debug=rules_python
 common --incompatible_strict_action_env
 common:bazel7_bzlmod --enable_bzlmod
 common:bazel7_nobzlmod --noenable_bzlmod
-common:bazel6_bzlmod --enable_bzlmod
-common:bazel6_nobzlmod --noenable_bzlmod
+common:bazel8_bzlmod --enable_bzlmod
+common:bazel8_nobzlmod --noenable_bzlmod  --enable_workspace

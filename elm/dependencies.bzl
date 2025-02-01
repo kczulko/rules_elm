@@ -28,4 +28,19 @@ def elm_dependencies():
             ],
         )
 
+    if not native.existing_rule("rules_java"):
+        http_archive(
+            name = "rules_java",
+            urls = [
+                "https://github.com/bazelbuild/rules_java/releases/download/8.6.1/rules_java-8.6.1.tar.gz",
+            ],
+            sha256 = "c5bc17e17bb62290b1fd8fdd847a2396d3459f337a7e07da7769b869b488ec26",
+        )
 
+    if not native.existing_rule("rules_shell"):
+        http_archive(
+            name = "rules_shell",
+            sha256 = "410e8ff32e018b9efd2743507e7595c26e2628567c42224411ff533b57d27c28",
+            strip_prefix = "rules_shell-0.2.0",
+            url = "https://github.com/bazelbuild/rules_shell/releases/download/v0.2.0/rules_shell-v0.2.0.tar.gz",
+        )

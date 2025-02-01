@@ -49,10 +49,19 @@ http_archive(
 
 load("@rules_elm//elm:dependencies.bzl", "elm_dependencies")
 elm_dependencies()
-load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
-rules_js_dependencies() # rules_elm depends on rules_js
+load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
+rules_java_dependencies()
+load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+protobuf_deps()
 load("@rules_python//python:repositories.bzl", "py_repositories")
-py_repositories() # rules_elm depends on rules_python
+py_repositories()
+load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
+rules_js_dependencies()
+load("@rules_python//python:repositories.bzl", "py_repositories")
+py_repositories()
+
+load("@rules_shell//shell:repositories.bzl", "rules_shell_toolchains")
+rules_shell_toolchains()
 load("@rules_elm//elm:repositories.bzl", "elm_register_toolchains")
 elm_register_toolchains()
 load("@rules_elm_npm//:repositories.bzl", elm_npm_repositories = "npm_repositories")

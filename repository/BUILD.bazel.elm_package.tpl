@@ -5,10 +5,13 @@ elm_package(
     name = {{name}},
     srcs = [
         "elm.json",
-    ] + glob([
+    ] + glob(
+      include = [
         "**/*.elm",
         "**/*.js",
-    ]),
+      ],
+      allow_empty = True,
+    ),
     deps = {{deps}},
     package_name = {{package_name}},
     package_version = {{package_version}},

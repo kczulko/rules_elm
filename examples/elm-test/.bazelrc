@@ -1,5 +1,5 @@
 common --host_platform=@rules_nixpkgs_core//platforms:host
 build:bazel7_bzlmod --enable_bzlmod
 build:bazel7_nobzlmod --noenable_bzlmod
-build:bazel6_bzlmod --enable_bzlmod
-build:bazel6_nobzlmod --noenable_bzlmod
+build:bazel8_bzlmod --enable_bzlmod
+build:bazel8_nobzlmod --noenable_bzlmod --enable_workspace

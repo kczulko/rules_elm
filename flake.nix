@@ -19,7 +19,7 @@
           default = (pkgs.buildFHSEnv {
             name = "simple-bazelisk-env";
             targetPkgs = pkgs: with pkgs;[
-              rulesElm.bazel7
+              rulesElm.bazel8
               python3
               bash
               nodePackages.pnpm
