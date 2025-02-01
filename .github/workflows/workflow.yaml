@@ -30,8 +30,10 @@ jobs:
           path: |
             ~/.bazel-disk-cache
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
+      - name: Link nix-build to /bin
+        run: |
+          sudo ln -sf $(which nix-build) /bin/nix-build
       - name: Integration tests
         run: |
-          which nix-build
-          nix develop .#ci --command which nix-build
-#          nix develop .#ci --command bazel test //examples:integration_tests --config=ci
+#          nix develop .#ci --command which nix-build
+          nix develop .#ci --command bazel test //examples:integration_tests --config=ci
