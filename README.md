@@ -4,6 +4,8 @@
 ![osx_amd64](https://img.shields.io/badge/platform-linux__amd64-orange)
 ![osx_amd64](https://img.shields.io/badge/platform-osx__arm64-orange)
 ![osx_amd64](https://img.shields.io/badge/platform-osx__amd64-orange)
+![Bazel 7](https://img.shields.io/badge/Bazel-7-blue)
+![Bazel 8](https://img.shields.io/badge/Bazel-8-blue)
 
 [Elm](https://elm-lang.org/) is a functional programming language that
 can be [transpiled](https://en.wikipedia.org/wiki/Source-to-source_compiler)
