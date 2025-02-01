@@ -32,9 +32,9 @@ def elm_dependencies():
         http_archive(
             name = "rules_java",
             urls = [
-                "https://github.com/bazelbuild/rules_java/releases/download/8.6.1/rules_java-8.6.1.tar.gz",
+                "https://github.com/bazelbuild/rules_java/releases/download/8.8.0/rules_java-8.8.0.tar.gz",
             ],
-            sha256 = "c5bc17e17bb62290b1fd8fdd847a2396d3459f337a7e07da7769b869b488ec26",
+            sha256 = "f79a6e10cdd213ceded45884914bb8c68f0c8d41144e74ec89ebb74984c409ac",
         )
 
     if not native.existing_rule("rules_shell"):
