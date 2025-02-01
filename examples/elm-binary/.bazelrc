@@ -1,4 +1,4 @@
-common --host_platform=@rules_nixpkgs_core//platforms:host
+common --incompatible_strict_action_env
 build:bazel6_bzlmod --enable_bzlmod
 build:bazel6_nobzlmod --noenable_bzlmod
 build:bazel7_bzlmod --enable_bzlmod

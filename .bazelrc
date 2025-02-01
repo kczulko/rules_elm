@@ -1,3 +1,4 @@
+common --incompatible_strict_action_env=true
 build:nix --enable_bzlmod
 build:nix --host_platform=@rules_nixpkgs_core//platforms:host
 build:nix --host_cxxopt=-std=c++14

@@ -99,6 +99,9 @@ def _elm_binary_impl(ctx):
                 "--output",
                 js2_file.basename,
             ],
+            # rules_js is using uname and dirname
+            # see here: https://github.com/aspect-build/rules_js/blob/4488c9ff72efc4052fc338fc9fd28a1bad19fd1d/js/private/js_binary.sh.tpl#L365
+            use_default_shell_env = True,
             env = {
                 "BAZEL_BINDIR": ctx.bin_dir.path,
             },
@@ -116,6 +119,9 @@ def _elm_binary_impl(ctx):
                 "--output",
                 js_file.basename,
             ],
+            # rules_js is using uname and dirname
+            # see here: https://github.com/aspect-build/rules_js/blob/4488c9ff72efc4052fc338fc9fd28a1bad19fd1d/js/private/js_binary.sh.tpl#L365
+            use_default_shell_env = True,
             env = {
                 "BAZEL_BINDIR": ctx.bin_dir.path,
             },
@@ -238,6 +244,7 @@ def _elm_test_impl(ctx):
         env = {
             "BAZEL_BINDIR": ctx.bin_dir.path,
         },
+        use_default_shell_env = True,
         inputs = ctx.files.main,
         outputs = [ tests_found_file ]
     )
@@ -254,6 +261,7 @@ def _elm_test_impl(ctx):
             tests_found_file.path,
             main_file.path,
         ],
+        use_default_shell_env = True,
         inputs = ctx.files._generate_test_main + [tests_found_file],
         outputs = [main_file],
     )
@@ -276,15 +284,19 @@ def _elm_test_impl(ctx):
     # This is required to adapt the final file to run under nodejs
     # see: https://github.com/rtfeldman/node-test-runner/blob/eedf853fc9b45afd73a0db72decebdb856a69771/lib/Generate.js#L56-L74
     js_file = ctx.actions.declare_file(ctx.attr.name + ".js")
-    ctx.actions.run_shell(
+    ctx.actions.run(
         mnemonic = "EmlTestReplacePlacehoders",
-        tools = [ ctx.executable._tests_placehoder_repairer ],
-        command = "exec %s $(readlink -f %s) $(pwd)/%s\n" % (ctx.executable._tests_placehoder_repairer.path, js_file_with_placeholders.path, js_file.path),
+        executable = ctx.executable._tests_placehoder_repairer,
+        arguments = [
+            js_file_with_placeholders.short_path,
+            js_file.short_path
+        ],
         env = {
             "BAZEL_BINDIR": ctx.bin_dir.path,
         },
-        inputs = [ js_file_with_placeholders ],
-        outputs = [ js_file ]
+        use_default_shell_env = True,
+        inputs = [js_file_with_placeholders],
+        outputs = [js_file]
     )
 
     runner_filename = ctx.attr.name + ".sh"
@@ -292,11 +304,11 @@ def _elm_test_impl(ctx):
 
     ctx.actions.write(
         runner_file,
-        content = """
-#!/usr/bin/env bash
-exec {bin} {args}""".format(
+        content = """#!/usr/bin/env bash
+
+NODE_PATH=$PWD:$NODE_PATH exec {bin} {args}""".format(
             bin = ctx.executable._tests_runner.short_path,
-            args = " ".join(["$(pwd)/%s" % js_file.short_path])
+            args = " ".join(["%s" % js_file.short_path])
         ),
         is_executable = True,
     )

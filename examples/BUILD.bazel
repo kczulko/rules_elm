@@ -3,9 +3,13 @@ load("@rules_elm//examples:defs.bzl",
      "rules_elm_integration_test",
      "gen_test_names_each",
 )
+load(
+    "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
+    "bazel_integration_test",
+    "integration_test_utils",)
 
 bazel_binaries = {
-    "bazel6" : "@bazel6//:bin/bazel",
+#    "bazel8" : "@bazel8//:bin/bazel",
     "bazel7" : "@bazel7//:bin/bazel",
 }
 

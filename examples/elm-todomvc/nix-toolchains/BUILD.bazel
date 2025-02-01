@@ -19,6 +19,7 @@ py_runtime(
     name = "my_py3_runtime",
     interpreter = "@nixpkgs_python3//:bin/python",
     python_version = "PY3",
+    stub_shebang = "#!/bin/python3",
 )
 
 py_runtime_pair(
@@ -34,3 +35,4 @@ toolchain(
     toolchain = ":my_py_runtime_pair",
     toolchain_type = "@rules_python//python:toolchain_type",
 )
+

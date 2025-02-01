@@ -1,5 +1,5 @@
 let
-  lock = builtins.fromJSON (builtins.readFile ./flake.lock);
+  lock = builtins.fromJSON (builtins.readFile ../flake.lock);
   src = lock.nodes.nixpkgs.locked;
   nixpkgs =
     assert src.type == "github";

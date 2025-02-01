@@ -170,5 +170,6 @@ elm_library(
             name = "rules_elm_npm",
             pnpm_lock = "@rules_elm//tools/npm:pnpm-lock.yaml",
             verify_node_modules_ignored = "@rules_elm//:.bazelignore",
+            lifecycle_hooks_exclude = ["fsevents"],
         )
 
