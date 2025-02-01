@@ -107,9 +107,9 @@ test_suite(
     tests = gen_test_names_each(
         name_prefixes = [
             "elm_binary",
-            # "elm_binary_no_deps_negative",
-            # "elm_binary_opt",
-            # "elm_proto_complex",
+            "elm_binary_no_deps_negative",
+            "elm_binary_opt",
+            "elm_proto_complex",
             # "elm_proto_simple",
             # "elm_test",
             # "elm_todomvc",
