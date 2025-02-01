@@ -30,7 +30,7 @@
         ];
 
         shells = {
-          ci = pkgs.mkShell { packages = buildPkgs pkgs; };
+          ci = pkgs.mkShell { packages = targetPkgs pkgs; };
           default = (pkgs.buildFHSEnv {
             name = "simple-bazelisk-env";
             inherit targetPkgs;
