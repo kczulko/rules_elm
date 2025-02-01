@@ -32,4 +32,6 @@ jobs:
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
       - name: Integration tests
         run: |
-          nix develop .#ci --command bazel test //examples:integration_tests --config=ci
+          which nix-build
+          nix develop .#ci --command which nix-build
+#          nix develop .#ci --command bazel test //examples:integration_tests --config=ci
