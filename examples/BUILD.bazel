@@ -5,7 +5,7 @@ load("@rules_elm//examples:defs.bzl",
 )
 
 bazel_binaries = {
-    "bazel6" : "@bazel6//:bin/bazel",
+    "bazel8" : "@bazel8//:bin/bazel",
     "bazel7" : "@bazel7//:bin/bazel",
 }
 

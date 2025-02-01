@@ -2,7 +2,7 @@ load("@rules_elm//proto:defs.bzl",
      "elm_proto_library",
      "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION")
 load("@rules_elm//elm:defs.bzl", "elm_test")
-load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
 load("//nix-toolchains:proto_deps.bzl", "elm_proto_deps")
 
 proto_library(

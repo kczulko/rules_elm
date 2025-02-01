@@ -128,7 +128,6 @@ use_repo(
 )
 
 register_toolchains(
-    "//nix-toolchains:nixpkgs_nodejs_toolchain",
-    "//nix-toolchains:nixpkgs_python_toolchain",
+    "//nix-toolchains:all"
 )
 
