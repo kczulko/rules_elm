@@ -32,6 +32,7 @@ jobs:
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
       - name: Link nix-build to bin
         run: |
+          echo $PATH
           sudo ln -sf $(which nix-build) /bin/nix-build
           sudo ln -sf $(which nix) /bin/nix
       - name: Integration tests
