@@ -11,10 +11,6 @@ load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
 rules_js_dependencies()
 load("@rules_python//python:repositories.bzl", "py_repositories")
 py_repositories()
-load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies")
-rules_proto_dependencies()
-load("@rules_proto//proto:setup.bzl", "rules_proto_setup")
-rules_proto_setup()
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 protobuf_deps()
 load("@rules_python//python:repositories.bzl", "py_repositories")
@@ -52,10 +48,7 @@ nixpkgs_package(
     repository = "@nixpkgs"
 )
 register_toolchains(
-    "//nix-toolchains:nixpkgs_nodejs_toolchain",
-    "//nix-toolchains:nixpkgs_protobuf_toolchain",
-    "//nix-toolchains:nixpkgs_elm_protobuf_toolchain",
-    "//nix-toolchains:nixpkgs_python_toolchain",
+    "//nix-toolchains:all",
 )
 
 load("@rules_elm//elm:repositories.bzl", "elm_register_toolchains")

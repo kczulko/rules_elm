@@ -1,5 +1,6 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@rules_proto//proto:defs.bzl", "ProtoInfo", "proto_common")
+load("@com_google_protobuf//bazel/common:proto_common.bzl", "proto_common")
+load("@com_google_protobuf//bazel/common:proto_info.bzl", "ProtoInfo")
 load(
     "//elm/private:providers.bzl",
     _ElmLibrary = "ElmLibrary",

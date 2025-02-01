@@ -9,11 +9,10 @@ local_path_override(
     path = "../..",
 )
 
-bazel_dep(name = "rules_proto", version = "6.0.2")
 bazel_dep(name = "rules_nixpkgs_core", version = "0.13.0")
 bazel_dep(name = "rules_nodejs", version = "6.3.3")
-bazel_dep(name = "rules_python", version = "0.35.0")
-bazel_dep(name = "protobuf", version = "27.5", repo_name = "com_google_protobuf")
+bazel_dep(name = "rules_python", version = "0.40.0")
+bazel_dep(name = "protobuf", version = "29.0-rc2", repo_name = "com_google_protobuf")
 
 elm = use_extension("@rules_elm//elm:extensions.bzl", "elm")
 elm.repository(
@@ -170,8 +169,5 @@ use_repo(
 )
 
 register_toolchains(
-    "//nix-toolchains:nixpkgs_nodejs_toolchain",
-    "//nix-toolchains:nixpkgs_elm_protobuf_toolchain",
-    "//nix-toolchains:nixpkgs_protobuf_toolchain",
-    "//nix-toolchains:nixpkgs_python_toolchain",
+    "//nix-toolchains:all",
 )
