@@ -15,26 +15,25 @@
           ];
         };
 
+        targetPkgs = pkgs: with pkgs;[
+          rulesElm.bazel8
+          python3
+          bash
+          nodePackages.pnpm
+          nix
+          coreutils-prefixed
+          libtool # for macos build
+          protobuf
+          nodejs
+          zlib
+          gcc
+        ];
+
         shells = {
+          ci = pkgs.mkShell { packages = buildPkgs pkgs; };
           default = (pkgs.buildFHSEnv {
             name = "simple-bazelisk-env";
-            targetPkgs = pkgs: with pkgs;[
-              rulesElm.bazel8
-              python3
-              bash
-              nodePackages.pnpm
-              nix
-              coreutils-prefixed
-              libtool # for macos build
-              protobuf
-              nodejs
-              zlib
-              gcc
-            ];
-            profile = ''
-              export PATH=$PATH:${pkgs.python3}/bin
-              export CU=${pkgs.coreutils-prefixed}
-            '';
+            inherit targetPkgs;
           }).env;
         };
       in
