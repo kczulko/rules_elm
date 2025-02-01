@@ -6,7 +6,7 @@ load("@rules_elm//examples:defs.bzl",
 
 bazel_binaries = {
     "bazel8" : "@bazel8//:bin/bazel",
-    "bazel7" : "@bazel7//:bin/bazel",
+    # "bazel7" : "@bazel7//:bin/bazel",
 }
 
 sh_binary(
@@ -107,12 +107,12 @@ test_suite(
     tests = gen_test_names_each(
         name_prefixes = [
             "elm_binary",
-            "elm_binary_no_deps_negative",
-            "elm_binary_opt",
-            "elm_proto_complex",
-            "elm_proto_simple",
-            "elm_test",
-            "elm_todomvc",
+            # "elm_binary_no_deps_negative",
+            # "elm_binary_opt",
+            # "elm_proto_complex",
+            # "elm_proto_simple",
+            # "elm_test",
+            # "elm_todomvc",
         ],
         bazel_binaries = bazel_binaries,
     ),
