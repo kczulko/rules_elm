@@ -33,8 +33,8 @@ jobs:
       - name: Link nix-build to bin
         run: |
           echo $PATH
-          sudo ln -sf $(which nix-build) /bin/nix-build
-          sudo ln -sf $(which nix) /bin/nix
+          sudo ln -sf $(which nix-build) /usr/bin/nix-build
+          sudo ln -sf $(which nix) /usr/bin/nix
       - name: Integration tests
         run: |
           nix develop .#ci --command bazel test //examples:integration_tests --config=ci
