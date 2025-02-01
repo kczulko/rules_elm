@@ -9,12 +9,4 @@
     "replacements:all",
     "workarounds:all"
   ],
-  "packageRules": [
-    {
-      "matchFileNames": [
-        "MODULE.bazel"
-      ],
-      "enabled": false
-    }
-  ]
 }
