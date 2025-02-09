@@ -35,7 +35,6 @@ npm.npm_translate_lock(
     link_workspace = "rules_elm",
     pnpm_lock = "//tools/npm:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
-    lifecycle_hooks_exclude = ["fsevents"]
 )
 use_repo(npm, "rules_elm_npm")
 
