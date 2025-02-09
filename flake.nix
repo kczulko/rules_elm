@@ -15,7 +15,7 @@
           ];
         };
 
-        targetPkgs = pkgs: with pkgs;[
+        targetPkgs = pkgs: with pkgs; [
           rulesElm.bazel8
           python3
           bash

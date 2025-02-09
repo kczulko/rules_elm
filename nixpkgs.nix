@@ -7,4 +7,5 @@ let
       url = "https://github.com/${src.owner}/${src.repo}/archive/${src.rev}.tar.gz";
       sha256 = src.narHash;
     };
-in import nixpkgs
+in
+import nixpkgs
