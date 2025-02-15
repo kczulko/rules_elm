@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       elm-test:
-        specifier: 0.19.1-revision12
-        version: 0.19.1-revision12
+        specifier: 0.19.1-revision14
+        version: 0.19.1-revision14
       protoc-gen-elm:
         specifier: ^4.0.4
         version: 4.0.4
@@ -68,8 +68,8 @@ packages:
   elm-solve-deps-wasm@1.0.2:
     resolution: {integrity: sha512-qnwo7RO9IO7jd9SLHvIy0rSOEIlc/tNMTE9Cras0kl+b161PVidW4FvXo0MtXU8GAKi/2s/HYvhcnpR/NNQ1zw==}
 
-  elm-test@0.19.1-revision12:
-    resolution: {integrity: sha512-5GV3WkJ8R/faOP1hwElQdNuCt8tKx2+1lsMrdeIYWSFz01Kp9gJl/R6zGtp4QUyrUtO8KnHsxjHrQNUf2CHkrg==}
+  elm-test@0.19.1-revision14:
+    resolution: {integrity: sha512-gfQQYtHTeMstGbGbiRHbGKLsQCGI53ozLP22Wqx6YjxXLlNsdT8NS2EGmjkdQSU3ALRhYECtnF//ZUb4wbCpUQ==}
     engines: {node: '>=12.20.0'}
     hasBin: true
 
@@ -249,7 +249,7 @@ snapshots:
 
   elm-solve-deps-wasm@1.0.2: {}
 
-  elm-test@0.19.1-revision12:
+  elm-test@0.19.1-revision14:
     dependencies:
       chalk: 4.1.2
       chokidar: 3.6.0

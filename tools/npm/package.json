@@ -3,7 +3,7 @@
         "onlyBuiltDependencies": []
     },
 	"dependencies": {
-		"elm-test": "0.19.1-revision12",
+		"elm-test": "0.19.1-revision14",
 		"protoc-gen-elm": "^4.0.4",
 		"uglify-js": "^3.19.3"
 	}
