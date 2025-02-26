@@ -19,7 +19,7 @@ let
 in
 {
   rulesElm = {
-    bazel8 = final.callPackage (bazelisk-bazel "8.1.0") { };
+    bazel8 = final.callPackage (bazelisk-bazel "8.1.1") { };
     bazel7 = final.callPackage (bazelisk-bazel "7.5.0") { };
   };
 }
