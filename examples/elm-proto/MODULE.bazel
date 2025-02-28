@@ -11,7 +11,7 @@ local_path_override(
 
 bazel_dep(name = "rules_nixpkgs_core", version = "0.13.0")
 bazel_dep(name = "rules_nodejs", version = "6.3.3")
-bazel_dep(name = "rules_python", version = "1.1.0")
+bazel_dep(name = "rules_python", version = "1.2.0")
 bazel_dep(name = "protobuf", version = "29.3", repo_name = "com_google_protobuf")
 
 elm = use_extension("@rules_elm//elm:extensions.bzl", "elm")
