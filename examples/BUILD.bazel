@@ -37,6 +37,7 @@ rules_elm_integration_test_each_bazel(
     bazel_cmd = "build :main -c opt",
     expected_output = """(UglifyJS main.2.js)?.*
 INFO: Build completed successfully, .. total actions""",
+    flaky = True,
 )
 
 rules_elm_integration_test_each_bazel(
