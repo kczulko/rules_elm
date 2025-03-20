@@ -15,21 +15,6 @@ elm_binary(<a href="#elm_binary-name">name</a>, <a href="#elm_binary-deps">deps<
 Transpiles an Elm application to Javascript.
 The resulting Javascript file will be named `${name}.js`.
 
-```starlark
-load("@rules_elm//elm:defs.bzl", "elm_binary")
-
-elm_binary(
-   name = "bin",
-   main = "Main.elm",
-   deps = [
-       "@elm_package_elm_core",
-       "@elm_package_elm_html",
-       "@elm_package_elm_json",
-       "@elm_package_elm_virtual_dom",
-   ],
-)
-```
-
 **Note:** When the compilation mode (`-c`) is equal to `dbg`, the
 resulting Javascript file will have the time traveling debugger enabled.
 When the compilation mode is `opt`, optimizations are performed and the
