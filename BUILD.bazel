@@ -1,3 +1,5 @@
+load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+
 filegroup(
     name = "local_repository_files",
     srcs = [
@@ -5,17 +7,27 @@ filegroup(
         "BUILD.bazel",
         "MODULE.bazel",
         "WORKSPACE",
-        "//proto:all_files",
         "//elm:all_files",
         "//elm/private:all_files",
+        "//proto:all_files",
         "//repository:all_files",
-        "//tools/uglifyjs:all_files",
-        "//tools/npm:all_files",
-        "//tools/tests-finder:all_files",
-        "//tools/tests-runner:all_files",
-        "//tools/tests-placeholder-repairer:all_files",
-        "//tools/protoc-gen-elm:all_files",
         "//tools/gzip:all_files",
+        "//tools/npm:all_files",
+        "//tools/protoc-gen-elm:all_files",
+        "//tools/tests-finder:all_files",
+        "//tools/tests-placeholder-repairer:all_files",
+        "//tools/tests-runner:all_files",
+        "//tools/uglifyjs:all_files",
     ],
     visibility = ["//visibility:public"],
+)
+
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = ["@bazel_skylib_gazelle_plugin//bzl"],
+)
+
+gazelle(
+    name = "gazelle",
+    gazelle = "gazelle_bin",
 )

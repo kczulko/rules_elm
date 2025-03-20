@@ -11,4 +11,3 @@ js_binary(
     entry_point = "main.js",
     visibility = ["//visibility:public"],
 )
-

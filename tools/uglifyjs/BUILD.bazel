@@ -8,5 +8,5 @@ filegroup(
 
 bin.uglifyjs_binary(
     name = "bin",
-    visibility = ["//visibility:public"]
+    visibility = ["//visibility:public"],
 )

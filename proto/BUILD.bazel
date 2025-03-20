@@ -1,3 +1,4 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@com_google_protobuf//bazel/toolchains:proto_lang_toolchain.bzl", "proto_lang_toolchain")
 
 filegroup(
@@ -9,13 +10,36 @@ filegroup(
 proto_lang_toolchain(
     name = "default_elm_proto_toolchain",
     command_line = "--elm_out=%s",
-    progress_message = "Generating Elm proto_library %{label}",
     plugin = "@rules_elm//tools/protoc-gen-elm:bin",
     plugin_format_flag = "--plugin=protoc-gen-elm=%s",
+    progress_message = "Generating Elm proto_library %{label}",
     visibility = ["//visibility:public"],
 )
 
 toolchain_type(
     name = "toolchain_type",
     visibility = ["//visibility:public"],
+)
+
+bzl_library(
+    name = "defs",
+    srcs = ["defs.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//elm/private:providers",
+        "@bazel_skylib//lib:paths",
+        "@com_google_protobuf//bazel/common:proto_common",
+        "@com_google_protobuf//bazel/common:proto_info",
+    ],
+)
+
+bzl_library(
+    name = "elm_proto_toolchain_rule",
+    srcs = ["elm_proto_toolchain_rule.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_google_protobuf//bazel/common:proto_common",
+        "@rules_elm//elm/private:providers",
+        "@rules_elm//proto:defs",
+    ],
 )

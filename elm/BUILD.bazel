@@ -1,3 +1,5 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+
 toolchain_type(
     name = "toolchain",
     visibility = ["//visibility:public"],
@@ -7,4 +9,49 @@ filegroup(
     name = "all_files",
     srcs = glob(["*"]),
     visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "defs",
+    srcs = ["defs.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//elm/private:elm_binary",
+        "//elm/private:elm_library",
+        "//elm/private:elm_package",
+        "//elm/private:elm_test",
+    ],
+)
+
+bzl_library(
+    name = "dependencies",
+    srcs = ["dependencies.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@bazel_tools//tools/build_defs/repo:http.bzl",
+        "@bazel_tools//tools/build_defs/repo:utils.bzl",
+    ],
+)
+
+bzl_library(
+    name = "extensions",
+    srcs = ["extensions.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":repositories",
+        "@bazel_skylib//lib:sets",
+        "@rules_elm//repository:defs",
+    ],
+)
+
+bzl_library(
+    name = "repositories",
+    srcs = ["repositories.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@aspect_rules_js//js:toolchains",
+        "@aspect_rules_js//npm:repositories",
+        "@bazel_tools//tools/build_defs/repo:http.bzl",
+        "@bazel_tools//tools/build_defs/repo:utils.bzl",
+    ],
 )
