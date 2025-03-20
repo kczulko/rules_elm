@@ -95,9 +95,22 @@ NODE_PATH=$PWD:$NODE_PATH exec {bin} {args}""".format(
     )]
 
 elm_test = rule(
+    doc = """Compiles an Elm testing application to JavaScript and
+    executes it using Node.js.
+    """,
     attrs = {
-        "deps": attr.label_list(providers = [_ElmLibrary]),
+        "deps": attr.label_list(
+            doc = """\
+            List of `elm_library()` or `elm_package()` targets
+            on which the testing application depends.
+            """,
+            providers = [_ElmLibrary]
+        ),
         "main": attr.label(
+            doc = """\
+            The name of the source file containing one or more
+            [`Test`s](https://package.elm-lang.org/packages/elm-explorations/test/1.2.1/Test#Test)
+            """,
             allow_files = True,
             mandatory = True,
         ),
