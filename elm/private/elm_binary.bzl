@@ -80,9 +80,27 @@ def _elm_binary_impl(ctx):
     return [DefaultInfo(files = depset([js_file]))]
 
 elm_binary = rule(
+    doc = """Transpiles an Elm application to Javascript.
+    The resulting Javascript file will be named `${name}.js`.
+
+    **Note:** When the compilation mode (`-c`) is equal to `dbg`, the
+    resulting Javascript file will have the time traveling debugger enabled.
+    When the compilation mode is `opt`, optimizations are performed and the
+    resulting code is minified using UglifyJS.
+    """,
     attrs = {
-        "deps": attr.label_list(providers = [_ElmLibrary]),
+        "deps": attr.label_list(
+            providers = [_ElmLibrary],
+            doc = """\
+            List of `elm_library()` or `elm_package()` targets
+            on which the application depends.
+            """,
+        ),
         "main": attr.label(
+            doc = """\
+            The name of the source file containing the
+            [`Program`](https://package.elm-lang.org/packages/elm/core/latest/Platform#Program).
+            """,
             allow_files = True,
             mandatory = True,
         ),
