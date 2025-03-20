@@ -12,7 +12,28 @@ load("@rules_elm//elm:defs.bzl", "elm_binary")
 elm_binary(<a href="#elm_binary-name">name</a>, <a href="#elm_binary-deps">deps</a>, <a href="#elm_binary-main">main</a>)
 </pre>
 
+Transpiles an Elm application to Javascript.
+The resulting Javascript file will be named `${name}.js`.
 
+```starlark
+load("@rules_elm//elm:defs.bzl", "elm_binary")
+
+elm_binary(
+   name = "bin",
+   main = "Main.elm",
+   deps = [
+       "@elm_package_elm_core",
+       "@elm_package_elm_html",
+       "@elm_package_elm_json",
+       "@elm_package_elm_virtual_dom",
+   ],
+)
+```
+
+**Note:** When the compilation mode (`-c`) is equal to `dbg`, the
+resulting Javascript file will have the time traveling debugger enabled.
+When the compilation mode is `opt`, optimizations are performed and the
+resulting code is minified using UglifyJS.
 
 **ATTRIBUTES**
 
@@ -20,8 +41,8 @@ elm_binary(<a href="#elm_binary-name">name</a>, <a href="#elm_binary-deps">deps<
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="elm_binary-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
-| <a id="elm_binary-deps"></a>deps |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
-| <a id="elm_binary-main"></a>main |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
+| <a id="elm_binary-deps"></a>deps |  List of `elm_library()` or `elm_package()` targets on which the application depends.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+| <a id="elm_binary-main"></a>main |  The name of the source file containing the [`Program`](https://package.elm-lang.org/packages/elm/core/latest/Platform#Program).   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
 
 
 <a id="elm_library"></a>
