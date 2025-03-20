@@ -8,7 +8,7 @@ filegroup(
 
 js_binary(
     name = "bin",
-    entry_point = "main.js",
     data = ["//tools/npm:node_modules/elm-test"],
+    entry_point = "main.js",
     visibility = ["//visibility:public"],
 )

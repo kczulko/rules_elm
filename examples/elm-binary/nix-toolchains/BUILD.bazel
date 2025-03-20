@@ -10,7 +10,7 @@ nodejs_toolchain(
 
 toolchain(
     name = "nixpkgs_nodejs_toolchain",
-    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
+    exec_compatible_with = ["@rules_nixpkgs_core//constraints:support_nix"],
     toolchain = ":node_toolchain",
     toolchain_type = "@rules_nodejs//nodejs:toolchain_type",
 )
@@ -29,7 +29,7 @@ py_runtime_pair(
 toolchain(
     name = "nixpkgs_python_toolchain",
     exec_compatible_with = [
-        "@rules_nixpkgs_core//constraints:support_nix"
+        "@rules_nixpkgs_core//constraints:support_nix",
     ],
     toolchain = ":my_py_runtime_pair",
     toolchain_type = "@rules_python//python:toolchain_type",

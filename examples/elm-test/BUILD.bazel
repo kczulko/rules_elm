@@ -9,7 +9,7 @@ nodejs_toolchain(
 
 toolchain(
     name = "nixpkgs_nodejs_toolchain",
-    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
+    exec_compatible_with = ["@rules_nixpkgs_core//constraints:support_nix"],
     toolchain = ":node_toolchain",
     toolchain_type = "@rules_nodejs//nodejs:toolchain_type",
 )
@@ -31,18 +31,18 @@ elm_library(
 
 elm_test(
     name = "spec",
+    size = "small",
     main = "Spec.elm",
     deps = [
         ":lib",
         ":main-lib",
-        "@elm_package_elm_core",
-        "@elm_package_elm_json",
-        "@elm_package_elm_test",
         "@elm_package_elm_bytes",
-        "@elm_package_elm_random",
-        "@elm_package_elm_virtual_dom",
+        "@elm_package_elm_core",
         "@elm_package_elm_html",
+        "@elm_package_elm_json",
+        "@elm_package_elm_random",
+        "@elm_package_elm_test",
         "@elm_package_elm_time",
+        "@elm_package_elm_virtual_dom",
     ],
-    size="small",
 )

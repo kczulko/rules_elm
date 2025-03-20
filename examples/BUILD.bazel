@@ -1,12 +1,14 @@
-load("@rules_elm//examples:defs.bzl",
-     "rules_elm_integration_test_each_bazel",
-     "rules_elm_integration_test",
-     "gen_test_names_each",
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load(
+    "@rules_elm//examples:defs.bzl",
+    "gen_test_names_each",
+    "rules_elm_integration_test",
+    "rules_elm_integration_test_each_bazel",
 )
 
 bazel_binaries = {
-    "bazel8" : "@bazel8//:bin/bazel",
-    "bazel7" : "@bazel7//:bin/bazel",
+    "bazel8": "@bazel8//:bin/bazel",
+    "bazel7": "@bazel7//:bin/bazel",
 }
 
 sh_binary(
@@ -21,31 +23,31 @@ sh_binary(
 
 rules_elm_integration_test_each_bazel(
     name = "elm_binary",
+    timeout = "moderate",
     bazel_binaries = bazel_binaries,
-    workspace_path = "elm-binary",
     bazel_cmd = "build :main",
     expected_output = "INFO: Build completed successfully, .. total actions",
     # sometimes it fails with an error:
     # 0.19.1/d.dat: openBinaryFile: resource busy (file is locked)
     flaky = True,
-    timeout="moderate",
+    workspace_path = "elm-binary",
 )
 
 rules_elm_integration_test_each_bazel(
     name = "elm_binary_opt",
+    timeout = "moderate",
     bazel_binaries = bazel_binaries,
-    workspace_path = "elm-binary",
     bazel_cmd = "build :main -c opt",
     expected_output = """(UglifyJS main.2.js)?.*
 INFO: Build completed successfully, .. total actions""",
     flaky = True,
-    timeout="moderate",
+    workspace_path = "elm-binary",
 )
 
 rules_elm_integration_test_each_bazel(
     name = "elm_binary_no_deps_negative",
+    timeout = "moderate",
     bazel_binaries = bazel_binaries,
-    workspace_path = "elm-binary",
     bazel_cmd = "build :main-no-deps",
     expected_output = """-- MISSING DEPENDENCY ------------------------------------------------- elm.json
 
@@ -55,64 +57,65 @@ of `List` and `Maybe` do not work without it.
 If you modified your elm.json by hand, try to change it back! And if you are
 having trouble getting back to a working elm.json, it may be easier to delete it
 and use `elm init` to start fresh.""",
-    timeout="moderate"
+    workspace_path = "elm-binary",
 )
 
 rules_elm_integration_test_each_bazel(
     name = "elm_todomvc",
+    timeout = "moderate",
     bazel_binaries = bazel_binaries,
-    test_runner = ":output_match_runner",
-    workspace_path = "elm-todomvc",
     bazel_cmd = "build :bin",
     expected_output = """INFO: Build completed successfully, .. total actions""",
-    timeout="moderate"
+    test_runner = ":output_match_runner",
+    workspace_path = "elm-todomvc",
 )
 
 rules_elm_integration_test_each_bazel(
     name = "elm_test",
+    timeout = "moderate",
     bazel_binaries = bazel_binaries,
-    test_runner = ":output_match_runner",
-    workspace_path = "elm-test",
     bazel_cmd = "test :spec --test_output=all",
     expected_output = """TEST RUN PASSED
 
 Duration: 0 ms
 Passed:   4
 Failed:   0""",
-    timeout="moderate"
+    test_runner = ":output_match_runner",
+    workspace_path = "elm-test",
 )
 
 rules_elm_integration_test_each_bazel(
     name = "elm_proto_simple",
+    timeout = "moderate",
     bazel_binaries = bazel_binaries,
-    test_runner = ":output_match_runner",
-    workspace_path = "elm-proto",
     bazel_cmd = "test :spec --test_output=all",
     expected_output = """TEST RUN PASSED
 
 Duration: 0 ms
 Passed:   2
 Failed:   0""",
-    timeout="moderate"
+    test_runner = ":output_match_runner",
+    workspace_path = "elm-proto",
 )
 
 rules_elm_integration_test_each_bazel(
     name = "elm_proto_complex",
+    timeout = "moderate",
     bazel_binaries = bazel_binaries,
-    test_runner = ":output_match_runner",
-    workspace_path = "elm-proto",
     bazel_cmd = "test //foo:spec --test_output=all",
     expected_output = """TEST RUN PASSED
 
 Duration: 0 ms
 Passed:   1
 Failed:   0""",
-    timeout="moderate"
+    test_runner = ":output_match_runner",
+    workspace_path = "elm-proto",
 )
 
 test_suite(
     name = "integration_tests",
     tests = gen_test_names_each(
+        bazel_binaries = bazel_binaries,
         name_prefixes = [
             "elm_binary",
             "elm_binary_no_deps_negative",
@@ -122,7 +125,13 @@ test_suite(
             "elm_test",
             "elm_todomvc",
         ],
-        bazel_binaries = bazel_binaries,
     ),
     visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "defs",
+    srcs = ["defs.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["@rules_bazel_integration_test//bazel_integration_test:defs"],
 )

@@ -5,8 +5,8 @@ elm_binary(
     main = "Main.elm",
     deps = [
         "@elm_package_elm_core",
-        "@elm_package_elm_json",
         "@elm_package_elm_html",
+        "@elm_package_elm_json",
         "@elm_package_elm_virtual_dom",
     ],
 )

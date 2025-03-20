@@ -8,8 +8,8 @@ filegroup(
 
 bin.protoc_gen_elm_binary(
     name = "bin",
-    visibility = ["//visibility:public"],
     env = {
-        "BAZEL_BINDIR": "."
-    }
+        "BAZEL_BINDIR": ".",
+    },
+    visibility = ["//visibility:public"],
 )

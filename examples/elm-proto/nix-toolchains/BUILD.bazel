@@ -1,8 +1,8 @@
+load("@com_google_protobuf//bazel/private:toolchain_helpers.bzl", "toolchains")
+load("@com_google_protobuf//bazel/toolchains:proto_toolchain.bzl", "proto_toolchain")
 load("@rules_elm//proto:defs.bzl", "ELM_PROTO_TOOLCHAIN")
 load("@rules_elm//proto:elm_proto_toolchain_rule.bzl", "elm_proto_toolchain")
 load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
-load("@com_google_protobuf//bazel/private:toolchain_helpers.bzl", "toolchains")
-load("@com_google_protobuf//bazel/toolchains:proto_toolchain.bzl", "proto_toolchain")
 load("@rules_python//python:py_runtime.bzl", "py_runtime")
 load("@rules_python//python:py_runtime_pair.bzl", "py_runtime_pair")
 load(":proto_deps.bzl", "elm_proto_deps")
@@ -15,36 +15,36 @@ nodejs_toolchain(
 
 toolchain(
     name = "nixpkgs_nodejs_toolchain",
-    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
+    exec_compatible_with = ["@rules_nixpkgs_core//constraints:support_nix"],
     toolchain = ":node_toolchain",
     toolchain_type = "@rules_nodejs//nodejs:toolchain_type",
 )
 
 proto_toolchain(
     name = "nixpkgs_protoc_toolchain",
-    proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
     exec_compatible_with = [
-        "@rules_nixpkgs_core//constraints:support_nix"
+        "@rules_nixpkgs_core//constraints:support_nix",
     ],
+    proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
 )
 
 elm_proto_toolchain(
     name = "elm_proto_toolchain_opt_json",
+    exec_compatible_with = [
+        "@rules_nixpkgs_core//constraints:support_nix",
+    ],
     proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
     protoc_opts = [
         "--elm_opt=json=decode",
     ],
     deps = elm_proto_deps,
-    exec_compatible_with = [
-        "@rules_nixpkgs_core//constraints:support_nix"
-    ],
 )
 
 toolchain(
     name = "nixpkgs_elm_protobuf_toolchain",
-    toolchain_type = ELM_PROTO_TOOLCHAIN,
-    exec_compatible_with = [ "@rules_nixpkgs_core//constraints:support_nix" ],
+    exec_compatible_with = ["@rules_nixpkgs_core//constraints:support_nix"],
     toolchain = ":elm_proto_toolchain_opt_json",
+    toolchain_type = ELM_PROTO_TOOLCHAIN,
 )
 
 py_runtime(
@@ -61,8 +61,9 @@ py_runtime_pair(
 toolchain(
     name = "nixpkgs_python_toolchain",
     exec_compatible_with = [
-        "@rules_nixpkgs_core//constraints:support_nix"
+        "@rules_nixpkgs_core//constraints:support_nix",
     ],
     toolchain = ":my_py_runtime_pair",
     toolchain_type = "@rules_python//python:toolchain_type",
 )
+

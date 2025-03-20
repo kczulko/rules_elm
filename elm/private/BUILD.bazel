@@ -1,9 +1,10 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@rules_python//python:defs.bzl", "py_binary")
 
 py_binary(
     name = "compile",
     srcs = [
-        "compile.py"
+        "compile.py",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -11,7 +12,7 @@ py_binary(
 py_binary(
     name = "generate_test_main",
     srcs = [
-        "generate_test_main.py"
+        "generate_test_main.py",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -20,4 +21,63 @@ filegroup(
     name = "all_files",
     srcs = glob(["*"]),
     visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "common",
+    srcs = ["common.bzl"],
+    visibility = ["//elm:__subpackages__"],
+    deps = [":providers"],
+)
+
+bzl_library(
+    name = "elm_binary",
+    srcs = ["elm_binary.bzl"],
+    visibility = ["//elm:__subpackages__"],
+    deps = [
+        ":common",
+        ":providers",
+    ],
+)
+
+bzl_library(
+    name = "elm_library",
+    srcs = ["elm_library.bzl"],
+    visibility = ["//elm:__subpackages__"],
+    deps = [
+        ":common",
+        ":providers",
+    ],
+)
+
+bzl_library(
+    name = "elm_test",
+    srcs = ["elm_test.bzl"],
+    visibility = ["//elm:__subpackages__"],
+    deps = [
+        ":common",
+        ":providers",
+    ],
+)
+
+bzl_library(
+    name = "elm_package",
+    srcs = ["elm_package.bzl"],
+    visibility = ["//elm:__subpackages__"],
+    deps = [
+        ":common",
+        ":providers",
+    ],
+)
+
+bzl_library(
+    name = "elm_toolchain",
+    srcs = ["elm_toolchain.bzl"],
+    visibility = ["//elm:__subpackages__"],
+)
+
+bzl_library(
+    name = "providers",
+    srcs = ["providers.bzl"],
+    visibility = ["//elm:__subpackages__"],
 )
