@@ -23,7 +23,6 @@ sh_binary(
 
 rules_elm_integration_test_each_bazel(
     name = "elm_binary",
-    timeout = "moderate",
     bazel_binaries = bazel_binaries,
     bazel_cmd = "build :main",
     expected_output = "INFO: Build completed successfully, .. total actions",
@@ -35,7 +34,6 @@ rules_elm_integration_test_each_bazel(
 
 rules_elm_integration_test_each_bazel(
     name = "elm_binary_opt",
-    timeout = "moderate",
     bazel_binaries = bazel_binaries,
     bazel_cmd = "build :main -c opt",
     expected_output = """(UglifyJS main.2.js)?.*
@@ -46,7 +44,6 @@ INFO: Build completed successfully, .. total actions""",
 
 rules_elm_integration_test_each_bazel(
     name = "elm_binary_no_deps_negative",
-    timeout = "moderate",
     bazel_binaries = bazel_binaries,
     bazel_cmd = "build :main-no-deps",
     expected_output = """-- MISSING DEPENDENCY ------------------------------------------------- elm.json
@@ -62,7 +59,6 @@ and use `elm init` to start fresh.""",
 
 rules_elm_integration_test_each_bazel(
     name = "elm_todomvc",
-    timeout = "moderate",
     bazel_binaries = bazel_binaries,
     bazel_cmd = "build :bin",
     expected_output = """INFO: Build completed successfully, .. total actions""",
@@ -72,7 +68,6 @@ rules_elm_integration_test_each_bazel(
 
 rules_elm_integration_test_each_bazel(
     name = "elm_test",
-    timeout = "moderate",
     bazel_binaries = bazel_binaries,
     bazel_cmd = "test :spec --test_output=all",
     expected_output = """TEST RUN PASSED
@@ -86,7 +81,6 @@ Failed:   0""",
 
 rules_elm_integration_test_each_bazel(
     name = "elm_proto_simple",
-    timeout = "moderate",
     bazel_binaries = bazel_binaries,
     bazel_cmd = "test :spec --test_output=all",
     expected_output = """TEST RUN PASSED
@@ -100,7 +94,6 @@ Failed:   0""",
 
 rules_elm_integration_test_each_bazel(
     name = "elm_proto_complex",
-    timeout = "moderate",
     bazel_binaries = bazel_binaries,
     bazel_cmd = "test //foo:spec --test_output=all",
     expected_output = """TEST RUN PASSED
