@@ -28,6 +28,7 @@ rules_elm_integration_test_each_bazel(
     # sometimes it fails with an error:
     # 0.19.1/d.dat: openBinaryFile: resource busy (file is locked)
     flaky = True,
+    timeout="moderate",
 )
 
 rules_elm_integration_test_each_bazel(
@@ -38,6 +39,7 @@ rules_elm_integration_test_each_bazel(
     expected_output = """(UglifyJS main.2.js)?.*
 INFO: Build completed successfully, .. total actions""",
     flaky = True,
+    timeout="moderate",
 )
 
 rules_elm_integration_test_each_bazel(
@@ -53,6 +55,7 @@ of `List` and `Maybe` do not work without it.
 If you modified your elm.json by hand, try to change it back! And if you are
 having trouble getting back to a working elm.json, it may be easier to delete it
 and use `elm init` to start fresh.""",
+    timeout="moderate"
 )
 
 rules_elm_integration_test_each_bazel(
@@ -62,6 +65,7 @@ rules_elm_integration_test_each_bazel(
     workspace_path = "elm-todomvc",
     bazel_cmd = "build :bin",
     expected_output = """INFO: Build completed successfully, .. total actions""",
+    timeout="moderate"
 )
 
 rules_elm_integration_test_each_bazel(
@@ -75,6 +79,7 @@ rules_elm_integration_test_each_bazel(
 Duration: 0 ms
 Passed:   4
 Failed:   0""",
+    timeout="moderate"
 )
 
 rules_elm_integration_test_each_bazel(
@@ -88,6 +93,7 @@ rules_elm_integration_test_each_bazel(
 Duration: 0 ms
 Passed:   2
 Failed:   0""",
+    timeout="moderate"
 )
 
 rules_elm_integration_test_each_bazel(
@@ -101,6 +107,7 @@ rules_elm_integration_test_each_bazel(
 Duration: 0 ms
 Passed:   1
 Failed:   0""",
+    timeout="moderate"
 )
 
 test_suite(
