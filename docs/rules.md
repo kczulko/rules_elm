@@ -87,7 +87,8 @@ load("@rules_elm//elm:defs.bzl", "elm_test")
 elm_test(<a href="#elm_test-name">name</a>, <a href="#elm_test-deps">deps</a>, <a href="#elm_test-main">main</a>)
 </pre>
 
-
+Compiles an Elm testing application to JavaScript and
+executes it using Node.js.
 
 **ATTRIBUTES**
 
@@ -95,7 +96,7 @@ elm_test(<a href="#elm_test-name">name</a>, <a href="#elm_test-deps">deps</a>, <
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="elm_test-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
-| <a id="elm_test-deps"></a>deps |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
-| <a id="elm_test-main"></a>main |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
+| <a id="elm_test-deps"></a>deps |  List of `elm_library()` or `elm_package()` targets on which the testing application depends.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+| <a id="elm_test-main"></a>main |  The name of the source file containing one or more [`Test`s](https://package.elm-lang.org/packages/elm-explorations/test/1.2.1/Test#Test)   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
 
 
