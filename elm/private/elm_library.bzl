@@ -29,13 +29,33 @@ def _elm_library_impl(ctx):
     ]
 
 elm_library = rule(
+    doc = """Declare a collection of Elm source files that can be reused
+    by multiple `elm_binary()` targets.
+    """,
     attrs = {
-        "deps": attr.label_list(providers = [_ElmLibrary]),
+        "deps": attr.label_list(
+            doc = """\
+            List of `elm_library()` or `elm_package()` targets on which
+  the library depends.
+            """,
+            providers = [_ElmLibrary]
+        ),
         "srcs": attr.label_list(
+            doc = """\
+            List of source files to package together.
+            """,
             allow_files = True,
             mandatory = True,
         ),
-        "strip_import_prefix": attr.string(),
+        "strip_import_prefix": attr.string(
+            doc = """\
+            Workspace root relative path prefix that should
+            be removed from pathname resolution. For example, if the source file
+            `my/project/Foo/Bar.elm` contains module `Foo.Bar`,
+            `strip_import_prefix` should be set to `my/project` for module
+            resolution to work.
+            """,
+        ),
     },
     implementation = _elm_library_impl,
 )
