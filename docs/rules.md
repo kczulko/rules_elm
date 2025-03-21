@@ -40,7 +40,8 @@ load("@rules_elm//elm:defs.bzl", "elm_library")
 elm_library(<a href="#elm_library-name">name</a>, <a href="#elm_library-deps">deps</a>, <a href="#elm_library-srcs">srcs</a>, <a href="#elm_library-strip_import_prefix">strip_import_prefix</a>)
 </pre>
 
-
+Declare a collection of Elm source files that can be reused
+by multiple `elm_binary()` targets.
 
 **ATTRIBUTES**
 
@@ -48,9 +49,9 @@ elm_library(<a href="#elm_library-name">name</a>, <a href="#elm_library-deps">de
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="elm_library-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
-| <a id="elm_library-deps"></a>deps |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
-| <a id="elm_library-srcs"></a>srcs |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | required |  |
-| <a id="elm_library-strip_import_prefix"></a>strip_import_prefix |  -   | String | optional |  `""`  |
+| <a id="elm_library-deps"></a>deps |  List of `elm_library()` or `elm_package()` targets on which the library depends.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+| <a id="elm_library-srcs"></a>srcs |  List of source files to package together.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | required |  |
+| <a id="elm_library-strip_import_prefix"></a>strip_import_prefix |  Workspace root relative path prefix that should be removed from pathname resolution. For example, if the source file `my/project/Foo/Bar.elm` contains module `Foo.Bar`, `strip_import_prefix` should be set to `my/project` for module resolution to work.   | String | optional |  `""`  |
 
 
 <a id="elm_package"></a>
@@ -63,7 +64,10 @@ load("@rules_elm//elm:defs.bzl", "elm_package")
 elm_package(<a href="#elm_package-name">name</a>, <a href="#elm_package-deps">deps</a>, <a href="#elm_package-srcs">srcs</a>, <a href="#elm_package-package_name">package_name</a>, <a href="#elm_package-package_version">package_version</a>)
 </pre>
 
+Makes an off-the-shelf Elm package usable as a dependency.
 
+    **Note:** This function is typically not used directly; it is often
+sufficient to use `elm_repository()`.
 
 **ATTRIBUTES**
 
@@ -71,10 +75,10 @@ elm_package(<a href="#elm_package-name">name</a>, <a href="#elm_package-deps">de
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="elm_package-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
-| <a id="elm_package-deps"></a>deps |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
-| <a id="elm_package-srcs"></a>srcs |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | required |  |
-| <a id="elm_package-package_name"></a>package_name |  -   | String | required |  |
-| <a id="elm_package-package_version"></a>package_version |  -   | String | required |  |
+| <a id="elm_package-deps"></a>deps |  List of packages on which this package depends.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+| <a id="elm_package-srcs"></a>srcs |  Files that are part of this package. This list **SHOULD** include `"elm.json"`.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | required |  |
+| <a id="elm_package-package_name"></a>package_name |  The publicly used name of the package (e.g., `elm/json`)   | String | required |  |
+| <a id="elm_package-package_version"></a>package_version |  The version of the package (e.g., `1.0.2`).   | String | required |  |
 
 
 <a id="elm_test"></a>
