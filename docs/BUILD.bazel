@@ -3,8 +3,23 @@
 load("@aspect_bazel_lib//lib:docs.bzl", "stardoc_with_diff_test", "update_docs")
 
 stardoc_with_diff_test(
-    name = "rules",
+    name = "elm_defs",
     bzl_library_target = "//elm:defs",
+)
+
+stardoc_with_diff_test(
+    name = "elm_repositories",
+    bzl_library_target = "//elm:repositories",
+)
+
+stardoc_with_diff_test(
+    name = "elm_toolchain",
+    bzl_library_target = "//elm/private:elm_toolchain",
+)
+
+stardoc_with_diff_test(
+    name = "repository_defs",
+    bzl_library_target = "//repository:defs",
 )
 
 update_docs(

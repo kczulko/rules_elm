@@ -3,7 +3,7 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
 load("@aspect_rules_js//js:toolchains.bzl", "DEFAULT_NODE_VERSION", "rules_js_register_toolchains")
 
-def http_archive(**kwargs):
+def _http_archive_maybe(**kwargs):
     maybe(_http_archive, **kwargs)
 
 SUPPORTED_ELM_VERSION = "0.19.1"
@@ -133,7 +133,7 @@ elm_compiler_repository = repository_rule(
 
 def elm_register_toolchains(register = True):
 
-    http_archive(
+    _http_archive_maybe(
         name = "com_github_rtfeldman_node_test_runner",
         build_file_content = """load("@rules_elm//elm:defs.bzl", "elm_library")
 elm_library(
