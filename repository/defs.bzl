@@ -2,7 +2,7 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", _patch = "patch")
 
 # getting rid of the canonical repo name representation
 # should be compatible with https://github.com/bazelbuild/bazel/issues/23127
-def fix_bzl_mod_repo_name(name):
+def _fix_bzl_mod_repo_name(name):
     repo_name = name.split("~")[-1]
     if repo_name != name:
         return repo_name
@@ -28,7 +28,7 @@ def _elm_repository_impl(rctx):
     
     name = metadata["name"]
     substitutions = {
-        "{{name}}": json.encode(fix_bzl_mod_repo_name(name_arg)),
+        "{{name}}": json.encode(_fix_bzl_mod_repo_name(name_arg)),
         "{{deps}}": json.encode(deps)
     }
     if name.startswith("elm/") or name.startswith("elm-explorations/"):
@@ -59,17 +59,53 @@ def _elm_repository_impl(rctx):
         )
 
 elm_repository = repository_rule(
+    doc = """
+    Downloads an Elm package over HTTP, extracts it and creates a
+    `BUILD.bazel` file containing either an `elm_package()` or `elm_library()`
+    declaration. For `elm/*` and `elm-explorations/*` an `elm_package()` is
+    used. For others, `elm_library()` is used to prevent the Elm compiler
+    from returning hard to debug dependency management related errors.
+    """,
     attrs = {
-        # Download and extraction.
-        "urls": attr.string_list(),
-        "strip_prefix": attr.string(),
-        "type": attr.string(),
-        "sha256": attr.string(),
+        "urls": attr.string_list(
+            doc = """\
+            List of URLs where the package tarball may be downloaded.
+            """,
+        ),
+        "strip_prefix": attr.string(
+            doc = """\
+            Directory prefix that may be removed from the files upon extraction.
+            """,
+        ),
+        "type": attr.string(
+            doc = """
+            The archive type of the downloaded file. By default, the archive type is
+            determined from the file extension of the URL. If the file has no extension,
+            you can explicitly specify either "zip", "jar", "war", "aar", "nupkg", "tar",
+            "tar.gz", "tgz", "tar.xz", "txz", ".tar.zst", ".tzst", "tar.bz2", ".tbz", ".ar",
+            or ".deb" here. 
+            """,
+        ),
+        "sha256": attr.string(
+            doc = """\
+            SHA-256 checksum of the tarball.
+            """,
+        ),
         # Patches to apply after extraction.
-        "patches": attr.label_list(),
-        "patch_tool": attr.string(default = "patch"),
-        "patch_args": attr.string_list(default = ["-p0"]),
-        "patch_cmds": attr.string_list(default = []),
+        "patches": attr.label_list(
+            doc = """\
+            List of labels of patches to apply after extraction.
+            """,
+        ),
+        "patch_tool": attr.string(
+            default = "patch"
+        ),
+        "patch_args": attr.string_list(
+            default = ["-p0"]
+        ),
+        "patch_cmds": attr.string_list(
+            default = []
+        ),
         # build file templates
         "_elm_library_tpl": attr.label(
             default = Label("@rules_elm//repository:BUILD.bazel.elm_library.tpl")
