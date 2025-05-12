@@ -13,9 +13,9 @@ def elm_dependencies():
     if not native.existing_rule("rules_python"):
         http_archive(
             name = "rules_python",
-            sha256 = "2cc26bbd53854ceb76dd42a834b1002cd4ba7f8df35440cf03482e045affc244",
-            strip_prefix = "rules_python-1.3.0",
-            url = "https://github.com/bazelbuild/rules_python/releases/download/1.3.0/rules_python-1.3.0.tar.gz",
+            sha256 = "9f9f3b300a9264e4c77999312ce663be5dee9a56e361a1f6fe7ec60e1beef9a3",
+            strip_prefix = "rules_python-1.4.1",
+            url = "https://github.com/bazelbuild/rules_python/releases/download/1.4.1/rules_python-1.4.1.tar.gz",
         )
 
     if not native.existing_rule("com_google_protobuf"):
@@ -40,7 +40,7 @@ def elm_dependencies():
     if not native.existing_rule("rules_shell"):
         http_archive(
             name = "rules_shell",
-            sha256 = "410e8ff32e018b9efd2743507e7595c26e2628567c42224411ff533b57d27c28",
-            strip_prefix = "rules_shell-0.2.0",
-            url = "https://github.com/bazelbuild/rules_shell/releases/download/v0.2.0/rules_shell-v0.2.0.tar.gz",
+            sha256 = "bc61ef94facc78e20a645726f64756e5e285a045037c7a61f65af2941f4c25e1",
+            strip_prefix = "rules_shell-0.4.1",
+            url = "https://github.com/bazelbuild/rules_shell/releases/download/v0.4.1/rules_shell-v0.4.1.tar.gz",
         )
