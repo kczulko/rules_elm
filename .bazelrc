@@ -7,7 +7,7 @@ build:nix --deleted_packages=examples/elm-binary,examples/elm-binary/nix-toolcha
 query:nix --deleted_packages=examples/elm-binary,examples/elm-binary/nix-toolchains,examples/elm-proto,examples/elm-proto/foo,examples/elm-proto/nix-toolchains,examples/elm-test,examples/elm-test/nix-toolchains,examples/elm-todomvc,examples/elm-todomvc/nix-toolchains
 
 build:ci --config=nix
-build:ci --test_output=all --disk_cache=~/.bazel-disk-cache
+build:ci --test_output=all
 build:ci --disk_cache=~/.bazel-disk-cache
 # keep dependencies consistent
 build:ci --check_direct_dependencies=error
