@@ -26,7 +26,6 @@ jobs:
           # Bump this number to invalidate the GH actions cache
           cache-id: 2
         with:
-          save-always: true
           path: |
             ~/.bazel-disk-cache
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
