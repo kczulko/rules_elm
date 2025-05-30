@@ -9,7 +9,7 @@ module(
 bazel_dep(name = "aspect_rules_js", version = "2.3.4")
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
-bazel_dep(name = "aspect_bazel_lib", version = "2.16.0")
+bazel_dep(name = "aspect_bazel_lib", version = "2.17.1")
 bazel_dep(name = "rules_nodejs", version = "6.4.0")
 bazel_dep(name = "protobuf", version = "31.0", repo_name = "com_google_protobuf")
 bazel_dep(name = "rules_python", version = "1.4.1")
