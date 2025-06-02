@@ -16,7 +16,7 @@
         };
 
         targetPkgs = pkgs: with pkgs; [
-          rulesElm.bazel8
+          bazelisk-bazel
           python3
           bash
           nodePackages.pnpm
