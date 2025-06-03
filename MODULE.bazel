@@ -46,11 +46,9 @@ nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg"
 
 nix_repo.file(
     name = "nixpkgs",
-    file = "//:nix/nixpkgsWithOverlay.nix",
+    file = "//:nix/nixpkgs.nix",
     file_deps = [
         "//:flake.lock",
-        "//:nix/overlays/bazel.nix",
-        "//:nix/nixpkgs.nix",
     ],
 )
 use_repo(nix_repo, "nixpkgs")
@@ -60,17 +58,22 @@ nix_pkg.attr(
     attr = "nodejs",
     repo = "@nixpkgs",
 )
-nix_pkg.attr(
-    name = "bazel8",
-    attr = "rulesElm.bazel8",
-    repo = "@nixpkgs",
+use_repo(nix_pkg, "nixpkgs_nodejs")
+
+bazel_binaries = use_extension(
+    "@rules_bazel_integration_test//:extensions.bzl",
+    "bazel_binaries",
+    dev_dependency = True,
 )
-nix_pkg.attr(
-    name = "bazel7",
-    attr = "rulesElm.bazel7",
-    repo = "@nixpkgs",
-)
-use_repo(nix_pkg,
-         "bazel8",
-         "bazel7",
-         "nixpkgs_nodejs")
+bazel_binaries.download(version = "8.2.1")
+bazel_binaries.download(version = "7.6.1")
+use_repo(bazel_binaries,
+         "bazel_binaries",
+         "bazel_binaries_bazelisk",
+         "build_bazel_bazel_7_6_1",
+         "build_bazel_bazel_8_2_1")
+
+# inject_repo(
+# bazel_binaries,
+# "rules_bazel_integration_test"
+# )

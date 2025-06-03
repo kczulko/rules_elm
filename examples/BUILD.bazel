@@ -1,4 +1,5 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@bazel_binaries//:defs.bzl", "bazel_binaries")
 load(
     "@rules_elm//examples:defs.bzl",
     "gen_test_names_each",
@@ -6,10 +7,9 @@ load(
     "rules_elm_integration_test_each_bazel",
 )
 
-bazel_binaries = {
-    "bazel8": "@bazel8//:bin/bazel",
-    "bazel7": "@bazel7//:bin/bazel",
-}
+bazel_binaries_to_lbls = [
+    (v, bazel_binaries.label(v)) for v in bazel_binaries.versions.all
+]
 
 sh_binary(
     name = "output_match_runner",
@@ -23,7 +23,7 @@ sh_binary(
 
 rules_elm_integration_test_each_bazel(
     name = "elm_binary",
-    bazel_binaries = bazel_binaries,
+    bazel_binaries = bazel_binaries_to_lbls,
     bazel_cmd = "build :main",
     expected_output = "INFO: Build completed successfully, .. total actions",
     # sometimes it fails with an error:
@@ -34,7 +34,7 @@ rules_elm_integration_test_each_bazel(
 
 rules_elm_integration_test_each_bazel(
     name = "elm_binary_opt",
-    bazel_binaries = bazel_binaries,
+    bazel_binaries = bazel_binaries_to_lbls,
     bazel_cmd = "build :main -c opt",
     expected_output = """(UglifyJS main.2.js)?.*
 INFO: Build completed successfully, .. total actions""",
@@ -44,7 +44,7 @@ INFO: Build completed successfully, .. total actions""",
 
 rules_elm_integration_test_each_bazel(
     name = "elm_binary_no_deps_negative",
-    bazel_binaries = bazel_binaries,
+    bazel_binaries = bazel_binaries_to_lbls,
     bazel_cmd = "build :main-no-deps",
     expected_output = """-- MISSING DEPENDENCY ------------------------------------------------- elm.json
 
@@ -59,7 +59,7 @@ and use `elm init` to start fresh.""",
 
 rules_elm_integration_test_each_bazel(
     name = "elm_todomvc",
-    bazel_binaries = bazel_binaries,
+    bazel_binaries = bazel_binaries_to_lbls,
     bazel_cmd = "build :bin",
     expected_output = """INFO: Build completed successfully, .. total actions""",
     test_runner = ":output_match_runner",
@@ -68,7 +68,7 @@ rules_elm_integration_test_each_bazel(
 
 rules_elm_integration_test_each_bazel(
     name = "elm_test",
-    bazel_binaries = bazel_binaries,
+    bazel_binaries = bazel_binaries_to_lbls,
     bazel_cmd = "test :spec --test_output=all",
     expected_output = """TEST RUN PASSED
 
@@ -81,7 +81,7 @@ Failed:   0""",
 
 rules_elm_integration_test_each_bazel(
     name = "elm_proto_simple",
-    bazel_binaries = bazel_binaries,
+    bazel_binaries = bazel_binaries_to_lbls,
     bazel_cmd = "test :spec --test_output=all",
     expected_output = """TEST RUN PASSED
 
@@ -94,7 +94,7 @@ Failed:   0""",
 
 rules_elm_integration_test_each_bazel(
     name = "elm_proto_complex",
-    bazel_binaries = bazel_binaries,
+    bazel_binaries = bazel_binaries_to_lbls,
     bazel_cmd = "test //foo:spec --test_output=all",
     expected_output = """TEST RUN PASSED
 
@@ -108,7 +108,7 @@ Failed:   0""",
 test_suite(
     name = "integration_tests",
     tests = gen_test_names_each(
-        bazel_binaries = bazel_binaries,
+        bazel_binaries = bazel_binaries.versions.all,
         name_prefixes = [
             "elm_binary",
             "elm_binary_no_deps_negative",
