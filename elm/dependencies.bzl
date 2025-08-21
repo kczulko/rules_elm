@@ -40,7 +40,7 @@ def elm_dependencies():
     if not native.existing_rule("rules_shell"):
         http_archive(
             name = "rules_shell",
-            sha256 = "b15cc2e698a3c553d773ff4af35eb4b3ce2983c319163707dddd9e70faaa062d",
-            strip_prefix = "rules_shell-0.5.0",
-            url = "https://github.com/bazelbuild/rules_shell/releases/download/v0.5.0/rules_shell-v0.5.0.tar.gz",
+            sha256 = "fce2a7a974aa70e9367068122e19c39a6a27a5aca30698bcf9030beb529612b6",
+            strip_prefix = "rules_shell-0.6.0",
+            url = "https://github.com/bazelbuild/rules_shell/releases/download/v0.6.0/rules_shell-v0.6.0.tar.gz",
         )
