@@ -24,7 +24,7 @@ jobs:
         uses: actions/cache@v4
         env:
           # Bump this number to invalidate the GH actions cache
-          cache-id: 2
+          cache-id: 3
         with:
           path: |
             ~/.bazel-disk-cache
