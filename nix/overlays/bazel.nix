@@ -1,6 +1,6 @@
 final: prev:
 let
-  bazelisk-bazel = { bazelisk, makeWrapper, writeShellApplication, coreutils-prefixed }:
+  bazelisk-bazel = { bazelisk, makeWrapper, writeShellApplication }:
     let
       bazelisk' = bazelisk.overrideAttrs (final: prev: {
         nativeBuildInputs = [ makeWrapper ] ++ prev.nativeBuildInputs;
