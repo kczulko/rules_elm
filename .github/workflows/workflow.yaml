@@ -12,9 +12,9 @@ jobs:
       fail-fast: true
       matrix:
         os:
-          # - ubuntu-latest  # x86_64-linux
-          - macos-latest   # aarch64
-          - macos-15-intel # x86_64-darwin
+          - ubuntu-latest  # x86_64-linux
+          # - macos-latest   # aarch64
+          # - macos-15-intel # x86_64-darwin
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
