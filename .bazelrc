@@ -8,6 +8,6 @@ query:nix --deleted_packages=examples/elm-binary,examples/elm-binary/nix-toolcha
 
 build:ci --config=nix
 build:ci --test_output=all
-build:ci --disk_cache=~/.bazel-disk-cache
+# build:ci --disk_cache=~/.bazel-disk-cache
 # keep dependencies consistent
 build:ci --check_direct_dependencies=error
