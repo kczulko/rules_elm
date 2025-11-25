@@ -21,7 +21,7 @@ jobs:
       - uses: wimpysworld/nothing-but-nix@main
         if: runner.os == 'Linux'
         with:
-          hatchet-protocol: 'cleave'
+          hatchet-protocol: 'rampage'
           witness-carnage: true  # Default: false
       # - uses: cachix/install-nix-action@v31
       - uses: DeterminateSystems/nix-installer-action@main
