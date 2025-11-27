@@ -19,7 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: DeterminateSystems/nix-installer-action@main
-      # - uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Bazel disk cache
         uses: actions/cache@v4
         env:
@@ -29,6 +28,13 @@ jobs:
           path: |
             ~/.bazel-disk-cache
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
+      - name: Linux img cleanup
+        if: runner.os == 'Linux'
+        run: |
+          sudo rm -rf /usr/share/swift
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/.ghcup
+          sudo rm -rf /usr/local/lib/android
       - name: Integration tests
         run: |
           nix develop .#ci --command bazel test //examples:integration_tests --config=ci

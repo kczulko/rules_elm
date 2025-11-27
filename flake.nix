@@ -15,25 +15,25 @@
           ];
         };
 
-        targetPkgs = pkgs: with pkgs; [
+        ciTargetPkgs = pkgs: with pkgs; [
           bazelisk-bazel
-          python3
-          bash
-          nodePackages.pnpm
-          nix
-          coreutils-prefixed
-          libtool # for macos build
-          protobuf
-          nodejs
-          zlib
           gcc
+          nix
+          zlib
+          nodejs
         ];
 
+        devTargetPkgs = pkgs: (ciTargetPkgs pkgs)+ (with pkgs; [
+          python3
+          nodePackages.pnpm
+          protobuf
+        ]);
+
         shells = {
-          ci = pkgs.mkShell { packages = targetPkgs pkgs; };
+          ci = pkgs.mkShell { packages = ciTargetPkgs pkgs; };
           default = (pkgs.buildFHSEnv {
             name = "simple-bazelisk-env";
-            inherit targetPkgs;
+            targetPkgs = devTargetPkgs;
           }).env;
         };
       in
