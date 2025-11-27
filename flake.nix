@@ -16,10 +16,8 @@
         };
 
         ciTargetPkgs = pkgs: with pkgs; [
-          # bash
           bazelisk-bazel
           gcc
-          # libtool
           nix
           zlib
           nodejs
