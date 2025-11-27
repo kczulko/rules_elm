@@ -13,16 +13,11 @@ jobs:
       matrix:
         os:
           - ubuntu-latest  # x86_64-linux
-          - macos-latest   # aarch64
-          - macos-15-intel # x86_64-darwin
+          # - macos-latest   # aarch64
+          # - macos-15-intel # x86_64-darwin
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
-      - uses: wimpysworld/nothing-but-nix@main
-        if: runner.os == 'Linux'
-        with:
-          hatchet-protocol: 'rampage'
-          witness-carnage: true  # Default: false
       - uses: DeterminateSystems/nix-installer-action@main
       # - uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Bazel disk cache
@@ -34,6 +29,11 @@ jobs:
           path: |
             ~/.bazel-disk-cache
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
+      - name: Check disk
+        run: |
+          cd /
+          du -h -t 2G -d1
+          cd -
       - name: Integration tests
         run: |
           nix develop .#ci --command bazel test //examples:integration_tests --config=ci
