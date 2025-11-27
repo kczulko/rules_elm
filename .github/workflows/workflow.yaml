@@ -29,12 +29,12 @@ jobs:
           path: |
             ~/.bazel-disk-cache
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
-      - name: Check disk
-        run: |
-          cd /
-          du -h -t 2G -d5 \
-            --exclude=./proc
-          cd -
+      # - name: Check disk
+        # run: |
+          # cd /
+          # du -h -t 2G -d5 \
+            # --exclude=./proc
+          # cd -
       - name: Possible cleanup
         run: |
           sudo rm -rf /usr/share/swift
