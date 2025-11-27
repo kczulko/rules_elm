@@ -35,6 +35,12 @@ jobs:
           du -h -t 2G -d5 \
             --exclude=./proc
           cd -
+      - name: Possible cleanup
+        run: |
+          sudo rm -rf /usr/share/swift
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/.ghcup
+          sudo rm -rf /usr/local/lib/android
       - name: Integration tests
         run: |
           nix develop .#ci --command bazel test //examples:integration_tests --config=ci
