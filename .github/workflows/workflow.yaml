@@ -32,7 +32,8 @@ jobs:
       - name: Check disk
         run: |
           cd /
-          du -h -t 2G -d1
+          du -h -t 2G -d5 \
+            --exclude=./proc
           cd -
       - name: Integration tests
         run: |
