@@ -28,6 +28,7 @@ jobs:
           path: |
             ~/.bazel-disk-cache
           key: ${{ matrix.os }}-bazel-ci-cache-${{ env.cache-id }}
+          enableCrossOsArchive: true
       - name: Linux img cleanup
         if: runner.os == 'Linux'
         run: |
