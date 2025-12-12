@@ -1,3 +1,4 @@
+common --module_mirrors=https://bcr.cloudflaremirrors.com
 common --host_platform=@rules_nixpkgs_core//platforms:host
 # to speedup the legacy test we avoid protoc compilation by specifying custom protoc compiler
 build:bazel7_nobzlmod --noenable_bzlmod --proto_compiler=@nixpkgs_protobuf//:bin/protoc

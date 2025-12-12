@@ -1,3 +1,5 @@
+common --module_mirrors=https://bcr.cloudflaremirrors.com
+
 build:nix --enable_bzlmod
 build:nix --host_platform=@rules_nixpkgs_core//platforms:host
 build:nix --host_cxxopt=-std=c++14
