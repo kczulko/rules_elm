@@ -21,10 +21,10 @@ def elm_dependencies():
     if not native.existing_rule("com_google_protobuf"):
         http_archive(
             name = "com_google_protobuf",
-            sha256 = "eb671d900b05d8e17f4cd6ca61bfcc60770d209af1a289cb1a200815d6b621ae",
-            strip_prefix = "protobuf-33.2",
+            sha256 = "136a07aad488cc502b11c4416fe4a7df2dfdea1d0833a7a8211000bf952728ba",
+            strip_prefix = "protobuf-33.4",
             urls = [
-                "https://github.com/protocolbuffers/protobuf/archive/v33.2.tar.gz",
+                "https://github.com/protocolbuffers/protobuf/archive/v33.4.tar.gz",
             ],
         )
 
