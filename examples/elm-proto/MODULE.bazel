@@ -184,11 +184,6 @@ nix_pkg.attr(
     repo = "@nixpkgs",
 )
 nix_pkg.attr(
-    name = "nixpkgs_protobuf",
-    attr = "protobuf_33",
-    repo = "@nixpkgs",
-)
-nix_pkg.attr(
     name = "nixpkgs_python3",
     attr = "python3",
     repo = "@nixpkgs",
@@ -196,7 +191,6 @@ nix_pkg.attr(
 use_repo(
     nix_pkg,
     "nixpkgs_nodejs",
-    "nixpkgs_protobuf",
     "nixpkgs_python3",
 )
 

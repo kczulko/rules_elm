@@ -18,6 +18,31 @@ rules_js_dependencies()
 load("@rules_python//python:repositories.bzl", "py_repositories")
 py_repositories()
 
+http_archive(
+    name = "protobuf_x86_64-linux",
+    urls = [
+        "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-linux-x86_64.zip".replace("{v}", PROTOC_VERSION),
+    ],
+    build_file_content = """exports_files(["bin/protoc"])""",
+    sha256 = "c0040ea9aef08fdeb2c74ca609b18d5fdbfc44ea0042fcfbfb38860d35f7dd66",
+)
+http_archive(
+    name = "protobuf_x86_64-darwin",
+    urls = [
+        "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-osx-x86_64.zip".replace("{v}", PROTOC_VERSION),
+    ],
+    build_file_content = """exports_files(["bin/protoc"])""",
+    sha256 = "a49bec10d039e902d3b43e49938c42526f90011467609864fa6386ac4014da58",
+)
+http_archive(
+    name = "protobuf_aarch64-darwin",
+    urls = [
+        "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-osx-aarch_64.zip".replace("{v}", PROTOC_VERSION),
+    ],
+    build_file_content = """exports_files(["bin/protoc"])""",
+    sha256 = "726297dcfed58592fd35620a5a6246ae020c39e88f3fd4cb1827df7bcf3dfcf1",
+)
+
 _rules_nixpkgs_version = "0.13.0"
 strip_prefix = "rules_nixpkgs-%s" % _rules_nixpkgs_version
 rules_nixpkgs_url = \
@@ -37,11 +62,6 @@ nixpkgs_local_repository(name = "nixpkgs", nix_file = "//:nixpkgs.nix", nix_file
 nixpkgs_package(
     name = "nixpkgs_nodejs",
     attribute_path = "nodejs",
-    repository = "@nixpkgs"
-)
-nixpkgs_package(
-    name = "nixpkgs_protobuf",
-    attribute_path = "protobuf",
     repository = "@nixpkgs"
 )
 nixpkgs_package(
