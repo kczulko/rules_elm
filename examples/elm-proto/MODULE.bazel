@@ -12,7 +12,7 @@ local_path_override(
 bazel_dep(name = "rules_nixpkgs_core", version = "0.13.0")
 bazel_dep(name = "rules_nodejs", version = "6.6.2")
 bazel_dep(name = "rules_python", version = "1.6.3")
-bazel_dep(name = "protobuf", version = "33.2", repo_name = "com_google_protobuf")
+bazel_dep(name = "protobuf", version = "33.4", repo_name = "com_google_protobuf")
 
 elm = use_extension("@rules_elm//elm:extensions.bzl", "elm")
 elm.repository(
@@ -139,9 +139,12 @@ use_repo(
 )
 
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
-nix_repo.github(
+nix_repo.file(
     name = "nixpkgs",
-    commit = "cfd6b5fc90b15709b780a5a1619695a88505a176",
+    file = "//:nixpkgs.nix",
+    file_deps = [
+        "//:flake.lock",
+    ],
 )
 use_repo(nix_repo, "nixpkgs")
 
@@ -153,7 +156,7 @@ nix_pkg.attr(
 )
 nix_pkg.attr(
     name = "nixpkgs_protobuf",
-    attr = "protobuf",
+    attr = "protobuf_33",
     repo = "@nixpkgs",
 )
 nix_pkg.attr(
