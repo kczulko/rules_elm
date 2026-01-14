@@ -55,20 +55,12 @@ toolchain(
 
 proto_toolchain(
     name = "nixpkgs_protoc_toolchain",
-    # exec_compatible_with = [
-        # "@rules_nixpkgs_core//constraints:support_nix",
-    # ],
-    # proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
-    proto_compiler = "@protobuf_x86_64_linux//:bin/protoc",
+    proto_compiler = ":proto_compiler",
 )
 
 elm_proto_toolchain(
     name = "elm_proto_toolchain_opt_json",
-    # exec_compatible_with = [
-        # "@rules_nixpkgs_core//constraints:support_nix",
-    # ],
-    # proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
-    proto_compiler = "@protobuf_x86_64_linux//:bin/protoc",
+    proto_compiler = ":proto_compiler",
     protoc_opts = [
         "--elm_opt=json=decode",
     ],
