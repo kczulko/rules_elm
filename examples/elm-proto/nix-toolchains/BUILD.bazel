@@ -10,24 +10,24 @@ load(":proto_deps.bzl", "elm_proto_deps")
 config_setting(
     name = "x86_64-linux",
     constraint_values = [
-        "@platform//os:linux",
-        "@platform//cpu:x86_64",
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
     ]
 )
 
 config_setting(
     name = "x86_64-darwin",
     constraint_values = [
-        "@platform//os:macos",
-        "@platform//cpu:x86_64",
+        "@platforms//os:macos",
+        "@platforms//cpu:x86_64",
     ]
 )
 
 config_setting(
     name = "aarch64-darwin",
     constraint_values = [
-        "@platform//os:macos",
-        "@platform//cpu:aarch64",
+        "@platforms//os:macos",
+        "@platforms//cpu:aarch64",
     ]
 )
 
