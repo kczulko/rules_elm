@@ -18,6 +18,7 @@ rules_js_dependencies()
 load("@rules_python//python:repositories.bzl", "py_repositories")
 py_repositories()
 
+PROTOC_VERSION = "33.4"
 http_archive(
     name = "protobuf_x86_64-linux",
     urls = [
