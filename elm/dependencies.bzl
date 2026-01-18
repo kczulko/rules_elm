@@ -13,9 +13,9 @@ def elm_dependencies():
     if not native.existing_rule("rules_python"):
         http_archive(
             name = "rules_python",
-            sha256 = "2f5c284fbb4e86045c2632d3573fc006facbca5d1fa02976e89dc0cd5488b590",
-            strip_prefix = "rules_python-1.6.3",
-            url = "https://github.com/bazelbuild/rules_python/releases/download/1.6.3/rules_python-1.6.3.tar.gz",
+            sha256 = "0558021abbd244f3e2b51120a7ec4bded37c6cb02c372aaa188da9ba375560d8",
+            strip_prefix = "rules_python-1.8.0",
+            url = "https://github.com/bazelbuild/rules_python/releases/download/1.8.0/rules_python-1.8.0.tar.gz",
         )
 
     if not native.existing_rule("com_google_protobuf"):
