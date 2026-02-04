@@ -5,9 +5,9 @@ def elm_dependencies():
     if not native.existing_rule("aspect_rules_js"):
         http_archive(
             name = "aspect_rules_js",
-            sha256 = "1774702556e1d0b83b7f5eb58ec95676afe6481c62596b53f5b96575bacccf73",
-            strip_prefix = "rules_js-2.9.2",
-            url = "https://github.com/aspect-build/rules_js/releases/download/v2.9.2/rules_js-v2.9.2.tar.gz",
+            sha256 = "e82460550e2975392efa9e15bdb6718738d587a2072b0c4a1020262177d95295",
+            strip_prefix = "rules_js-3.1.0",
+            url = "https://github.com/aspect-build/rules_js/releases/download/v3.1.0/rules_js-v3.1.0.tar.gz",
         )
 
     if not native.existing_rule("rules_python"):
