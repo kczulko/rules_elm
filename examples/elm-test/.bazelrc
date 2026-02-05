@@ -1,4 +1,1 @@
 common --host_platform=@rules_nixpkgs_core//platforms:host
-build:bazel7 --enable_bzlmod
-build:bazel8 --enable_bzlmod
-

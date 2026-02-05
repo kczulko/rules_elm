@@ -5,9 +5,6 @@ load(
     "integration_test_utils",
 )
 
-def mkBazelRcPrefix(bzl_version):
-    return "bazel{}".format(bzl_version[0])
-
 def gen_name(name_prefix, bazel_binary_name):
     return "{}_{}".format(name_prefix, bazel_binary_name)
 
@@ -60,7 +57,7 @@ def rules_elm_integration_test_each_bazel(
         rules_elm_integration_test(
             name = gen_name(name, bzl_version),
             workspace_path = workspace_path,
-            bazel_cmd = bazel_cmd + " --config={}".format(mkBazelRcPrefix(bzl_version)),
+            bazel_cmd = bazel_cmd,
             expected_output = expected_output,
             test_runner = test_runner,
             bazel_binary = bzl_label,
