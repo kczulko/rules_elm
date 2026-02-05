@@ -1,9 +1,7 @@
 common --host_platform=@rules_nixpkgs_core//platforms:host
 # to speedup the legacy test we avoid protoc compilation by specifying custom protoc compiler
-build:bazel7_nobzlmod --noenable_bzlmod --proto_compiler=//nix-toolchains:proto_compiler
-build:bazel7_bzlmod --enable_bzlmod --incompatible_enable_proto_toolchain_resolution
-build:bazel8_nobzlmod --noenable_bzlmod --enable_workspace --proto_compiler=//nix-toolchains:proto_compiler
-build:bazel8_bzlmod --enable_bzlmod --incompatible_enable_proto_toolchain_resolution
+build:bazel7 --enable_bzlmod --incompatible_enable_proto_toolchain_resolution
+build:bazel8 --enable_bzlmod --incompatible_enable_proto_toolchain_resolution
 # common --protocopt="--elm_opt=json"
 # getting rid of [...]execroot/_main/bazel-out/k8-fastbuild/bin/elm_book_proto_elm_proto_compile is a dangling symbolic link
 # common --noincompatible_sandbox_hermetic_tmp
