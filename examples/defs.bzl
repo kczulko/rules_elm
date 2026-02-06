@@ -63,9 +63,6 @@ def rules_elm_integration_test_each_bazel(
             bazel_binary = bzl_label,
             tags = [
                 bzl_version,
-                # for bazel7 sandboxing issue
-                # https://github.com/bazelbuild/bazel/issues/1990
-                "no-sandbox",
             ],
             **kwargs,
         )

@@ -1,6 +1,6 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@com_google_protobuf//bazel/common:proto_common.bzl", "proto_common")
-load("@com_google_protobuf//bazel/common:proto_info.bzl", "ProtoInfo")
+load("@protobuf//bazel/common:proto_common.bzl", "proto_common")
+load("@protobuf//bazel/common:proto_info.bzl", "ProtoInfo")
 load(
     "//elm/private:providers.bzl",
     _ElmLibrary = "ElmLibrary",
@@ -96,7 +96,7 @@ _elm_proto_aspect = aspect(
             values = ["", "grpcDevTools"],
         ),
         "_well_known_protos": attr.label(
-            default = "@com_google_protobuf//:well_known_protos"
+            default = "@protobuf//:well_known_protos"
         )
     } | _if_legacy_toolchain({
         "_aspect_proto_toolchain": attr.label(

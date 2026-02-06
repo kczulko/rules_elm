@@ -1,4 +1,4 @@
-load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
+load("@protobuf//bazel:proto_library.bzl", "proto_library")
 load("@rules_elm//elm:defs.bzl", "elm_test")
 load("@rules_elm//proto:defs.bzl", "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION", "elm_proto_library")
 load("//nix-toolchains:proto_deps.bzl", "elm_proto_deps")
@@ -8,8 +8,8 @@ proto_library(
     srcs = ["foo.proto"],
     deps = [
         "//:book_proto",
-        "@com_google_protobuf//:any_proto",
-        "@com_google_protobuf//:timestamp_proto",
+        "@protobuf//:any_proto",
+        "@protobuf//:timestamp_proto",
     ],
 )
 
