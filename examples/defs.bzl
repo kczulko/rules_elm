@@ -37,6 +37,7 @@ def rules_elm_integration_test(
         workspace_files = integration_test_utils.glob_workspace_files(workspace_path) + [
             "@rules_elm//:local_repository_files"
         ],
+        env_inherit = ["PATH"],
         env = {
             "BAZEL_CMD": bazel_cmd,
             "EXPECTED_OUTPUT": expected_output,
