@@ -1,6 +1,2 @@
 common --host_platform=@rules_nixpkgs_core//platforms:host
 common --verbose_failures
-common:bazel7_bzlmod --enable_bzlmod
-common:bazel7_nobzlmod --noenable_bzlmod
-common:bazel8_bzlmod --enable_bzlmod
-common:bazel8_nobzlmod --noenable_bzlmod  --enable_workspace

@@ -7,4 +7,3 @@ elm_binary = _elm_binary
 elm_package = _elm_package
 elm_library = _elm_library
 elm_test = _elm_test
-

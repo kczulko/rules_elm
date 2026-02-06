@@ -5,26 +5,20 @@ load(
     "integration_test_utils",
 )
 
-_configs = ["bzlmod", "nobzlmod"]
-
-def mkBazelRcPrefix(bzl_version):
-    return "bazel{}".format(bzl_version[0])
-
-def gen_name(name_prefix, bazel_binary_name, config):
-    return "{}_{}_{}".format(name_prefix, bazel_binary_name, config)
+def gen_name(name_prefix, bazel_binary_name):
+    return "{}_{}".format(name_prefix, bazel_binary_name)
 
 
-def gen_test_names(name_prefix, bazel_binaries, config):
+def gen_test_names(name_prefix, bazel_binaries):
     return [
-        gen_name(name_prefix, bazel_binary_name, config)
+        gen_name(name_prefix, bazel_binary_name)
         for bazel_binary_name in bazel_binaries
     ]
 
 def gen_test_names_each(name_prefixes, bazel_binaries):
     result = []
     for name_prefix in name_prefixes:
-        for config in _configs:
-            result += gen_test_names(name_prefix, bazel_binaries, config)
+        result += gen_test_names(name_prefix, bazel_binaries)
 
     return result
 
@@ -59,20 +53,19 @@ def rules_elm_integration_test_each_bazel(
     test_runner = ":output_match_runner",
     **kwargs,
 ):
-    for config in _configs:
-        for bzl_version, bzl_label in bazel_binaries:
-            rules_elm_integration_test(
-                name = gen_name(name, bzl_version, config),
-                workspace_path = workspace_path,
-                bazel_cmd = bazel_cmd + " --config={}_{}".format(mkBazelRcPrefix(bzl_version), config),
-                expected_output = expected_output,
-                test_runner = test_runner,
-                bazel_binary = bzl_label,
-                tags = [
-                    bzl_version,
-                    # for bazel7 sandboxing issue
-                    # https://github.com/bazelbuild/bazel/issues/1990
-                    "no-sandbox",
-                ],
-                **kwargs,
-            )
+    for bzl_version, bzl_label in bazel_binaries:
+        rules_elm_integration_test(
+            name = gen_name(name, bzl_version),
+            workspace_path = workspace_path,
+            bazel_cmd = bazel_cmd,
+            expected_output = expected_output,
+            test_runner = test_runner,
+            bazel_binary = bzl_label,
+            tags = [
+                bzl_version,
+                # for bazel7 sandboxing issue
+                # https://github.com/bazelbuild/bazel/issues/1990
+                "no-sandbox",
+            ],
+            **kwargs,
+        )
