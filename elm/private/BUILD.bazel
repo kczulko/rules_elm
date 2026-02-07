@@ -57,7 +57,7 @@ bzl_library(
 
 bzl_library(
     name = "elm_test",
-    srcs = ["elm_test.bzl"],
+    srcs = ["elm_test.bzl"],  # keep
     visibility = ["//elm:__subpackages__"],
     deps = [
         ":common",
@@ -78,11 +78,11 @@ bzl_library(
 bzl_library(
     name = "elm_toolchain",
     srcs = ["elm_toolchain.bzl"],
-    visibility = ["//docs:__pkg__"],
+    visibility = ["//elm:__subpackages__"],
 )
 
 bzl_library(
     name = "providers",
     srcs = ["providers.bzl"],
-    visibility = ["//elm:__subpackages__"],
+    visibility = ["//:__subpackages__"],
 )

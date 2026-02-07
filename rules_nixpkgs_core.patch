@@ -1,0 +1,85 @@
+diff --git a/MODULE.bazel b/MODULE.bazel
+index e7d3864..971a572 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -3,8 +3,8 @@ module(
+     version = "0.13.0",
+ )
+ 
+-bazel_dep(name = "platforms", version = "0.0.4")
+-bazel_dep(name = "bazel_skylib", version = "1.0.3")
++bazel_dep(name = "platforms", version = "1.0.0")
++bazel_dep(name = "bazel_skylib", version = "1.8.2")
+ 
+ nix_repo = use_extension("//extensions:repository.bzl", "nix_repo")
+ nix_repo.github(
+diff --git a/platforms/BUILD.bazel b/platforms/BUILD.bazel
+index c4d0fab..6f07f15 100644
+--- a/platforms/BUILD.bazel
++++ b/platforms/BUILD.bazel
+@@ -1,6 +1,6 @@
+ platform(
+     name = "host",
+     constraint_values = ["@rules_nixpkgs_core//constraints:support_nix"],
+-    parents = ["@local_config_platform//:host"],
++    parents = ["@platforms//host"],
+     visibility = ["//visibility:public"],
+ )
+diff --git a/util.bzl b/util.bzl
+index 87cf8a4..abe51c9 100644
+--- a/util.bzl
++++ b/util.bzl
+@@ -1,6 +1,43 @@
+ load("@bazel_skylib//lib:paths.bzl", "paths")
+ load("@bazel_skylib//lib:versions.bzl", "versions")
+-load("//private/cc_toolchain:lib_cc_configure.bzl", "get_cpu_value")
++
++# Taken from @rules_cc/cc/private/toolchain/lib_cc_configure.bzl:get_cpu_value
++def _get_cpu_value(repository_ctx):
++    """Compute the cpu_value based on the OS name. Doesn't %-escape the result!
++
++    Args:
++      repository_ctx: The repository context.
++    Returns:
++      One of (darwin, freebsd, x64_windows, ppc, s390x, arm, aarch64, k8, piii)
++    """
++    os_name = repository_ctx.os.name
++    arch = repository_ctx.os.arch
++    if os_name.startswith("mac os"):
++        # Check if we are on x86_64 or arm64 and return the corresponding cpu value.
++        return "darwin_" + ("arm64" if arch == "aarch64" else "x86_64")
++    if os_name.find("freebsd") != -1:
++        return "freebsd"
++    if os_name.find("openbsd") != -1:
++        return "openbsd"
++    if os_name.find("windows") != -1:
++        if arch == "aarch64":
++            return "arm64_windows"
++        else:
++            return "x64_windows"
++
++    if arch in ["power", "ppc64le", "ppc", "ppc64"]:
++        return "ppc"
++    if arch in ["s390x"]:
++        return "s390x"
++    if arch in ["mips64"]:
++        return "mips64"
++    if arch in ["riscv64"]:
++        return "riscv64"
++    if arch in ["arm", "armv7l"]:
++        return "arm"
++    if arch in ["aarch64"]:
++        return "aarch64"
++    return "k8" if arch in ["amd64", "x86_64", "x64"] else "piii"
+ 
+ def fail_on_err(return_value, prefix = None):
+     """Fail if the given return value indicates an error.
+@@ -145,7 +182,7 @@ def default_constraints(repository_ctx):
+     Returns:
+       A list containing the cpu and os constraints.
+     """
+-    cpu_value = get_cpu_value(repository_ctx)
++    cpu_value = _get_cpu_value(repository_ctx)
+     cpu = {
+         "darwin": "@platforms//cpu:x86_64",
+         "darwin_x86_64": "@platforms//cpu:x86_64",

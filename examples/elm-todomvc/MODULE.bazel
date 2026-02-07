@@ -13,6 +13,14 @@ local_path_override(
     path = "../..",
 )
 
+single_version_override(
+    module_name = "rules_nixpkgs_core",
+    patch_strip = 1,
+    patches = [
+        "//:rules_nixpkgs_core.patch",
+    ],
+)
+
 elm = use_extension("@rules_elm//elm:extensions.bzl", "elm")
 elm.repository(
     name = "elm_package_elm_core",

@@ -3,7 +3,7 @@ load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 # For stardoc to reference the files
 exports_files(
     glob(["*.bzl"]),
-    visibility = ["//docs:__pkg__"]
+    visibility = ["//docs:__pkg__"],
 )
 
 toolchain_type(
@@ -15,12 +15,6 @@ filegroup(
     name = "all_files",
     srcs = glob(["*"]),
     visibility = ["//:__subpackages__"],
-)
-
-
-bzl_library(
-    name = "js_bzl",
-    srcs = ["@aspect_rules_js//js:toolchains.bzl"],
 )
 
 bzl_library(
@@ -37,7 +31,6 @@ bzl_library(
 
 bzl_library(
     name = "dependencies",
-    srcs = ["dependencies.bzl"],
     visibility = ["//visibility:public"],
     deps = [
         "@bazel_tools//tools/build_defs/repo:http.bzl",
@@ -57,20 +50,10 @@ bzl_library(
 )
 
 bzl_library(
-    name = "nodejs_bzl",
-    srcs = [
-        "@rules_nodejs//nodejs/private:bzl",
-        "@rules_nodejs//nodejs:repositories.bzl",
-    ],
-)
-
-bzl_library(
     name = "repositories",
     srcs = ["repositories.bzl"],
     visibility = ["//visibility:public"],
     deps = [
-        "js_bzl",
-        "nodejs_bzl",
         "@aspect_rules_js//npm:repositories",
         "@bazel_tools//tools/build_defs/repo:http.bzl",
         "@bazel_tools//tools/build_defs/repo:utils.bzl",

@@ -1,5 +1,5 @@
-load("@com_google_protobuf//bazel/private:toolchain_helpers.bzl", "toolchains")
-load("@com_google_protobuf//bazel/toolchains:proto_toolchain.bzl", "proto_toolchain")
+load("@protobuf//bazel/private:toolchain_helpers.bzl", "toolchains")
+load("@protobuf//bazel/toolchains:proto_toolchain.bzl", "proto_toolchain")
 load("@rules_elm//proto:defs.bzl", "ELM_PROTO_TOOLCHAIN")
 load("@rules_elm//proto:elm_proto_toolchain_rule.bzl", "elm_proto_toolchain")
 load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")

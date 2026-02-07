@@ -37,6 +37,7 @@ def rules_elm_integration_test(
         workspace_files = integration_test_utils.glob_workspace_files(workspace_path) + [
             "@rules_elm//:local_repository_files"
         ],
+        env_inherit = ["PATH"],
         env = {
             "BAZEL_CMD": bazel_cmd,
             "EXPECTED_OUTPUT": expected_output,
@@ -63,9 +64,6 @@ def rules_elm_integration_test_each_bazel(
             bazel_binary = bzl_label,
             tags = [
                 bzl_version,
-                # for bazel7 sandboxing issue
-                # https://github.com/bazelbuild/bazel/issues/1990
-                "no-sandbox",
             ],
             **kwargs,
         )
