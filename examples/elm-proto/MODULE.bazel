@@ -147,7 +147,7 @@ use_repo(
     "elm_package_elm_time",
 )
 
-PROTOC_VERSION = "33.4"
+PROTOC_VERSION = "33.5"
 
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 http_archive(
