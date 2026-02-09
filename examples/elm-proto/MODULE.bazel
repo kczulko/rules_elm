@@ -156,7 +156,7 @@ http_archive(
         "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-linux-x86_64.zip".replace("{v}", PROTOC_VERSION),
     ],
     build_file_content = """exports_files(["bin/protoc"])""",
-    sha256 = "c0040ea9aef08fdeb2c74ca609b18d5fdbfc44ea0042fcfbfb38860d35f7dd66",
+    sha256 = "24e58fb231d50306ee28491f33a170301e99540f7e29ca461e0e80fd1239f8d1",
 )
 http_archive(
     name = "protobuf_x86_64-darwin",
