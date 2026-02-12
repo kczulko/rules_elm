@@ -11,7 +11,7 @@ local_path_override(
 
 bazel_dep(name = "rules_nixpkgs_core", version = "0.13.0")
 bazel_dep(name = "rules_nodejs", version = "6.7.3")
-bazel_dep(name = "rules_python", version = "1.6.3")
+bazel_dep(name = "rules_python", version = "1.8.4")
 bazel_dep(name = "protobuf", version = "33.5", repo_name = "protobuf")
 bazel_dep(name = "platforms", version = "1.0.0")
 
