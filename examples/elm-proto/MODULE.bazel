@@ -164,7 +164,7 @@ http_archive(
         "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-osx-x86_64.zip".replace("{v}", PROTOC_VERSION),
     ],
     build_file_content = """exports_files(["bin/protoc"])""",
-    sha256 = "a49bec10d039e902d3b43e49938c42526f90011467609864fa6386ac4014da58",
+    sha256 = "7f31625f8bec4929082ae9209e101c1c03692624457cc6332f83736db495ee92",
 )
 http_archive(
     name = "protobuf_aarch64-darwin",
