@@ -12,7 +12,7 @@ local_path_override(
 bazel_dep(name = "rules_nixpkgs_core", version = "0.13.0")
 bazel_dep(name = "rules_nodejs", version = "6.7.3")
 bazel_dep(name = "rules_python", version = "1.6.3")
-bazel_dep(name = "protobuf", version = "33.4", repo_name = "protobuf")
+bazel_dep(name = "protobuf", version = "33.5", repo_name = "protobuf")
 bazel_dep(name = "platforms", version = "1.0.0")
 
 single_version_override(
@@ -147,7 +147,7 @@ use_repo(
     "elm_package_elm_time",
 )
 
-PROTOC_VERSION = "33.4"
+PROTOC_VERSION = "33.5"
 
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 http_archive(
@@ -156,7 +156,7 @@ http_archive(
         "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-linux-x86_64.zip".replace("{v}", PROTOC_VERSION),
     ],
     build_file_content = """exports_files(["bin/protoc"])""",
-    sha256 = "c0040ea9aef08fdeb2c74ca609b18d5fdbfc44ea0042fcfbfb38860d35f7dd66",
+    sha256 = "24e58fb231d50306ee28491f33a170301e99540f7e29ca461e0e80fd1239f8d1",
 )
 http_archive(
     name = "protobuf_x86_64-darwin",
@@ -164,7 +164,7 @@ http_archive(
         "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-osx-x86_64.zip".replace("{v}", PROTOC_VERSION),
     ],
     build_file_content = """exports_files(["bin/protoc"])""",
-    sha256 = "a49bec10d039e902d3b43e49938c42526f90011467609864fa6386ac4014da58",
+    sha256 = "7f31625f8bec4929082ae9209e101c1c03692624457cc6332f83736db495ee92",
 )
 http_archive(
     name = "protobuf_aarch64-darwin",
@@ -172,7 +172,7 @@ http_archive(
         "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-osx-aarch_64.zip".replace("{v}", PROTOC_VERSION),
     ],
     build_file_content = """exports_files(["bin/protoc"])""",
-    sha256 = "726297dcfed58592fd35620a5a6246ae020c39e88f3fd4cb1827df7bcf3dfcf1",
+    sha256 = "7084c6482e3bb416a33fe2162ba566711773b842e6953bf6cb181647b9ef57c0",
 )
 
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
