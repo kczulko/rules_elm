@@ -1,4 +1,4 @@
-load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@gazelle//:def.bzl", "gazelle", "gazelle_binary")
 
 filegroup(
     name = "local_repository_files",
@@ -6,7 +6,6 @@ filegroup(
         ".bazelignore",
         "BUILD.bazel",
         "MODULE.bazel",
-        "WORKSPACE",
         "//elm:all_files",
         "//elm/private:all_files",
         "//proto:all_files",

@@ -1,14 +1,19 @@
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@bazel_binaries//:defs.bzl", "bazel_binaries")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load(
     "@rules_elm//examples:defs.bzl",
     "gen_test_names_each",
     "rules_elm_integration_test",
     "rules_elm_integration_test_each_bazel",
 )
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 
 bazel_binaries_to_lbls = [
-    (v, bazel_binaries.label(v)) for v in bazel_binaries.versions.all
+    (
+        v,
+        bazel_binaries.label(v),
+    )
+    for v in bazel_binaries.versions.all
 ]
 
 sh_binary(

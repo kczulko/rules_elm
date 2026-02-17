@@ -2,7 +2,7 @@
   description = "rules_elm nix flake";
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
   };
 
   outputs = { ... } @ args: with args;
@@ -15,19 +15,24 @@
           ];
         };
 
-        ciTargetPkgs = pkgs: with pkgs; [
+        ciTargetPkgs = p: (with p; [
           bazelisk-bazel
           gcc
           nix
           zlib
           nodejs
-        ];
-
-        devTargetPkgs = pkgs: (ciTargetPkgs pkgs)+ (with pkgs; [
-          python3
-          nodePackages.pnpm
-          protobuf
         ]);
+
+        devTargetPkgs = pkgs:
+          let
+            ciPkgs = (ciTargetPkgs pkgs);
+            otherPkgs = with pkgs; [
+              python3
+              nodePackages.pnpm
+              protobuf_33
+            ];
+          in
+            ciPkgs ++ otherPkgs;
 
         shells = {
           ci = pkgs.mkShell { packages = ciTargetPkgs pkgs; };

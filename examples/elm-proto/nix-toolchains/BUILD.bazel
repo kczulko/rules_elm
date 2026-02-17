@@ -1,11 +1,44 @@
-load("@com_google_protobuf//bazel/private:toolchain_helpers.bzl", "toolchains")
-load("@com_google_protobuf//bazel/toolchains:proto_toolchain.bzl", "proto_toolchain")
+load("@protobuf//bazel/private:toolchain_helpers.bzl", "toolchains")
+load("@protobuf//bazel/toolchains:proto_toolchain.bzl", "proto_toolchain")
 load("@rules_elm//proto:defs.bzl", "ELM_PROTO_TOOLCHAIN")
 load("@rules_elm//proto:elm_proto_toolchain_rule.bzl", "elm_proto_toolchain")
 load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
 load("@rules_python//python:py_runtime.bzl", "py_runtime")
 load("@rules_python//python:py_runtime_pair.bzl", "py_runtime_pair")
 load(":proto_deps.bzl", "elm_proto_deps")
+
+config_setting(
+    name = "x86_64-linux",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ]
+)
+
+config_setting(
+    name = "x86_64-darwin",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:x86_64",
+    ]
+)
+
+config_setting(
+    name = "aarch64-darwin",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:aarch64",
+    ]
+)
+
+alias(
+    name = "proto_compiler",
+    actual = select({
+        "x86_64-linux": "@protobuf_x86_64-linux//:bin/protoc",
+        "x86_64-darwin": "@protobuf_x86_64-darwin//:bin/protoc",
+        "aarch64-darwin": "@protobuf_aarch64-darwin//:bin/protoc",
+    }),
+)
 
 nodejs_toolchain(
     name = "node_toolchain",
@@ -22,18 +55,12 @@ toolchain(
 
 proto_toolchain(
     name = "nixpkgs_protoc_toolchain",
-    exec_compatible_with = [
-        "@rules_nixpkgs_core//constraints:support_nix",
-    ],
-    proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
+    proto_compiler = ":proto_compiler",
 )
 
 elm_proto_toolchain(
     name = "elm_proto_toolchain_opt_json",
-    exec_compatible_with = [
-        "@rules_nixpkgs_core//constraints:support_nix",
-    ],
-    proto_compiler = "@nixpkgs_protobuf//:bin/protoc",
+    proto_compiler = ":proto_compiler",
     protoc_opts = [
         "--elm_opt=json=decode",
     ],

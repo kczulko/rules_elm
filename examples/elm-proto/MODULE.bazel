@@ -10,9 +10,18 @@ local_path_override(
 )
 
 bazel_dep(name = "rules_nixpkgs_core", version = "0.13.0")
-bazel_dep(name = "rules_nodejs", version = "6.6.2")
-bazel_dep(name = "rules_python", version = "1.6.3")
-bazel_dep(name = "protobuf", version = "33.1", repo_name = "com_google_protobuf")
+bazel_dep(name = "rules_nodejs", version = "6.7.3")
+bazel_dep(name = "rules_python", version = "1.8.4")
+bazel_dep(name = "protobuf", version = "33.5", repo_name = "protobuf")
+bazel_dep(name = "platforms", version = "1.0.0")
+
+single_version_override(
+    module_name = "rules_nixpkgs_core",
+    patch_strip = 1,
+    patches = [
+        "//:rules_nixpkgs_core.patch",
+    ],
+)
 
 elm = use_extension("@rules_elm//elm:extensions.bzl", "elm")
 elm.repository(
@@ -138,10 +147,41 @@ use_repo(
     "elm_package_elm_time",
 )
 
+PROTOC_VERSION = "33.5"
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+http_archive(
+    name = "protobuf_x86_64-linux",
+    urls = [
+        "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-linux-x86_64.zip".replace("{v}", PROTOC_VERSION),
+    ],
+    build_file_content = """exports_files(["bin/protoc"])""",
+    sha256 = "24e58fb231d50306ee28491f33a170301e99540f7e29ca461e0e80fd1239f8d1",
+)
+http_archive(
+    name = "protobuf_x86_64-darwin",
+    urls = [
+        "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-osx-x86_64.zip".replace("{v}", PROTOC_VERSION),
+    ],
+    build_file_content = """exports_files(["bin/protoc"])""",
+    sha256 = "7f31625f8bec4929082ae9209e101c1c03692624457cc6332f83736db495ee92",
+)
+http_archive(
+    name = "protobuf_aarch64-darwin",
+    urls = [
+        "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-osx-aarch_64.zip".replace("{v}", PROTOC_VERSION),
+    ],
+    build_file_content = """exports_files(["bin/protoc"])""",
+    sha256 = "7084c6482e3bb416a33fe2162ba566711773b842e6953bf6cb181647b9ef57c0",
+)
+
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
-nix_repo.github(
+nix_repo.file(
     name = "nixpkgs",
-    commit = "cfd6b5fc90b15709b780a5a1619695a88505a176",
+    file = "//:nixpkgs.nix",
+    file_deps = [
+        "//:flake.lock",
+    ],
 )
 use_repo(nix_repo, "nixpkgs")
 
@@ -152,11 +192,6 @@ nix_pkg.attr(
     repo = "@nixpkgs",
 )
 nix_pkg.attr(
-    name = "nixpkgs_protobuf",
-    attr = "protobuf",
-    repo = "@nixpkgs",
-)
-nix_pkg.attr(
     name = "nixpkgs_python3",
     attr = "python3",
     repo = "@nixpkgs",
@@ -164,7 +199,6 @@ nix_pkg.attr(
 use_repo(
     nix_pkg,
     "nixpkgs_nodejs",
-    "nixpkgs_protobuf",
     "nixpkgs_python3",
 )
 

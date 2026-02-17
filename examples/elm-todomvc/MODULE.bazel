@@ -4,13 +4,21 @@ module(
 )
 
 bazel_dep(name = "rules_elm")
-bazel_dep(name = "aspect_rules_js", version = "2.8.3")
+bazel_dep(name = "aspect_rules_js", version = "2.9.2")
 bazel_dep(name = "rules_nixpkgs_core", version = "0.13.0")
-bazel_dep(name = "rules_nodejs", version = "6.6.2")
-bazel_dep(name = "rules_python", version = "1.6.3")
+bazel_dep(name = "rules_nodejs", version = "6.7.3")
+bazel_dep(name = "rules_python", version = "1.8.4")
 local_path_override(
     module_name = "rules_elm",
     path = "../..",
+)
+
+single_version_override(
+    module_name = "rules_nixpkgs_core",
+    patch_strip = 1,
+    patches = [
+        "//:rules_nixpkgs_core.patch",
+    ],
 )
 
 elm = use_extension("@rules_elm//elm:extensions.bzl", "elm")

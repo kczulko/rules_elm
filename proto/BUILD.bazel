@@ -1,5 +1,5 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("@com_google_protobuf//bazel/toolchains:proto_lang_toolchain.bzl", "proto_lang_toolchain")
+load("@protobuf//bazel/toolchains:proto_lang_toolchain.bzl", "proto_lang_toolchain")
 
 filegroup(
     name = "all_files",
@@ -28,8 +28,8 @@ bzl_library(
     deps = [
         "//elm/private:providers",
         "@bazel_skylib//lib:paths",
-        "@com_google_protobuf//bazel/common:proto_common",
-        "@com_google_protobuf//bazel/common:proto_info",
+        "@protobuf//bazel/common:proto_common_bzl", # keep
+        "@protobuf//bazel/common:proto_info_bzl", # keep
     ],
 )
 
@@ -38,7 +38,7 @@ bzl_library(
     srcs = ["elm_proto_toolchain_rule.bzl"],
     visibility = ["//visibility:public"],
     deps = [
-        "@com_google_protobuf//bazel/common:proto_common",
+        "@protobuf//bazel/common:proto_common_bzl", # keep
         "@rules_elm//elm/private:providers",
         "@rules_elm//proto:defs",
     ],

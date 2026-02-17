@@ -8,6 +8,8 @@ build:nix --cxxopt=c++14
 build:nix --deleted_packages=examples/elm-binary,examples/elm-binary/nix-toolchains,examples/elm-proto,examples/elm-proto/foo,examples/elm-proto/nix-toolchains,examples/elm-test,examples/elm-test/nix-toolchains,examples/elm-todomvc,examples/elm-todomvc/nix-toolchains
 query:nix --deleted_packages=examples/elm-binary,examples/elm-binary/nix-toolchains,examples/elm-proto,examples/elm-proto/foo,examples/elm-proto/nix-toolchains,examples/elm-test,examples/elm-test/nix-toolchains,examples/elm-todomvc,examples/elm-todomvc/nix-toolchains
 
+common --@protobuf//bazel/toolchains:prefer_prebuilt_protoc
+
 build:ci --config=nix
 build:ci --test_output=all
 build:ci --disk_cache=~/.bazel-disk-cache
