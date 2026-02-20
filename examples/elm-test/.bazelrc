@@ -1,1 +1,2 @@
+common --module_mirrors=https://bcr.cloudflaremirrors.com
 common --host_platform=@rules_nixpkgs_core//platforms:host
