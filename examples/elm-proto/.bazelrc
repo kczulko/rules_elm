@@ -1,6 +1,6 @@
 common --module_mirrors=https://bcr.cloudflaremirrors.com
 common --host_platform=@rules_nixpkgs_core//platforms:host
-# to speedup the legacy test we avoid protoc compilation by specifying custom protoc compiler
+build --@protobuf//bazel/toolchains:prefer_prebuilt_protoc
 build --incompatible_enable_proto_toolchain_resolution
 # common --protocopt="--elm_opt=json"
 # getting rid of [...]execroot/_main/bazel-out/k8-fastbuild/bin/elm_book_proto_elm_proto_compile is a dangling symbolic link
