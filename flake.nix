@@ -35,7 +35,11 @@
             ciPkgs ++ otherPkgs;
 
         shells = {
-          ci = pkgs.mkShell { packages = ciTargetPkgs pkgs; };
+          ci = pkgs.mkShell {
+            # 'unset' android home
+            ANDROID_HOME = "";
+            packages = ciTargetPkgs pkgs;
+          };
           default = (pkgs.buildFHSEnv {
             name = "simple-bazelisk-env";
             targetPkgs = devTargetPkgs;
