@@ -147,7 +147,7 @@ use_repo(
     "elm_package_elm_time",
 )
 
-PROTOC_VERSION = "33.6"
+PROTOC_VERSION = "35.1"
 
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 http_archive(
@@ -156,7 +156,7 @@ http_archive(
         "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-linux-x86_64.zip".replace("{v}", PROTOC_VERSION),
     ],
     build_file_content = """exports_files(["bin/protoc"])""",
-    sha256 = "9c49962391ff8b5754342509efc3885db91dfe11a358e1e98c9a71518f0ad199",
+    sha256 = "6930ebf62bd4ea607b98fff052596c6ee564b9835b4ce172c75a3f53ae9d91b7",
 )
 http_archive(
     name = "protobuf_x86_64-darwin",
@@ -164,7 +164,7 @@ http_archive(
         "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-osx-x86_64.zip".replace("{v}", PROTOC_VERSION),
     ],
     build_file_content = """exports_files(["bin/protoc"])""",
-    sha256 = "13a2c245613ed7eca4a8c1a779545f0f2762f2735b2f7d7f7d6fe2618440ae2d",
+    sha256 = "537d73604a344ded6fc94e98e07e529d4fe3e4a0b09e59905353950fafc2a1f7",
 )
 http_archive(
     name = "protobuf_aarch64-darwin",
@@ -172,7 +172,7 @@ http_archive(
         "https://github.com/protocolbuffers/protobuf/releases/download/v{v}/protoc-{v}-osx-aarch_64.zip".replace("{v}", PROTOC_VERSION),
     ],
     build_file_content = """exports_files(["bin/protoc"])""",
-    sha256 = "606aca137976af9090847025dcc8fc0daceb5cbbc5a46819296118fc53f0b870",
+    sha256 = "193289af0470c6a1aada357d4fba0bbf8d78bfaac8b5e42ca30af2ef75583de2",
 )
 
 nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
