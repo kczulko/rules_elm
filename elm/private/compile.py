@@ -11,7 +11,7 @@ def mkdir(directory):
     finally:
         os.umask(original_umask)
 
-PACKAGES_DIR = "elm-home/0.19.1/packages"
+PACKAGES_DIR = "elm-home/0.19.2/packages"
 mkdir(PACKAGES_DIR)
 
 (

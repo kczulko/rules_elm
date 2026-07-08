@@ -2,9 +2,9 @@
     "pnpm": {
         "onlyBuiltDependencies": []
     },
-	"dependencies": {
-		"elm-test": "0.19.1-revision17",
-		"protoc-gen-elm": "^4.0.4",
-		"uglify-js": "^3.19.3"
-	}
+    "dependencies": {
+        "elm-test": "0.19.2-0",
+        "protoc-gen-elm": "^4.0.4",
+        "uglify-js": "^3.19.3"
+    }
 }

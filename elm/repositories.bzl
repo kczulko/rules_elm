@@ -4,21 +4,21 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 def _http_archive_maybe(**kwargs):
     maybe(_http_archive, **kwargs)
 
-SUPPORTED_ELM_VERSION = "0.19.1"
+SUPPORTED_ELM_VERSION = "0.19.2"
 
 ELM_VERSIONS = {
     SUPPORTED_ELM_VERSION: {
         "x86_64-linux": {
-            "sha256": "e44af52bb27f725a973478e589d990a6428e115fe1bb14f03833134d6c0f155c",
-            "url": "https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz",
+            "sha256": "66320d27701654fa11bd0e8d84bdf9829694d5770c8dcee2dede6160fad58737",
+            "url": "https://github.com/elm/compiler/releases/download/{0}/elm-{0}-linux-x64.gz".format(SUPPORTED_ELM_VERSION),
         },
         "x86_64-darwin": {
             "sha256": "05289f0e3d4f30033487c05e689964c3bb17c0c48012510dbef1df43868545d1",
-            "url": "https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit.gz",
+            "url": "https://github.com/elm/compiler/releases/download/{0}/elm-{0}-mac-x64.gz".format(SUPPORTED_ELM_VERSION),
         },
         "aarch64-darwin": {
             "sha256": "552c8300b55dafdf52073b095e7bc6afc1b2ea2a600fbc7654bca8a241e38689",
-            "url": "https://github.com/elm/compiler/releases/download/0.19.1/binary-for-mac-64-bit-ARM.gz",
+            "url": "https://github.com/elm/compiler/releases/download/{0}/elm-{0}-mac-arm.gz".format(SUPPORTED_ELM_VERSION),
         }
     }
 }
@@ -140,9 +140,9 @@ elm_library(
     strip_import_prefix = "elm/src",
     visibility = ["//visibility:public"],
 )""",
-        sha256 = "35a23ab97942aae035a3f44de6c8582aafce16172ca702676d2c77f3228f0905",
-        strip_prefix = "node-test-runner-0.19.1-revision17",
-        urls = ["https://github.com/rtfeldman/node-test-runner/archive/0.19.1-revision17.tar.gz"],
+        sha256 = "c8f78d5c947cf3daf8208d207a3ceef39810c16fb89fd3a06a285792d09f6d3f",
+        strip_prefix = "node-test-runner-0.19.2-0",
+        urls = ["https://github.com/rtfeldman/node-test-runner/archive/refs/tags/0.19.2-0.tar.gz"],
     )
 
     elm_compilers_toolchain_repo_name = "elm_compiler_toolchains"
