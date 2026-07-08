@@ -1,7 +1,7 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", _http_archive = "http_archive", _http_file = "http_file")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
-load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
-load("@aspect_rules_js//js:toolchains.bzl", "DEFAULT_NODE_VERSION", "rules_js_register_toolchains")
+#load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
+#load("@aspect_rules_js//js:toolchains.bzl", "DEFAULT_NODE_VERSION", "rules_js_register_toolchains")
 
 def _http_archive_maybe(**kwargs):
     maybe(_http_archive, **kwargs)
@@ -163,13 +163,13 @@ elm_library(
         toolchain = "@elm_{platform}//:elm_toolchain_info",
     )
 
-    if register:
-        rules_js_register_toolchains(node_version = DEFAULT_NODE_VERSION)
+    # if register:
+        #rules_js_register_toolchains(node_version = DEFAULT_NODE_VERSION)
 
-        npm_translate_lock(
-            name = "rules_elm_npm",
-            pnpm_lock = "@rules_elm//tools/npm:pnpm-lock.yaml",
-            verify_node_modules_ignored = "@rules_elm//:.bazelignore",
-            lifecycle_hooks_exclude = ["fsevents"],
-        )
+        # npm_translate_lock(
+        #     name = "rules_elm_npm",
+        #     pnpm_lock = "@rules_elm//tools/npm:pnpm-lock.yaml",
+        #     verify_node_modules_ignored = "@rules_elm//:.bazelignore",
+        #     lifecycle_hooks_exclude = ["fsevents"],
+        # )
 
