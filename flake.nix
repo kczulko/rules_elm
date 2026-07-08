@@ -2,7 +2,7 @@
   description = "rules_elm nix flake";
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
   };
 
   outputs = { ... } @ args: with args;
@@ -28,7 +28,7 @@
             ciPkgs = (ciTargetPkgs pkgs);
             otherPkgs = with pkgs; [
               python3
-              nodePackages.pnpm
+              pnpm
               protobuf_33
             ];
           in

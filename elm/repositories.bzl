@@ -1,7 +1,5 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", _http_archive = "http_archive", _http_file = "http_file")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
-load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
-load("@aspect_rules_js//js:toolchains.bzl", "DEFAULT_NODE_VERSION", "rules_js_register_toolchains")
 
 def _http_archive_maybe(**kwargs):
     maybe(_http_archive, **kwargs)
@@ -131,7 +129,7 @@ elm_compiler_repository = repository_rule(
     }
 )
 
-def elm_register_toolchains(register = True):
+def elm_register_toolchains():
 
     _http_archive_maybe(
         name = "com_github_rtfeldman_node_test_runner",
@@ -142,9 +140,9 @@ elm_library(
     strip_import_prefix = "elm/src",
     visibility = ["//visibility:public"],
 )""",
-        sha256 = "03d4f0950527599ebe2be4d8d8abc9c8638d93abe5e667d5d3427fcecc6dc24d",
-        strip_prefix = "node-test-runner-0.19.1-revision12",
-        urls = ["https://github.com/rtfeldman/node-test-runner/archive/0.19.1-revision12.tar.gz"],
+        sha256 = "35a23ab97942aae035a3f44de6c8582aafce16172ca702676d2c77f3228f0905",
+        strip_prefix = "node-test-runner-0.19.1-revision17",
+        urls = ["https://github.com/rtfeldman/node-test-runner/archive/0.19.1-revision17.tar.gz"],
     )
 
     elm_compilers_toolchain_repo_name = "elm_compiler_toolchains"
@@ -155,21 +153,7 @@ elm_library(
             platform = platform
         )
 
-        if register:
-            native.register_toolchains("@{}//:{}_toolchain".format(elm_compilers_toolchain_repo_name, platform))
-
     elm_toolchains_repository(
         name = elm_compilers_toolchain_repo_name,
         toolchain = "@elm_{platform}//:elm_toolchain_info",
     )
-
-    if register:
-        rules_js_register_toolchains(node_version = DEFAULT_NODE_VERSION)
-
-        npm_translate_lock(
-            name = "rules_elm_npm",
-            pnpm_lock = "@rules_elm//tools/npm:pnpm-lock.yaml",
-            verify_node_modules_ignored = "@rules_elm//:.bazelignore",
-            lifecycle_hooks_exclude = ["fsevents"],
-        )
-

@@ -5,7 +5,7 @@ module(
     version = "0.0.0",
 )
 
-bazel_dep(name = "aspect_rules_js", version = "2.9.2")
+bazel_dep(name = "aspect_rules_js", version = "3.2.2")
 bazel_dep(name = "platforms", version = "1.1.0")
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "aspect_bazel_lib", version = "2.22.5")
@@ -42,7 +42,7 @@ register_toolchains("@elm_compiler_toolchains//:all")
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
 npm.npm_translate_lock(
     name = "rules_elm_npm",
-    link_workspace = "rules_elm",
+    #link_workspace = "rules_elm",
     pnpm_lock = "//tools/npm:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
 )
