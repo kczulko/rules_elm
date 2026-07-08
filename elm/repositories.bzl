@@ -17,7 +17,7 @@ ELM_VERSIONS = {
             "url": "https://github.com/elm/compiler/releases/download/{0}/elm-{0}-mac-x64.gz".format(SUPPORTED_ELM_VERSION),
         },
         "aarch64-darwin": {
-            "sha256": "552c8300b55dafdf52073b095e7bc6afc1b2ea2a600fbc7654bca8a241e38689",
+            "sha256": "8b02a7fac1643b39acb87ae2a8e10f0f1534fe61940ca08ab17dfc2ac98115c8",
             "url": "https://github.com/elm/compiler/releases/download/{0}/elm-{0}-mac-arm.gz".format(SUPPORTED_ELM_VERSION),
         }
     }
