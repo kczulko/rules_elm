@@ -17,7 +17,7 @@ def _repository_fun(attrs):
     )
 
 def _toolchain_fun(attrs):
-    elm_register_toolchains(register = False)
+    elm_register_toolchains()
 
 def _elm_module_extension_impl(module_ctx):
     root_direct_deps = sets.make()
