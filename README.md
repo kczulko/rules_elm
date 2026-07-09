@@ -1,8 +1,9 @@
 # Bazel build rules for Elm
 
 ![CI](https://github.com/kczulko/rules_elm/actions/workflows/workflow.yaml/badge.svg)
-![osx_amd64](https://img.shields.io/badge/platform-linux__amd64-orange)
-![osx_amd64](https://img.shields.io/badge/platform-osx__arm64-orange)
+![linux_amd64](https://img.shields.io/badge/platform-linux__amd64-orange)
+![linux_arm64](https://img.shields.io/badge/platform-linux__arm64-orange)
+![osx_arm64](https://img.shields.io/badge/platform-osx__arm64-orange)
 ![osx_amd64](https://img.shields.io/badge/platform-osx__amd64-orange)
 ![Bazel 9](https://img.shields.io/badge/Bazel-9-blue)
 

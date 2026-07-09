@@ -16,6 +16,14 @@ ELM_VERSIONS = {
                 "@platforms//cpu:x86_64",
             ],
         },
+        "aarch64-linux": {
+            "sha256": "a2bb23e8af8c9874ed1f700fdba4d25636699313dff04695598c41055028c8f5",
+            "url": "https://github.com/elm/compiler/releases/download/{0}/elm-{0}-linux-arm.gz".format(SUPPORTED_ELM_VERSION),
+            "compatible_with": [
+                "@platforms//os:linux",
+                "@platforms//cpu:aarch64",
+            ],
+        },
         "x86_64-darwin": {
             "sha256": "bcfbec1ee85bf87e29da23ea6cb597caa4613b74df77b4a3a40d881df1fa0410",
             "url": "https://github.com/elm/compiler/releases/download/{0}/elm-{0}-mac-x64.gz".format(SUPPORTED_ELM_VERSION),
