@@ -10,7 +10,6 @@ filegroup(
         "//elm/private:all_files",
         "//proto:all_files",
         "//repository:all_files",
-        "//tools/gzip:all_files",
         "//tools/npm:all_files",
         "//tools/protoc-gen-elm:all_files",
         "//tools/tests-finder:all_files",
