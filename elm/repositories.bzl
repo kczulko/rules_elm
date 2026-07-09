@@ -17,7 +17,7 @@ ELM_VERSIONS = {
             ],
         },
         "aarch64-linux": {
-            "sha256": "26320d27701654fa11bd0e8d84bdf9829694d5770c8dcee2dede6160fad58737",
+            "sha256": "a2bb23e8af8c9874ed1f700fdba4d25636699313dff04695598c41055028c8f5",
             "url": "https://github.com/elm/compiler/releases/download/{0}/elm-{0}-linux-arm.gz".format(SUPPORTED_ELM_VERSION),
             "compatible_with": [
                 "@platforms//os:linux",
