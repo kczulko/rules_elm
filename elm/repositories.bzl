@@ -13,7 +13,7 @@ ELM_VERSIONS = {
             "url": "https://github.com/elm/compiler/releases/download/{0}/elm-{0}-linux-x64.gz".format(SUPPORTED_ELM_VERSION),
         },
         "x86_64-darwin": {
-            "sha256": "05289f0e3d4f30033487c05e689964c3bb17c0c48012510dbef1df43868545d1",
+            "sha256": "bcfbec1ee85bf87e29da23ea6cb597caa4613b74df77b4a3a40d881df1fa0410",
             "url": "https://github.com/elm/compiler/releases/download/{0}/elm-{0}-mac-x64.gz".format(SUPPORTED_ELM_VERSION),
         },
         "aarch64-darwin": {
