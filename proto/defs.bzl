@@ -1,6 +1,7 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@protobuf//bazel/common:proto_common.bzl", "proto_common")
 load("@protobuf//bazel/common:proto_info.bzl", "ProtoInfo")
+load("@protobuf//bazel/private:toolchain_helpers.bzl", "toolchains")
 load(
     "//elm/private:providers.bzl",
     _ElmLibrary = "ElmLibrary",
@@ -8,26 +9,6 @@ load(
 )
 
 ELM_PROTO_TOOLCHAIN = "@rules_elm//proto:toolchain_type"
-INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION = getattr(proto_common, "INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION", False)
-
-# _find_toolchain and _if_legacy_toolchain were copied from rules_proto.
-# If used as imports from rules_proto then an error occurs in bzlmod case.
-# Their impl wants to retrieve e.g. rules_elm toolchain which is impossible
-# from the context of rules_proto.
-def _find_toolchain(ctx, legacy_attr, toolchain_type):
-    if INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION:
-        toolchain = ctx.toolchains[toolchain_type]
-        if not toolchain:
-            fail("No toolchains registered for '%s'." % toolchain_type)
-        return toolchain.proto
-    else:
-        return getattr(ctx.attr, legacy_attr)[proto_common.ProtoLangToolchainInfo]
-
-def _if_legacy_toolchain(legacy_attr_dict):
-    if INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION:
-        return {}
-    else:
-        return legacy_attr_dict
 
 def _well_known_proto(direct_srcs, well_known_protos):
     if direct_srcs:
@@ -41,7 +22,7 @@ def _well_known_proto(direct_srcs, well_known_protos):
 
 def _elm_proto_aspect_impl(target, ctx):
 
-    proto_lang_toolchain_info = _find_toolchain(ctx, "_aspect_proto_toolchain", ELM_PROTO_TOOLCHAIN)
+    proto_lang_toolchain_info = toolchains.find_toolchain(ctx, "_aspect_proto_toolchain", Label(ELM_PROTO_TOOLCHAIN))
     proto_info = target[ProtoInfo]
 
     additional_args = ctx.actions.args()
@@ -65,7 +46,7 @@ def _elm_proto_aspect_impl(target, ctx):
             additional_args = additional_args,
         )
 
-        elm_proto_toolchain_deps = ctx.toolchains[ELM_PROTO_TOOLCHAIN].deps if INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION else []
+        elm_proto_toolchain_deps = ctx.toolchains[ELM_PROTO_TOOLCHAIN].deps
 
         return [
             _create_elm_library_provider(
@@ -98,7 +79,7 @@ _elm_proto_aspect = aspect(
         "_well_known_protos": attr.label(
             default = "@protobuf//:well_known_protos"
         )
-    } | _if_legacy_toolchain({
+    } | toolchains.if_legacy_toolchain({
         "_aspect_proto_toolchain": attr.label(
             default = ":default_elm_proto_toolchain",
         ),
@@ -106,7 +87,7 @@ _elm_proto_aspect = aspect(
     attr_aspects = ["deps"],
     required_providers = [ProtoInfo],
     provides = [_ElmLibrary],
-    toolchains = [ELM_PROTO_TOOLCHAIN] if INCOMPATIBLE_ENABLE_PROTO_TOOLCHAIN_RESOLUTION else [],
+    toolchains = [ELM_PROTO_TOOLCHAIN],
 )
 
 def _elm_proto_library_rule(ctx):
