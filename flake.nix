@@ -17,10 +17,7 @@
 
         ciTargetPkgs = p: (with p; [
           bazelisk-bazel
-          gcc
-          nix
           zlib
-          nodejs
         ]);
 
         devTargetPkgs = pkgs:
@@ -29,7 +26,6 @@
             otherPkgs = with pkgs; [
               python3
               pnpm
-              protobuf_33
             ];
           in
             ciPkgs ++ otherPkgs;
