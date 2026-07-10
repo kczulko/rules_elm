@@ -85,27 +85,10 @@ Failed:   0""",
 )
 
 rules_elm_integration_test_each_bazel(
-    name = "elm_proto_simple",
+    name = "elm_proto",
     bazel_binaries = bazel_binaries_to_lbls,
-    bazel_cmd = "test :spec --test_output=all",
-    expected_output = """TEST RUN PASSED
-
-Duration: 0 ms
-Passed:   2
-Failed:   0""",
-    test_runner = ":output_match_runner",
-    workspace_path = "elm-proto",
-)
-
-rules_elm_integration_test_each_bazel(
-    name = "elm_proto_complex",
-    bazel_binaries = bazel_binaries_to_lbls,
-    bazel_cmd = "test //foo:spec --test_output=all",
-    expected_output = """TEST RUN PASSED
-
-Duration: 0 ms
-Passed:   1
-Failed:   0""",
+    bazel_cmd = "test //... --test_output=all",
+    expected_output = "Executed 2 out of 2 tests: 2 tests pass.",
     test_runner = ":output_match_runner",
     workspace_path = "elm-proto",
 )
