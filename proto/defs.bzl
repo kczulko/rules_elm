@@ -36,7 +36,7 @@ def _elm_proto_aspect_impl(target, ctx):
     if proto_info.direct_sources and not _well_known_proto(proto_info.direct_sources, ctx.files._well_known_protos):
         generated_files = ctx.actions.declare_directory("Proto")
         elm_out = generated_files.dirname
-        
+
         proto_common.compile(
             actions = ctx.actions,
             proto_info = proto_info,
