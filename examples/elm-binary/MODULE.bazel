@@ -6,18 +6,6 @@ local_path_override(
     path = "../..",
 )
 
-bazel_dep(name = "rules_nixpkgs_core", version = "0.13.0", dev_dependency = True)
-bazel_dep(name = "rules_nodejs", version = "6.7.5")
-bazel_dep(name = "rules_python", version = "2.2.0")
-
-single_version_override(
-    module_name = "rules_nixpkgs_core",
-    patch_strip = 1,
-    patches = [
-        "//:rules_nixpkgs_core.patch",
-    ],
-)
-
 elm = use_extension("@rules_elm//elm:extensions.bzl", "elm")
 elm.repository(
     name = "elm_package_elm_html",
@@ -50,34 +38,3 @@ use_repo(
     "elm_package_elm_core",
     "elm_package_elm_virtual_dom",
 )
-
-nix_repo = use_extension("@rules_nixpkgs_core//extensions:repository.bzl", "nix_repo")
-nix_repo.file(
-    name = "nixpkgs",
-    file = "//:nixpkgs.nix",
-    file_deps = ["//:flake.lock"],
-)
-use_repo(nix_repo, "nixpkgs")
-
-nix_pkg = use_extension("@rules_nixpkgs_core//extensions:package.bzl", "nix_pkg")
-nix_pkg.attr(
-    name = "nixpkgs_nodejs",
-    attr = "nodejs",
-    repo = "@nixpkgs",
-)
-nix_pkg.attr(
-    name = "nixpkgs_python3",
-    attr = "python3",
-    repo = "@nixpkgs",
-)
-use_repo(
-    nix_pkg,
-    "nixpkgs_nodejs",
-    "nixpkgs_python3",
-)
-
-register_toolchains(
-    "//nix-toolchains:nixpkgs_nodejs_toolchain",
-    "//nix-toolchains:nixpkgs_python_toolchain",
-)
-
