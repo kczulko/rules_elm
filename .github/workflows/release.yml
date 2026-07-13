@@ -29,7 +29,7 @@ jobs:
     needs: [release]
     uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v1.4.2
     with:
-      tag_name: ${{ inputs.tag_name }}
+      tag_name: ${{ inputs.tag_name || github.ref_name }}
       registry_fork: kczulko/bazel-central-registry
     permissions:
       contents: write
