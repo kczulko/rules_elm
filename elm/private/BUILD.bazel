@@ -11,6 +11,7 @@ py_binary(
     srcs = [
         "compile.py",
     ],
+    legacy_create_init = 0,
     visibility = ["//:__subpackages__"],
 )
 
@@ -19,6 +20,7 @@ py_binary(
     srcs = [
         "generate_test_main.py",
     ],
+    legacy_create_init = 0,
     visibility = ["//:__subpackages__"],
 )
 

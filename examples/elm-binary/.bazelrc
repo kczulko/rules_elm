@@ -1,2 +1,3 @@
+build --repo_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1
 common --module_mirrors=https://bcr.cloudflaremirrors.com
 
