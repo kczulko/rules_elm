@@ -28,8 +28,8 @@ bzl_library(
     deps = [
         "//elm/private:providers",
         "@bazel_skylib//lib:paths",
-        "@protobuf//bazel/common:proto_common_bzl", # keep
-        "@protobuf//bazel/common:proto_info_bzl", # keep
+        "@protobuf//bazel/common:proto_common_bzl",  # keep
+        "@protobuf//bazel/common:proto_info_bzl",  # keep
     ],
 )
 
@@ -38,7 +38,7 @@ bzl_library(
     srcs = ["elm_proto_toolchain_rule.bzl"],
     visibility = ["//visibility:public"],
     deps = [
-        "@protobuf//bazel/common:proto_common_bzl", # keep
+        "@protobuf//bazel/common:proto_common_bzl",  # keep
         "@rules_elm//elm/private:providers",
         "@rules_elm//proto:defs",
     ],
