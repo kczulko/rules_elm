@@ -10,22 +10,29 @@ on:
 
 permissions:
   contents: write
+  attestations: write
+  id-token: write
 
 jobs:
   release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-      - name: Prepare release notes and artifacts
-        run: .github/workflows/release_prep.sh > release_notes.txt
-      - name: Release
-        uses: softprops/action-gh-release@v3
-        with:
-          draft: true
-          prerelease: true
-          # Use GH feature to populate the changelog automatically
-          generate_release_notes: true
-          body_path: release_notes.txt
-          fail_on_unmatched_files: true
-          files: rules_elm-*.tar.gz
+    # SLSA trusted-builder reusable workflows MUST be referenced by a semantic
+    # version tag, not a commit SHA: slsa-verifier reads the builder ref from the
+    # provenance and rejects a bare SHA ("unexpected ref type"), which breaks the
+    # release-artifact attestations that BCR's presubmit verifies. Do not SHA-pin.
+    uses: bazel-contrib/.github/.github/workflows/release_ruleset.yaml@v7.6.0
+    with:
+      release_files: rules_elm-*.tar.gz
+      prerelease: false
+      tag_name: ${{ inputs.tag_name || github.ref_name }}
+  publish:
+    needs: [release]
+    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v1.4.2
+    with:
+      tag_name: ${{ inputs.tag_name }}
+      registry_fork: kczulko/bazel-central-registry
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    secrets:
+      publish_token: ${{ secrets.BCR_PUBLISH_TOKEN }}
