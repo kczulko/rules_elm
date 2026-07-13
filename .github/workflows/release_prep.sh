@@ -8,7 +8,7 @@ TAG=$1
 VERSION=${TAG:1}
 # The prefix is chosen to match what GitHub generates for source archives
 PREFIX="rules_elm-${TAG:1}"
-ARCHIVE="$rules_elm-$TAG.tar.gz"
+ARCHIVE="rules_elm-$TAG.tar.gz"
 git archive --format=tar --prefix=${PREFIX}/ ${TAG} | gzip > $ARCHIVE
 SHA=$(shasum -a 256 $ARCHIVE | awk '{print $1}')
 
