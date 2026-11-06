@@ -26,6 +26,7 @@
             otherPkgs = with pkgs; [
               python3
               pnpm
+              gcc
             ];
           in
             ciPkgs ++ otherPkgs;

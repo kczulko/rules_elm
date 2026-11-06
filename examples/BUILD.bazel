@@ -8,13 +8,8 @@ load(
 )
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 
-bazel_binaries_to_lbls = [
-    (
-        v,
-        bazel_binaries.label(v),
-    )
-    for v in bazel_binaries.versions.all
-]
+bazel_bin_name = "latest"
+bazel_binaries_to_lbls = [(bazel_bin_name, bazel_binaries.label(bazel_binaries.versions.current))]
 
 sh_binary(
     name = "output_match_runner",
@@ -96,7 +91,7 @@ rules_elm_integration_test_each_bazel(
 test_suite(
     name = "integration_tests",
     tests = gen_test_names_each(
-        bazel_binaries = bazel_binaries.versions.all,
+        bazel_binaries = [bazel_bin_name],
         name_prefixes = [
             "elm_binary",
             "elm_binary_no_deps_negative",
