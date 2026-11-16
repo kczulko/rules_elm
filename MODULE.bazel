@@ -12,7 +12,7 @@ bazel_dep(name = "bazel_lib", version = "3.7.2")
 bazel_dep(name = "rules_nodejs", version = "6.7.7")
 bazel_dep(name = "protobuf", version = "36.2")
 bazel_dep(name = "rules_python", version = "2.4.6")
-bazel_dep(name = "rules_shell", version = "0.8.0")
+bazel_dep(name = "rules_shell", version = "0.10.0")
 
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.30.0", dev_dependency = True)
 bazel_dep(name = "rules_bazel_integration_test", version = "0.37.1", dev_dependency = True)
