@@ -41,6 +41,3 @@ use_repo(elm, "elm_package_elm_core")
 \`\`\`
 
 EOF
-
-# awk 'f;/--SNIP--/{f=1}' e2e/workspace/WORKSPACE.bazel
-echo "\`\`\`"
